@@ -1,0 +1,1460 @@
+This file, if opened with Emacs, is in "org" mode.
+As such, there are a number of useful key chords:
+
+shift-Tab will cycle between various levels of outlining.
+
+If you're on a link (indicated with an underline), hit Enter over the
+link, and you'll open the target.
+
+BibTeX just ignores everything not in bibtex blocks, so having
+org-mode markup is harmless to BibTeX.
+
+* DTrace
+
+@inproceedings{DTrace2004,
+  author    = {Bryan Cantrill and
+               Michael W. Shapiro and
+               Adam H. Leventhal},
+  title     = {{Dynamic Instrumentation of Production Systems}},
+  booktitle = {Proceedings of the General Track: 2004 {USENIX} Annual Technical Conference,
+               June 27 - July 2, 2004, Boston Marriott Copley Place, Boston, MA,
+               {USA}},
+  pages     = {15--28},
+  year      = {2004},
+  url       = {http://www.usenix.org/publications/library/proceedings/usenix04/tech/general/cantrill.html},
+  timestamp = {Thu, 11 Nov 2004 12:25:01 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/usenix/CantrillSL04},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+* Configuration troubleshooting
+
+** Do not blame users for misconfigurations (UCSD)
+
+@inproceedings{xu2013misconfiguration,
+  title={Do not blame users for misconfigurations},
+  author={Xu, Tianyin and Zhang, Jiaqi and Huang, Peng and Zheng, Jing and Sheng, Tianwei and Yuan, Ding and Zhou, Yuanyuan and Pasupathy, Shankar},
+  booktitle={Proceedings of the Twenty-Fourth ACM Symposium on Operating Systems Principles},
+  pages={244--259},
+  year={2013},
+  organization={ACM}
+}
+
+** X-ray (Michigan)
+
+@inproceedings{attariyan2012xray,
+  title={{X-ray: Automating Root-Cause Diagnosis of Performance Anomalies in Production Software}},
+  author={Attariyan, Mona and Chow, Michael and Flinn, Jason},
+  booktitle={OSDI},
+  pages={307--320},
+  year={2012}
+}
+
+** ConfAid (Michigan)
+
+@article{attariyan2010confaid,
+  title={Automating configuration troubleshooting with dynamic information flow analysis},
+  author={Attariyan, Mona and Flinn, Jason},
+  journal={Proceedings of the 9th Symposium on Operating Systems Design and Implementation (OSDI)},
+  pages={1--11},
+  year={2010}
+}
+
+** Using Causality to diagnose configuration bugs (Michigan)
+
+@inproceedings{attariyan2008causality,
+  title={Using causality to diagnose configuration bugs},
+  author={Attariyan, Mona and Flinn, Jason},
+  booktitle={USENIX 2008 Annual Technical Conference on Annual Technical Conference},
+  pages={281--286},
+  year={2008},
+  organization={USENIX Association}
+}
+
+** AutoBash
+
+@inproceedings{su2007autobash,
+  title={{AutoBash}: improving configuration management with operating system causality analysis},
+  author={Su, Ya-Yunn and Attariyan, Mona and Flinn, Jason},
+  booktitle={Proceedings of Twenty-first ACM SIGOPS Symposium on Operating Systems Principles},
+  pages={237--250},
+  year={2007},
+  organization={ACM}
+}
+
+* Distributed Tracing and Instrumentation
+
+** Iprof (Toronto)
+
+@inproceedings{zhao2014iprof,
+  title={{Iprof: A nonintrusive request flow profiler for distributed systems}},
+  author={Zhao, Xu and Zhang, Yongle and Lion, David and Faizan, Muhammad and Luo, Yu and Yuan, Ding and Stumm, Michael},
+  booktitle={Proceedings of the 11th Symposium on Operating Systems Design and Implementation},
+  year={2014}
+}
+
+** Fay (Microsoft)
+
+@inproceedings{erlingsson2011fay,
+  title={{Fay: extensible distributed tracing from kernels to clusters}},
+  author={Erlingsson, {\'U}lfar and Peinado, Marcus and Peter, Simon and Budiu, Mihai},
+  booktitle={Proceedings of the Twenty-Third ACM Symposium on Operating Systems Principles},
+  pages={311--326},
+  year={2011},
+  organization={ACM}
+}
+
+** Dapper (Google)
+
+@techreport{dapper,
+title = {{Dapper, a Large-Scale Distributed Systems Tracing Infrastructure}},
+author  = {Benjamin H. Sigelman and Luiz Andr\'{e} Barroso and Mike Burrows and Pat Stephenson and Manoj Plakal and Donald Beaver and Saul Jaspan and Chandan Shanbhag},
+year  = 2010,
+URL = {http://research.google.com/archive/papers/dapper-2010-1.pdf},
+institution = {Google, Inc.}
+}
+
+** PerfScope (NCSU/NEC)
+
+   -Uses Linux Trace Toolkit (LTTng)
+
+@inproceedings{dean2014perfscope,
+  title={{PerfScope: Practical Online Server Performance Bug Inference in Production Cloud Computing Infrastructures}},
+  author={Dean, Daniel J and Nguyen, Hiep and Gu, Xiaohui and Zhang, Hui and Rhee, Junghwan and Arora, Nipun and Jiang, Geoff},
+  booktitle={Proceedings of the ACM Symposium on Cloud Computing},
+  pages={1--13},
+  year={2014},
+  organization={ACM}
+}
+
+** IntroPerf (Purdue/NEC)
+
+   -Uses Windows tracing
+
+@inproceedings{kim2014introperf,
+  title={{IntroPerf: transparent context-sensitive multi-layer performance inference using system stack traces}},
+  author={Kim, Chung Hwan and Rhee, Junghwan and Zhang, Hui and Arora, Nipun and Jiang, Guofei and Zhang, Xiangyu and Xu, Dongyan},
+  booktitle={The 2014 ACM international conference on Measurement and modeling of computer systems},
+  pages={235--247},
+  year={2014},
+  organization={ACM}
+}
+
+** Magpie (Microsoft)
+
+@inproceedings{barham2004magpie,
+  title={{Using Magpie for Request Extraction and Workload Modelling}},
+  author={Barham, Paul and Donnelly, Austin and Isaacs, Rebecca and Mortier, Richard},
+  booktitle={OSDI},
+  volume={4},
+  pages={18--18},
+  year={2004}
+}
+
+** Latency Analysis in the Trading Community (Tracing Summit 2013)
+
+http://www.tracingsummit.org/w/images/6/65/Latency_Analysis_in_the_Trading_Community_-_Tracing_Summit_2013.pdf
+
+** LTTng: Cloud Monitoring and Distribution Bug Reporting with Live Streaming and Snapshots (Tracing Summit 2013)
+
+http://www.tracingsummit.org/w/images/b/b3/Lttng-desnoyers-tracing-summit-2013.pdf
+
+** Using tracing at Facebook scale (Tracing Summit 2014)
+
+http://tracingsummit.org/w/images/6/6f/TracingSummit2014-Tracing-at-Facebook-Scale.pdf
+https://www.youtube.com/watch?v=NM1rZK9yUSY&list=PLuo4E47p5_7ZoVpxVKH6cw8fapFYySxCl&index=1
+
+** From Network to Application: Understanding Your Distributed System with Trace Compass (Tracing Summit 2014)
+
+http://tracingsummit.org/w/images/c/cd/Tracingsummit2014-gbastien.pdf
+https://www.youtube.com/watch?v=poFf4NIvmHQ&list=PLuo4E47p5_7ZoVpxVKH6cw8fapFYySxCl&index=4
+
+** Discover what your app is waiting with kernel tracing (Tracing Summit 2014)
+
+http://tracingsummit.org/w/images/0/00/TracingSummit2014-Why-App-Waiting.pdf
+https://www.youtube.com/watch?v=8SyXvFRN4hs&list=PLuo4E47p5_7ZoVpxVKH6cw8fapFYySxCl&index=5
+
+** Hardware trace - the ultimate Linux performance tuning tool (Tracing Summit 2014)
+
+http://tracingsummit.org/w/images/6/64/TracingSummit2014-HW-Trace.pdf
+https://www.youtube.com/watch?v=rl3Da6cL_SU&list=PLuo4E47p5_7ZoVpxVKH6cw8fapFYySxCl&index=10
+
+* Introspection
+
+** Execution Mining (UBC)
+
+@inproceedings{lefebvre2012execution,
+ author = {Lefebvre, Geoffrey and Cully, Brendan and Head, Christopher and Spear, Mark and Hutchinson, Norm and Feeley, Mike and Warfield, Andrew},
+ title = {{Execution Mining}},
+ booktitle = {Proceedings of the 8th ACM SIGPLAN/SIGOPS Conference on Virtual Execution Environments},
+ series = {VEE '12},
+ year = {2012},
+ isbn = {978-1-4503-1176-2},
+ location = {London, England, UK},
+ pages = {145--158},
+ numpages = {14},
+ url = {http://doi.acm.org/10.1145/2151024.2151044},
+ doi = {10.1145/2151024.2151044},
+ acmid = {2151044},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {binary analysis, offline analysis, semantic gap, virtual machine},
+}
+
+** /Tappan Zee (North) Bridge: Mining Memory Accesses for Introspection/ (Gatech/MIT LL)
+
+@inproceedings{dolan2013tappan,
+  title={{Tappan zee (north) bridge: mining memory accesses for introspection}},
+  author={Dolan-Gavitt, Brendan and Leek, Tim and Hodosh, Josh and Lee, Wenke},
+  booktitle={{Proceedings of the 2013 ACM SIGSAC Conference on Computer \& Communications Security (ACM CCS)}},
+  pages={839--850},
+  year={2013},
+  organization={ACM}
+}
+
+* Taint tracking
+
+** minemu
+
+@InProceedings{minemu:raid11,
+  author = 	 {Erik Bosman and Asia Slowinska and Herbert Bos},
+  title = 	 {{Minemu: The World's Fastest Taint Tracker}},
+  booktitle = {Proceedings of RAID'11},
+  year = 	 2011,
+  address = 	 {Menlo Park, CA},
+  month = 	 {September}}
+
+** argos
+
+@InProceedings{argos:eurosys06,
+  author = 	 {Georgios Portokalidis and Asia Slowinska and Herbert Bos},
+  title = 	 {{Argos: an Emulator for Fingerprinting Zero-Day Attacks}},
+  booktitle =	 {Proc. ACM SIGOPS EUROSYS'2006},
+  year =	 2006,
+  address =	 {Leuven, Belgium},
+  month =	 {April}
+}
+
+** libdft
+
+@inproceedings{Kemerlis:2012,
+ author = {Kemerlis, Vasileios P. and Portokalidis, Georgios and Jee, Kangkook and Keromytis, Angelos D.},
+ title = {{Libdft: Practical Dynamic Data Flow Tracking for Commodity Systems}},
+ booktitle = {Proceedings of the 8th ACM SIGPLAN/SIGOPS Conference on Virtual Execution Environments (ACM VEE)},
+ series = {VEE '12},
+ year = {2012},
+ isbn = {978-1-4503-1176-2},
+ location = {London, England, UK},
+ pages = {121--132},
+ numpages = {12},
+ url = {http://doi.acm.org/10.1145/2151024.2151042},
+ doi = {10.1145/2151024.2151042},
+ acmid = {2151042},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {data flow tracking, dynamic binary instrumentation, exploit prevention, information leak detection, taint analysis},
+}
+
+** CloudFence
+
+@INPROCEEDINGS{pappas:cloudfence,
+AUTHOR = "Vasilis Pappas and Vasileios P. Kemerlis and Angeliki Zavou and Michalis Polychronakis and Angelos D. Keromytis",
+TITLE = {{CloudFence: Data Flow Tracking as a Cloud Service}},
+BOOKTITLE = "RAID'13",
+PAGES = {411-431},
+YEAR = {2013},
+}
+
+** TaintDroid (Columbia)
+
+@article{enck2014taintdroid,
+  title={{TaintDroid: an information-flow tracking system for realtime privacy monitoring on smartphones}},
+  author={Enck, William and Gilbert, Peter and Han, Seungyeop and Tendulkar, Vasant and Chun, Byung-Gon and Cox, Landon P and Jung, Jaeyeon and McDaniel, Patrick and Sheth, Anmol N},
+  journal={ACM Transactions on Computer Systems (TOCS)},
+  volume={32},
+  number={2},
+  pages={5},
+  year={2014},
+  publisher={ACM}
+}
+
+** Dynamic Taint Analysis and Forward Symbolic Execution (Berkeley)
+
+@inproceedings{schwartz2010all,
+  title={All you ever wanted to know about dynamic taint analysis and forward symbolic execution (but might have been afraid to ask)},
+  author={Schwartz, Edward J and Avgerinos, Thanassis and Brumley, David},
+  booktitle={Security and Privacy (SP), 2010 IEEE Symposium on},
+  pages={317--331},
+  year={2010},
+  organization={IEEE}
+}
+
+** Mysore et al ASPLOS 2008, Understanding and visualizing full systems with data flow tomography
+
+   - hack QEMU (x86 emulator) to perform instruction-level tagging and
+     tag propagation.
+   - their main goal isn't _enforcement_ of particular policies, but
+     gathering data for system understanding, exploration,
+     esp. visualization.
+
+   - they instrument VM network drivers so that inter-VM network
+     traffic maintains tags.
+
+   - they do not handle implicit flows, and they do not handle flowing
+     tags through persistent storage.
+
+
+@inproceedings{MysoreASPLOS2008,
+  author    = {Shashidhar Mysore and
+               Bita Mazloom and
+               Banit Agrawal and
+               Timothy Sherwood},
+  title     = {Understanding and visualizing full systems with data flow tomography},
+  booktitle = {Proceedings of the 13th International Conference on Architectural
+               Support for Programming Languages and Operating Systems, {ASPLOS}
+               2008, Seattle, WA, USA, March 1-5, 2008},
+  pages     = {211--221},
+  year      = {2008},
+  url       = {http://doi.acm.org/10.1145/1346281.1346308},
+  doi       = {10.1145/1346281.1346308},
+  timestamp = {Tue, 08 Apr 2008 14:34:50 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/asplos/MysoreMAS08},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+
+** Dytan: a generic dynamic taint analysis framework, 2007, Clause, Li, Orso
+
+   - [GTS, 1/2015]
+     Framework allows for specifying either pure dynamic taint
+     tracking, or control+data taint tracking (that takes into account
+     implicit flows).
+   - generic propagation/mapping policy: taint "produced data" with
+     union of all markings on "affecting data".
+     - framework allows custom mapping functions
+   - provide for custom "checking operations" (aka "taint sinks"). 
+
+   - I was initially excited as they claim to have a general solution
+     to implicit flow, but when they finally get to the section
+     "General Approach" under "Control-flow Based Taint Propagation",
+     and consider the canonical tricky example (2b), they give up:
+
+   "The presented approach is safe under the assumption that we can
+   analyze the binary code on which we are performing dynamic tainting
+   and conservatively (1) build CFGs for the procedures in the code
+   and (2) identify which memory locations are accessed by each
+   instruction. Unfortunately, this assumption is often unmet due to
+   the inherent difficulties in analyzing binary code, especially in
+   the presence of indirect branches and indirect memory
+   accesses. Suitably handling these issues requires dynamic updating,
+   complex and often overly conservative analysis techniques [2], or
+   additional knowledge about the compiler used to create the
+   binary [4]. To simplify our initial implementation of the approach,
+   we are currently limiting our tool to statically identifiable
+   memory locations, similarly to Masri and colleagues [13]."
+
+   So they play a trick of always fabricating an "else" branch, and
+   moving dummy assignments (e.g. x = x) into both branches so that
+   both branches assign the same set of variables. This requires
+   statically figuring out what variables are possibly set in each
+   branch, which is extremely difficult in the presence of indirect
+   addressing.
+
+   Oh well - no magic after all.
+
+
+@inproceedings{Dytan2007,
+  author    = {James A. Clause and
+               Wanchun Li and
+               Alessandro Orso},
+  title     = {Dytan: a generic dynamic taint analysis framework},
+  booktitle = {Proceedings of the {ACM/SIGSOFT} International Symposium on Software
+               Testing and Analysis, {ISSTA} 2007, London, UK, July 9-12, 2007},
+  pages     = {196--206},
+  year      = {2007},
+  url       = {http://doi.acm.org/10.1145/1273463.1273490},
+  doi       = {10.1145/1273463.1273490},
+  timestamp = {Wed, 22 Aug 2007 15:20:28 +0200},
+  biburl    = {http://dblp.dagstuhl.de/rec/bib/conf/issta/ClauseLO07},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+** DTA++, Kant, McCamant, Poosankam, Song 2011.
+
+   - [GTS, 1/2015]
+     Authors claim to be aiming for a happy medium between
+     under-tainting as in pure dynamic taint analysis (DTA) and
+     over-tainting due to conservative static flow analyses.
+
+     They only consider "benign" implicit flows, as opposed to
+     maliciously crafted code designed to confound taint tracking via
+     implicit flow.
+
+     They are doing taint tracking on binaries, building on top of
+     BitBlaze. They do a study on Windows-based word processors
+     (incl. MS Word).
+
+     I'm not happy with how they identify "undertainting": they
+     generate execution traces using identical untainted inputs but
+     differing tainted inputs. If they ever see blocks of that differ
+     in taint, then that's an instance of "undertainting". Seems
+     pretty ad-hoc to me.
+
+
+@inproceedings{DTA++2011,
+  author    = {Min Gyung Kang and
+               Stephen McCamant and
+               Pongsin Poosankam and
+               Dawn Song},
+  title     = {{DTA++:} Dynamic Taint Analysis with Targeted Control-Flow Propagation},
+  booktitle = {Proceedings of the Network and Distributed System Security Symposium,
+               {NDSS} 2011, San Diego, California, USA, 6th February - 9th February
+               2011},
+  year      = {2011},
+  url       = {http://www.isoc.org/isoc/conferences/ndss/11/pdf/5_4.pdf},
+  timestamp = {Wed, 31 Aug 2011 14:07:58 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/ndss/KangMPS11},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{kemerlis2010ileak,
+  title={{iLeak}: A lightweight system for detecting inadvertent information leaks},
+  author={Kemerlis, Vasileios P and Pappas, Vasilis and Portokalidis, Georgios and Keromytis, Angelos D},
+  booktitle={Proceedings of the 6th European Conference on Computer Network Defense (EC2ND)},
+  pages={21--28},
+  year={2010}
+}
+
+* Pointless tainting
+
+@InProceedings{pointless:eurosys09,
+  author = 	 {Asia Slowinska and Herbert Bos},
+  title = 	 {Pointless tainting? Evaluating the practicality of pointer tainting },
+  booktitle = {Proceedings of {ACM SIGOPS EUROSYS}},
+  year = 	 2009,
+  address = 	 {Nuremberg, Germany},
+  month = 	 {March-April}}
+
+@article{pointlessrebuttal:osr10,
+ author = {Slowinska, Asia and Bos, Herbert},
+ title = {Pointer tainting still pointless: (but we all see the point of tainting)},
+ journal = {SIGOPS Oper. Syst. Rev.},
+ volume = {44},
+ number = {3},
+ year = {2010},
+ issn = {0163-5980},
+ pages = {88--92},
+ doi = {http://doi.acm.org/10.1145/1842733.1842748},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ }
+
+* Rollback and replay
+
+** ReVirt (Michigan)
+
+@article{dunlap2002revirt,
+ author = {Dunlap, George W. and King, Samuel T. and Cinar, Sukru and Basrai, Murtaza A. and Chen, Peter M.},
+ title = {ReVirt: Enabling Intrusion Analysis Through Virtual-machine Logging and Replay},
+ journal = {SIGOPS Oper. Syst. Rev.},
+ issue_date = {Winter 2002},
+ volume = {36},
+ number = {SI},
+ month = dec,
+ year = {2002},
+ issn = {0163-5980},
+ pages = {211--224},
+ numpages = {14},
+ url = {http://doi.acm.org/10.1145/844128.844148},
+ doi = {10.1145/844128.844148},
+ acmid = {844148},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+}
+
+** Eidetic systems (Michigan)
+
+@inproceedings{devecsery2014eidetic,
+  title={Eidetic systems},
+  author={Devecsery, David and Chow, Michael and Dou, Xianzheng and Flinn, Jason and Chen, Peter M},
+  booktitle={Proceedings of the 11th USENIX conference on Operating Systems Design and Implementation},
+  pages={525--540},
+  year={2014},
+  organization={USENIX Association}
+}
+
+** DejaView (Columbia)
+
+@inproceedings{laadan2007dejaview,
+  title={DejaView: a personal virtual computer recorder},
+  author={Laadan, Oren and Baratto, Ricardo A and Phung, Dan B and Potter, Shaya and Nieh, Jason},
+  booktitle={21st ACM Symposium on Operating Systems Principles (SOSP 2007)},
+  address={Stevenson, WA},
+  month=oct,
+  pages={279--292},
+  year={2007},
+  organization={ACM}
+}
+
+** ASSURE (Columbia)
+
+@inproceedings{sidiroglou2009assure,
+ author = {Sidiroglou, Stelios and Laadan, Oren and Perez, Carlos and Viennot, Nicolas and Nieh, Jason and Keromytis, Angelos D.},
+ title = {ASSURE: Automatic Software Self-healing Using Rescue Points},
+ booktitle = {Proceedings of the 14th International Conference on Architectural Support for Programming Languages and Operating Systems},
+ series = {ASPLOS XIV},
+ year = {2009},
+ isbn = {978-1-60558-406-5},
+ location = {Washington, DC, USA},
+ pages = {37--48},
+ numpages = {12},
+ url = {http://doi.acm.org/10.1145/1508244.1508250},
+ doi = {10.1145/1508244.1508250},
+ acmid = {1508250},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {binary patching, chekpoint restart, error recovery, reliable software, software self-healing},
+}
+
+* Provenance
+
+** Open Provenance Model core spec (v1.1) 2011
+
+   - I found the following pages useful:
+     http://open-biomed.sourceforge.net/opmv/opmv-guide.html
+     http://openprovenance.org/model/opmx#example  (you can just look
+     at the pictures)
+
+
+@article{OPMSpecv11,
+          volume = {27},
+          number = {6},
+           month = {June},
+          author = {Luc Moreau and Ben Clifford and Juliana Freire and Joe Futrelle and Yolanda Gil and Paul Groth and Natalia Kwasnikowska and Simon Miles and Paolo Missier and Jim Myers and Beth Plale and Yogesh Simmhan and Eric Stephan and Jan Van den Bussche},
+           title = {The Open Provenance Model core specification (v1.1)},
+         journal = {Future Generation Computer Systems},
+           pages = {743--756},
+            year = {2011},
+        keywords = {provenance, representation, inter-operability},
+             url = {http://eprints.soton.ac.uk/271449/},
+        abstract = {The Open Provenance Model is a model of provenance that is designed to meet the following requirements: (1) To allow provenance information to be exchanged between systems, by means of a compatibility layer based on a shared provenance model. (2) To allow developers to build and share tools that operate on such a provenance model. (3) To define provenance in a precise, technology-agnostic manner. (4) To support a digital representation of provenance for any 'thing', whether produced by computer systems or not. (5) To allow multiple levels of description to coexist. (6) To define a core set of rules that identify the valid inferences that can be made on provenance representation. This document contains the specification of the Open Provenance Model (v1.1) resulting from a community-effort to achieve inter-operability in the Provenance Challenge series.}
+}
+
+
+** Gehani and Tariq 2012, SPADE: Support for Provenance Auditing in Distributed Environments
+
+   - [[reading:MW-2012.SPADE.pdf][local copy]]
+
+
+   - SPADEv2 is an impressive system that captures provenance events
+     via a "reporter" interface that is supported on Linux, MacOS, and
+     Windows.
+   - They use the standard OPM model of Agents, Processes, and
+     Artifacts, connected by Dependency edges such as
+     "wasTriggeredBy", "wasDerivedFrom", "wasGeneratedBy", etc.
+   - They use a combination of utilities, including audit subsystems
+     and hooks into FUSE filesystems (they don't mention dtrace).
+   - They store data in a variety of DB backends, with Neo4j the default.
+   - The system is written in Java. They use classloaders and
+     reflection to support dynamic addition of queries, reporters, etc.
+
+
+@incollection{Gehani2012-SPADE,
+ title={{SPADE: Support for Provenance Auditing in Distributed Environments}},
+ author={Gehani, Ashish and Tariq, Dawood},
+ booktitle={Middleware 2012},
+ series={Lecture Notes in Computer Science},
+ volume={7662},
+ pages={101-120},
+ year={2012},
+ doi={10.1007/978-3-642-35170-9_6},
+ isbn={978-3-642-35169-3},
+ url={http://dx.doi.org/10.1007/978-3-642-35170-9_6},
+ editor={Narasimhan, Priya and Triantafillou, Peter},
+ publisher={Springer Berlin Heidelberg}
+}
+
+*** Tariq et al. 2012, Towards Automated Collection of Application-Level Data Provenance
+
+@inproceedings{Tariq2012-instrumentation,
+title = {{Towards Automated Collection of Application-Level Data Provenance}},
+author = {Tariq, Dawood and Ali, Maisem and Gehani, Ashish},
+booktitle = {TaPP'12 Proceedings of the 4th USENIX conference on Theory and Practice of Provenance},
+year = {2012},
+pages = {16--21},
+url = {http://dl.acm.org/citation.cfm?id=2342875.2342891},
+}
+
+** Gessiou et al (incl. Keromytis), 2012, Towards a Universal Data Provenance Framework Using Dynamic Instrumentation
+
+   - argue strongly that low level syscall tracing not sufficient
+     (need app level semantics)
+   - build on top of DTrace
+   - promote exploration - a "discovery" phase that then leads to more
+     fine-grained instrumentation.
+   - highlight goal of identifying _interesting_ data
+   - enable "assisted discovery"
+   - exploration seems based on a simple idiom: identify a key value
+     (probably a string) of interest, such as the a user's name, or a
+     fabricated likely unique value, e.g. "XXXYYY", trace all system
+     calls looking for evidence of that key value, and tell user what
+     function calls look relevant by virtue of having trafficked in
+     data containing that value.
+
+
+   - an example of a completely bogus claim: "This scenario shows that
+     using the powerful logging capabilities of our frame- work we can
+     gather system call level information about the file-system by
+     simply specifying the set of the file-system related system
+     calls, without performing any changes in the operating system
+     itself." -- all they did was use DTrace and then claim "powerful
+     logging capabilities of our framework".
+
+
+@inproceedings{GessiouPAKI12,
+  author    = {Eleni Gessiou and
+               Vasilis Pappas and
+               Elias Athanasopoulos and
+               Angelos D. Keromytis and
+               Sotiris Ioannidis},
+  title     = {Towards a Universal Data Provenance Framework Using Dynamic Instrumentation},
+  booktitle = {Information Security and Privacy Research - 27th {IFIP} {TC} 11 Information
+               Security and Privacy Conference, {SEC} 2012, Heraklion, Crete, Greece,
+               June 4-6, 2012. Proceedings},
+  pages     = {103--114},
+  year      = {2012},
+  url       = {http://dx.doi.org/10.1007/978-3-642-30436-1_9},
+  doi       = {10.1007/978-3-642-30436-1_9},
+  timestamp = {Tue, 12 Jun 2012 14:32:05 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/sec/GessiouPAKI12},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+** Quire: Provenance for Smart Phones (Rice)
+
+@inproceedings{dietz2011quire,
+  title={QUIRE: Lightweight Provenance for Smart Phone Operating Systems.},
+  author={Dietz, Michael and Shekhar, Shashi and Pisetsky, Yuliy and Shu, Anhei and Wallach, Dan S},
+  booktitle={USENIX Security Symposium},
+  year={2011}
+}
+
+* Symbolic Execution
+
+** s2e
+
+@inproceedings{chipounov2011s2e,
+  title={S2E: A platform for in-vivo multi-path analysis of software systems},
+  author={Chipounov, Vitaly and Kuznetsov, Volodymyr and Candea, George},
+  booktitle = {Proceedings of the Sixteenth International Conference on Architectural Support for Programming Languages and Operating Systems},
+  year={2011},
+  publisher={ACM}
+}
+
+* Intrusion Detection
+
+@inproceedings{porras1997emerald,
+  title={{EMERALD}: Event monitoring enabling response to anomalous live disturbances},
+  author={Porras, Phillip A and Neumann, Peter G},
+  booktitle={Proceedings of the 20th national information systems security conference},
+  pages={353--365},
+  year={1997}
+}
+
+@article{hofmeyr1998intrusion,
+  title={Intrusion detection using sequences of system calls},
+  author={Hofmeyr, Steven A and Forrest, Stephanie and Somayaji, Anil},
+  journal={Journal of computer security},
+  volume={6},
+  number={3},
+  pages={151--180},
+  year={1998},
+  publisher={{IOS} Press}
+}
+
+
+@inproceedings{warrender1999detecting,
+  title={Detecting intrusions using system calls: Alternative data models},
+  author={Warrender, Christina and Forrest, Stephanie and Pearlmutter, Barak},
+  booktitle={Security and Privacy, 1999. Proceedings of the 1999 {IEEE} Symposium on},
+  pages={133--145},
+  year={1999},
+  organization={{IEEE}}
+}
+* Intrusion Recovery
+
+** RAIL (MIT)
+
+@inproceedings{chen2014rail,
+  title={Identifying information disclosure in web applications with retroactive auditing},
+  author={Chen, Haogang and Kim, Taesoo and Wang, Xi and Kaashoek, MF and Zeldovich, N},
+  booktitle={Proceedings of the 11th USENIX conference on Operating Systems Design and Implementation},
+  pages={555--569},
+  year={2014},
+  organization={USENIX Association}
+}
+
+@inproceedings{kim2010retro,
+  title={Intrusion Recovery Using Selective Re-execution.},
+  author={Kim, Taesoo and Wang, Xi and Zeldovich, Nickolai and Kaashoek, M Frans},
+  booktitle={Proceedings of the 9th USENIX conference on Operating Systems Design and Implementation},
+  pages={89--104},
+  year={2010}
+}
+
+* Debugging
+
+** Expositor: scriptable time-travel debugging with first-class traces (UMD)
+
+@inproceedings{phang2013expositor,
+  title={Expositor: scriptable time-travel debugging with first-class traces},
+  author={Phang, Khoo Yit and Foster, Jeffrey S and Hicks, Michael},
+  booktitle={Software Engineering (ICSE), 2013 35th International Conference on},
+  pages={352--361},
+  year={2013},
+  organization={IEEE}
+}
+
+* Virtualization
+
+** A Virtual Machine Introspection Based Architecture for Intrusion Detection
+
+@inproceedings{garfinkel2003livewire,
+  title={A Virtual Machine Introspection Based Architecture for Intrusion Detection.},
+  author={Garfinkel, Tal and Rosenblum, Mendel and others},
+  booktitle={NDSS},
+  volume={3},
+  pages={191--206},
+  year={2003}
+}
+
+* Languages
+
+** Weir: A Streaming Language for Performance Analysis (Utah)
+
+@inproceedings{burtsev2014weir,
+  author =       "Anton Burtsev and Nikhil Mishrikoti and Eric Eide and Robert Ricci",
+  title =        "{Weir}: A Streaming Language for Performance Analysis",
+  booktitle =    "Proceedings of the Seventh Workshop on Programming Languages and Operating Systems",
+  series =       {PLOS '13},
+  address =      "Farmington, PA",
+  year =         2013,
+  month =        nov,
+  doi =          "10.1145/2525528.2525537"
+}
+
+* Binary instrumentation / Program transformation
+
+** Program Shepherding (DynamoRIO)
+
+@inproceedings{Kiriansky:2002,
+ author = {Kiriansky, Vladimir and Bruening, Derek and Amarasinghe, Saman P.},
+ title = {Secure Execution via Program Shepherding},
+ booktitle = {Proceedings of the 11th USENIX Security Symposium},
+ year = {2002},
+ isbn = {1-931971-00-5},
+ pages = {191--206},
+ numpages = {16},
+ url = {http://dl.acm.org/citation.cfm?id=647253.720293},
+ acmid = {720293},
+ publisher = {USENIX Association},
+ address = {Berkeley, CA, USA},
+}
+
+** DBILL
+
+@inproceedings{lyu2014dbill,
+  title={DBILL: an efficient and retargetable dynamic binary instrumentation framework using llvm backend},
+  author={Lyu, Yi-Hong and Hong, Ding-Yong and Wu, Tai-Yi and Wu, Jan-Jan and Hsu, Wei-Chung and Liu, Pangfeng and Yew, Pen-Chung},
+  booktitle={Proceedings of the 10th ACM SIGPLAN/SIGOPS international conference on Virtual execution environments},
+  pages={141--152},
+  year={2014},
+  organization={ACM}
+}
+
+** LLVM Dataflow Sanitizer (DFSan)
+
+@misc{DFSan,
+  author = {Team LLVM},
+  title = {{LLVM Clang DataFlowSanitizer}},
+  howpublished = "\url{http://clang.llvm.org/docs/DataFlowSanitizer.html}",
+  year = {}, 
+  note = "[Online; accessed 02-Feb-2015]"
+}
+
+** KCoFI
+
+@inproceedings{criswell2014kcofi,
+ author = {Criswell, John and Dautenhahn, Nathan and Adve, Vikram},
+ title = {KCoFI: Complete Control-Flow Integrity for Commodity Operating System Kernels},
+ booktitle = {Proceedings of the 2014 IEEE Symposium on Security and Privacy},
+ series = {SP '14},
+ year = {2014},
+ isbn = {978-1-4799-4686-0},
+ pages = {292--307},
+ numpages = {16},
+ url = {http://dx.doi.org/10.1109/SP.2014.26},
+ doi = {10.1109/SP.2014.26},
+ acmid = {2650804},
+ publisher = {IEEE Computer Society},
+ address = {Washington, DC, USA},
+ keywords = {control-flow integrity, operating systems, Free BSD, compiler, formal verification},
+} 
+
+
+* Distributed information flow
+
+** Shand 2011, Security policy and information sharing in distributed event-based systems
+
+@article{Shand:2011,
+   author = {Shand, B and Pietzuch, P and Papagiannis, I and Moody, K and Migliavacca, M and Eyers, DM and Bacon, J},
+   doi = {10.1007/978-3-642-19724-6_7},
+   journal = {Studies in Computational Intelligence},
+   pages = {151--172},
+   title = {Security policy and information sharing in distributed event-based systems},
+   url = {http://dx.doi.org/10.1007/978-3-642-19724-6_7},
+   volume = {347},
+   year = {2011}
+}
+
+** Myers, Liskov /Protecting privacy using the decentralized label model/
+@Article{myers:decentr_label_model,
+  author = {Myers, A. C. and Liskov, B.},
+  title = {Protecting privacy using the decentralized label model},
+  journal = {Transactions On Software Engineering And Methodology (TOSEM)},
+  shortjournal = {TOSEM},
+  volume = 9,
+  issue = 4,
+  month = {October},
+  year = 2000,
+  issn = {1049-331X},
+  pages = {410--442},
+  numpages = 33,
+  url = {http://doi.acm.org/10.1145/363516.363526},
+  doi = {http://doi.acm.org/10.1145/363516.363526},
+  acmid = 363526,
+  publisher = {ACM},
+  keywords = {confidentiality, declassification, downgrading, end-to-end, information flow controls, integrity, lattice, policies, principals, roles, type checking},
+}
+
+
+** Bacon et al /Information flow control for secure cloud computing/
+
+@article{Bacon:2014,
+   author = {Bacon, J and Eyers, D and Pasquier, TFJ-M and Singh, J 
+      and Papagiannis, I and Pietzuch, P},
+   doi = {10.1109/TNSM.2013.122313.130423},
+   journal = {IEEE Transactions on Network and Service Management},
+   pages = {76--89},
+   title = {Information flow control for secure cloud computing},
+   url = {http://dx.doi.org/10.1109/TNSM.2013.122313.130423},
+   volume = {11},
+   year = {2014}
+}
+
+    [[reading:Bacon2014_InformationFlowForSecureCloudComputing.pdf][local copy]]
+
+    - mentions their work on DEFCON, which has the notion of
+      "Decentralised Event Flow Control" (DEFC).
+
+
+** Migliavacca et al 2010 /Distributed Middleware Enforcement of Event Flow Security Policy/
+
+@inproceedings{Migliavacca:2010,
+ author = {Migliavacca, Matteo and Papagiannis, Ioannis and Eyers, David M. and Shand, Brian and Bacon, Jean and Pietzuch, Peter},
+ title = {Distributed Middleware Enforcement of Event Flow Security Policy},
+ booktitle = {Proceedings of the ACM/IFIP/USENIX 11th International Conference on Middleware},
+ series = {Middleware '10},
+ year = {2010},
+ isbn = {978-3-642-16954-0},
+ location = {Bangalore, India},
+ pages = {334--354},
+ numpages = {21},
+ url = {http://dl.acm.org/citation.cfm?id=2023718.2023741},
+ acmid = {2023741},
+ publisher = {Springer-Verlag},
+ address = {Berlin, Heidelberg},
+ keywords = {event-based middleware, information flow control, multi-domain distributed applications, security policy},
+} 
+
+    [[reading:Migliavacca2010DEFConPolicy.pdf][local copy]]
+
+    - introduces DEFCon-Policy Language (DPL)
+    - "express high-level security policy as constraints on permitted
+      data flows throughout a distributed, event-driven application." 
+    - built on top of event-based middleware such as Sun JMS or IBM
+      WebSphere. 
+    - declarative policy language of allowed and required flows.
+
+** Migliavacca et al 2010 /DEFCON: High-performance Event Processing with Information Security/
+
+@inproceedings{MigliavaccaDefcon:2010,
+ author = {Migliavacca, Matteo and Papagiannis, Ioannis and Eyers, David M. and Shand, Brian and Bacon, Jean and Pietzuch, Peter},
+ title = {DEFCON: High-performance Event Processing with Information Security},
+ booktitle = {Proceedings of the 2010 USENIX Conference on USENIX Annual Technical Conference},
+ series = {USENIXATC'10},
+ year = {2010},
+ location = {Boston, MA},
+ pages = {1--1},
+ numpages = {1},
+ url = {http://dl.acm.org/citation.cfm?id=1855840.1855841},
+ acmid = {1855841},
+ publisher = {USENIX Association},
+ address = {Berkeley, CA, USA},
+} 
+
+
+    [[reading:Migliavacca2010-DEFCon.pdf][local copy]]
+
+    - introduce DEFCon - contraints on event flows.
+    - hack JVM.
+    - maintains IFC-like labels and privileges. Privileges are for
+      declassification (confidentiality) or endorsement (integrity). 
+
+
+
+** Yip et al  /Improving Application Security with Data Flow Assertions/
+
+@inproceedings{Yip:2009,
+ author = {Yip, Alexander and Wang, Xi and Zeldovich, Nickolai and Kaashoek, M. Frans},
+ title = {Improving Application Security with Data Flow Assertions},
+ booktitle = {Proceedings of the ACM SIGOPS 22Nd Symposium on Operating Systems Principles},
+ series = {SOSP '09},
+ year = {2009},
+ isbn = {978-1-60558-752-3},
+ location = {Big Sky, Montana, USA},
+ pages = {291--304},
+ numpages = {14},
+ url = {http://doi.acm.org/10.1145/1629575.1629604},
+ doi = {10.1145/1629575.1629604},
+ acmid = {1629604},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {php, privacy, python, security, sql injection, web, xss},
+} 
+
+  [[reading:Yip2009_ImprovingApplicationSecurityWithDataFlowAssertions.pdf][local copy]]
+
+  Resin project: http://pdos.csail.mit.edu/resin/
+
+  Notes (Greg S. 12/2014):
+  - Core Resin concepts: (1) policy objects, (2) data tracking, (3)
+    filter objects.
+    - Policy objects contain metadata (and code) and travel with
+      data. 
+    - Filter objects are on channels and may contain channel-specific
+      metadata. 
+  - Programmers annotate data with policy objects. Annotations are in
+    host language (e.g. python, php, etc.) of application.
+  - Terminology: "data flow assertions".
+  - uses MoinMoin wiki and HotCRP as examples.
+  - example assertions:
+    - "Any user input data must flow through a sanitization function
+      before it flows into a SQL query."
+    - "No data may flow into directory d unless the authenticated user
+      has write permission for d." 
+    - "The interpreter may not interpret any user-supplied code."
+    - "Wiki page p may flow out of the system only to a user on p's
+      ACL"
+    - "User u's password may leave the system only via email to u's
+      email address, or to the program chair." 
+  - "RESIN treats the entire language runtime, and application code,
+    as part of the trusted computing base. RESIN assumes the
+    application code is not malicious, and does not prevent an
+    adversary from com- promising the underlying language runtime or
+    the OS. "
+  - filter objects define data flow boundaries; interposes an I/O
+    channel or function call.
+  - notes that "Flume provides assurance against malicious server
+    code and RESIN does not".
+
+  - Resin future work:
+    - "Instead of requiring programmers to specify what writes are
+      allowed using filter objects, we envision using transactions to
+      buffer database or file system changes, and checking a
+      programmer-specified assertion before committing them" 
+    - "construct internal data flow boundaries within an
+      application. For example, an assertion could prevent clear-text
+      passwords from flowing out of the software module that handles
+      passwords" 
+    - "extend RESIN to allow data flow assertions to span multiple
+      runtimes, possibly including Javascript and SQL"
+    - "We would like to investigate whether static analysis or
+      programmer annotations can help check RESIN-style data flow
+      assertions at compile time" 
+
+
+* Policy Languages
+
+** Anderson, Watson et al., /TESLA: temporally enhanced system logic assertions/
+
+@inproceedings{AndersonTesla14,
+  author    = {Jonathan Anderson and
+               Robert N. M. Watson and
+               David Chisnall and
+               Khilan Gudka and
+               Ilias Marinos and
+               Brooks Davis},
+  title     = {{TESLA:} Temporally Enhanced System Logic Assertions},
+  booktitle = {Proceedings of The 2014 European Conference on Computer Systems (EuroSys 2014), Amsterdam, The Netherlands,
+               April 14-16, 2014},
+  year      = {2014},
+  url       = {http://doi.acm.org/10.1145/2592798.2592801},
+  doi       = {10.1145/2592798.2592801},
+  timestamp = {Fri, 13 Jun 2014 16:43:52 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/eurosys/AndersonWCGMD14},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+    [[reading:Anderson2014_tesla.pdf][local copy]]
+
+    - annotations in C code inspired by Linear Temporal Logic.
+      - e.g. previously, eventually
+      - events: fn calls, returns, struct field assignment, reaching
+        an assertion site.
+    - examples from FreeBSD, GNUStep, OpenSSL.
+    - uses LLVM Clang and LLVM IR.
+
+
+
+** Dockins, Tolmach, /SUPPL: A flexible language for policies/
+
+@incollection{dockins2014suppl,
+  title={Suppl: A Flexible Language for Policies},
+  author={Dockins, Robert and Tolmach, Andrew},
+  year={2014},
+  isbn={978-3-319-12735-4},
+  booktitle={Programming Languages and Systems},
+  volume={8858},
+  series={Lecture Notes in Computer Science},
+  editor={Garrigue, Jacques},
+  doi={10.1007/978-3-319-12736-1_10},
+  url={http://dx.doi.org/10.1007/978-3-319-12736-1_10},
+  publisher={Springer International Publishing},
+  pages={176--195},
+  language={English}
+}
+
+  - [[reading:Dockins2014_SupplLangForPolicies.pdf][local copy]]
+
+** Lobo et al., /A Policy Description Language/
+
+@inproceedings{Lobo:1999:PDL:315149.315308,
+ author = {Lobo, Jorge and Bhatia, Randeep and Naqvi, Shamim},
+ title = {A Policy Description Language},
+ booktitle = {Proceedings of the Sixteenth National Conference on Artificial Intelligence and the Eleventh Innovative Applications of Artificial Intelligence Conference Innovative Applications of Artificial Intelligence},
+ series = {AAAI '99/IAAI '99},
+ year = {1999},
+ isbn = {0-262-51106-1},
+ location = {Orlando, Florida, USA},
+ pages = {291--298},
+ numpages = {8},
+ url = {http://dl.acm.org/citation.cfm?id=315149.315308},
+ acmid = {315308},
+ publisher = {American Association for Artificial Intelligence},
+ address = {Menlo Park, CA, USA},
+} 
+
+
+* Program Analysis
+
+** Marten, Livshits, Lam, /Finding Application Errors and Security Flaws Using PQL: A Program Query Language/
+
+@inproceedings{Martin:2005,
+ author = {Martin, Michael and Livshits, Benjamin and Lam, Monica S.},
+ title = {Finding Application Errors and Security Flaws Using PQL: A Program Query Language},
+ booktitle = {Proceedings of the 20th Annual ACM SIGPLAN Conference on Object-oriented Programming, Systems, Languages, and Applications},
+ series = {OOPSLA '05},
+ year = {2005},
+ isbn = {1-59593-031-0},
+ location = {San Diego, CA, USA},
+ pages = {365--383},
+ numpages = {19},
+ url = {http://doi.acm.org/10.1145/1094811.1094840},
+ doi = {10.1145/1094811.1094840},
+ acmid = {1094840},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {SQL injection, bug finding, pattern matching, program traces, resource leaks, web applications},
+} 
+
+  [[reading:Martin2005_FindingAppErrorsUsingPQL.pdf][local copy]]
+
+  - Notes (Greg S. 12/2014)
+    - nice intermixing of static and dynamic analysis. Optimize use
+      of dynamic instrumentation by using sound static analysis.
+    - amazing results - found 260 bugs in Java programs, w/o deep
+      knowledge of the applications.
+    - "focus of PQL is to track method invocations and accesses of
+      fields and array elements in related objects." 
+    - "We abstract the program execution as a trace of primitive
+      events, each of which contains a unique event ID, an event type,
+      and a list of attributes." 
+    - primitive events: (1) field loads and stores; (2) array loads
+      and stores; (3) method calls and returns; (4) object creations;
+      (5) end of program (to enforce "never happens"). 
+
+
+* Overlay Networks
+
+** Loo et al. /Implementing Declarative Overlays/ (P2 system)
+
+@inproceedings{Loo:2005,
+  author = {Loo, Boon Thau and Condie, Tyson and Hellerstein, 
+            Joseph M. and Maniatis, Petros and Roscoe, Timothy and Stoica, Ion},
+  title = {Implementing Declarative Overlays},
+  booktitle = {Proceedings of the Twentieth ACM Symposium on Operating Systems Principles},
+  series = {SOSP '05},
+  year = 2005,
+  isbn = {1-59593-079-5},
+  location = {Brighton, United Kingdom},
+  pages = {75--90},
+  numpages = {16},
+  url = {http://doi.acm.org/10.1145/1095810.1095818},
+  doi = {10.1145/1095810.1095818},
+  acmid = {1095818},
+  publisher = {ACM},
+  address = {New York, NY, USA},
+  keywords = {dataflow engines, declarative overlays, executable pseudocode},
+}
+
+  [[reading:Loo2005ImplementingDeclarativeOverlaysP2.pdf][local copy]]
+
+  - present P2 system for defining network overlays.
+  - define Overlog language, built on Datalog
+  - "Parallel and distributed database query systems like Gamma [12],
+    Volcano [14] and PIER [16] use dataflow graphs as their basic
+    query executables: these graphs connect various database
+    'operators' with dataflow edges that represent the passing of
+    tuples among operators, possibly across a network."
+
+
+** Singh et al. /Using Queries for Distributed Monitoring and Forensics/ (P2 system)
+
+   - a follow-on to the 2005 paper above
+
+@inproceedings{Singh:2006,
+ author = {Singh, Atul and Maniatis, Petros and Roscoe, Timothy and Druschel, Peter},
+ title = {Using Queries for Distributed Monitoring and Forensics},
+ booktitle = {Proceedings of the 1st ACM SIGOPS/EuroSys European Conference on Computer Systems 2006},
+ series = {EuroSys '06},
+ year = {2006},
+ isbn = {1-59593-322-0},
+ location = {Leuven, Belgium},
+ pages = {389--402},
+ numpages = {14},
+ url = {http://doi.acm.org/10.1145/1217935.1217973},
+ doi = {10.1145/1217935.1217973},
+ acmid = {1217973},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {declarative overlays, distributed debugging, distributed monitoring, invariant checking},
+} 
+
+   [[reading:Singh2006_QueriesDistributedMonitoringP2.pdf][local copy]]
+
+   - "for example, IBM's Tivoli console allows the operator to write
+     Prolog programs to perform continuous queries over management
+     state."
+
+   - "Applications using P2 can create such a dataflow graph
+     explicitly using an embedded language, but P2 provides a
+     higher-level query language to do this. This casts the
+     distributed routing state of an application's overlay network as
+     a database view over the underlying network state, and
+     maintaining this view over time as the execution of a continuous,
+     distributed, relational query."
+
+   - "All dataflow element classes in P2 are 'tappable'"
+
+
+* Network Analysis
+
+** Ou, Appel /MulVal: A Logic-based Network Security Analyzer/
+
+@inproceedings{Ou:2005,
+ author = {Ou, Xinming and Govindavajhala, Sudhakar and Appel, Andrew W.},
+ title = {MulVAL: A Logic-based Network Security Analyzer},
+ booktitle = {Proceedings of the 14th Conference on USENIX Security Symposium - Volume 14},
+ series = {SSYM'05},
+ year = {2005},
+ location = {Baltimore, MD},
+ pages = {8--8},
+ numpages = {1},
+ url = {http://dl.acm.org/citation.cfm?id=1251398.1251406},
+ acmid = {1251406},
+ publisher = {USENIX Association},
+ address = {Berkeley, CA, USA},
+} 
+
+   [[reading:Ou2005_MulValNetworkSecurityDatalog.pdf][local copy]]
+
+   - use Datalog to represent CVE reports initially in OVAL DSL, then
+     datalog to represent network config. 
+
+* Surveys
+
+** Provenance
+
+@article{carata2014provenance,
+  title={A primer on provenance},
+  author={Carata, Lucian and Akoush, Sherif and Balakrishnan, Nikilesh and Bytheway, Thomas and Sohan, Ripduman and Selter, Margo and Hopper, Andy},
+  journal={Communications of the ACM},
+  volume={57},
+  number={5},
+  pages={52--60},
+  year={2014},
+  publisher={ACM}
+}
+
+** Log Analysis
+
+@article{oliner2012loganalysis,
+  title={Advances and challenges in log analysis},
+  author={Oliner, Adam and Ganapathi, Archana and Xu, Wei},
+  journal={Communications of the ACM},
+  volume={55},
+  number={2},
+  pages={55--61},
+  year={2012},
+  publisher={ACM}
+}
+
+@inproceedings{xu2009logs,
+ author = {Xu, Wei and Huang, Ling and Fox, Armando and Patterson, David and Jordan, Michael I.},
+ title = {Detecting Large-scale System Problems by Mining Console Logs},
+ booktitle = {Proceedings of the ACM SIGOPS 22Nd Symposium on Operating Systems Principles},
+ series = {SOSP '09},
+ year = {2009},
+ isbn = {978-1-60558-752-3},
+ location = {Big Sky, Montana, USA},
+ pages = {117--132},
+ numpages = {16},
+ url = {http://doi.acm.org/10.1145/1629575.1629587},
+ doi = {10.1145/1629575.1629587},
+ acmid = {1629587},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {console log analysis, monitoring, pca, problem detection, source code analysis, statistical learning, tracing},
+} 
+
+** Distributed Tracing
+
+@techreport{sambasivan2014tracing,
+  title={{So, you want to trace your distributed system? Key design insights from years of practical experience}},
+  author={Sambasivan, Raja R and Fonseca, Rodrigo and Shafer, Ilari and Ganger, Gregory R},
+  year=2014,
+  url="http://www.pdl.cmu.edu/PDL-FTP/SelfStar/CMU-PDL-14-102.pdf",
+  institution = "Carnegie Mellon University Parallel Data Lab",
+}
+
+* Our refs
+
+** FreeBSD book
+
+@book{mckusick2014design,
+  title={{The Design and Implementation of the FreeBSD Operating System, 2nd Edition}},
+  author={McKusick, Marshall Kirk and Neville-Neil, George V. and Watson, Robert N.M.},
+  year={September 2014},
+  address={Boston, MA, USA},
+  publisher={Pearson Education},
+}
+
+** /TrustedBSD OpenBSM: Open Source Security Audit Framework/
+
+@inproceedings{watson2006audit,
+  author    = {Robert N. M. Watson and Wayne Salamon},
+  title     = {{TrustedBSD OpenBSM:} Open Source Security Audit Framework},
+  booktitle = {{UKUUG} Spring Conference},
+  month     = mar,
+  year      = {2006},
+  address   = {Durham, UK}
+}
+
+** TrustedBSD MAC Framework, Watson et al 2003
+
+@inproceedings{TrustedBSDMAC2003,
+  author    = {Robert Watson and
+               Brian Feldman and
+               Adam Migus and
+               Chris Vance},
+  title     = {{Design and Implementation of the TrustedBSD MAC Framework}},
+  booktitle = {3rd {DARPA} Information Survivability Conference and Exposition {(DISCEX-III)}
+               2003), 22-24 April 2003, Washington, DC, {USA}},
+  pages     = {38--49},
+  year      = {2003},
+  url       = {http://dx.doi.org/10.1109/DISCEX.2003.1194871},
+  doi       = {10.1109/DISCEX.2003.1194871},
+  timestamp = {Mon, 28 Jul 2014 17:06:04 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/discex/WatsonFMV03},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+** /FreeBSD Jail/
+
+@inproceedings{KampWatsonJail2000,
+  author = {Poul-Henning Kamp and Robert N. M. Watson},
+  title = {{Jails: Confining the Omnipotent Root}},
+  booktitle = {SANE 2000 Conference},
+  publisher = {NLUUG},
+  year = {2000},
+}
+
+** /Exploring compartmentalisation hypotheses with SOAAP/
+
+@inproceedings{gudka2012soaap,
+  author    = {Khilan Gudka and Robert N. M. Watson and Steven Hand and Ben Laurie and Anil Madhavapeddy},
+  title     = {Exploring compartmentalisation hypotheses with {SOAAP}},
+  booktitle = {Workshop on Adaptive Host and Network Security (AHANS 2012)},
+  month     = sep,
+  year      = {2012}
+}
+
+** /Declarative, Temporal, and Practical Programming with Capabilities/
+
+@inproceedings{harris2013capweave,
+  author    = {William R. Harris and Somesh Jha and Thomas Reps and Jonathan Anderson and Robert N. M. Watson},
+  title     = {Declarative, Temporal, and Practical Programming with Capabilities},
+  booktitle = {{IEEE} Symposium on Security and Privacy (Oakland)},
+  month     = may,
+  year      = {2013}
+}
+
+** /A decade of OS access-control extensibility/
+
+@article{watson2013mac,
+  title={{A decade of OS access-control extensibility}},
+  author={Robert N.M. Watson},
+  journal={Communications of the {ACM}},
+  volume={56},
+  number={2},
+  pages={52--63},
+  month=feb,
+  year={2013},
+  publisher={ACM}
+}
+
+** /Capsicum: practical capabilities for UNIX/
+
+@inproceedings{watson2010capsicum,
+  author    = {Robert N. M. Watson and Jonathan Anderson and Ben Laurie and Kris Kennaway},
+  title     = {{Capsicum: practical capabilities for UNIX}},
+  booktitle = {19th {USENIX} Security Symposium},
+  month     = aug,
+  year      = {2010}
+}
+
+** /Beyond the PDP-11: Processor support for a memory-safe C abstract machine/
+
+@inproceedings{chisnall2015memsafety,
+  author    = {David Chisnall and Colin Rothwell and Brooks Davis and Robert N.M. Watson and Jonathan Woodruff and Simon W. Moore and Peter G. Neumann and Michael Roe},
+  title     = {Beyond the {PDP-11}: Processor support for a memory-safe C abstract machine},
+  booktitle = {Architectural Support for Programming Languages and Operating Systems ({ASPLOS} 2015)},
+  month     = mar,
+  year      = {2015},
+  address   = {Istanbul, Turkey}
+}
+
+** /The CHERI capability model: Revisiting RISC in an age of risk/
+
+@inproceedings{woodruff2014cheri,
+  author    = {Jonathan Woodruff and Robert N. M. Watson and David Chisnall and Simon W. Moore and Jonathan Anderson and Brooks Davis and Ben Laurie and Peter G. Neumann and Robert Norton and and Michael Roe},
+  title     = {The {CHERI} capability model: Revisiting {RISC} in an age of risk},
+  booktitle = {41st International Symposium on Computer Architecture (ISCA 2014)},
+  month     = jun,
+  year      = {2014},
+  address   = {Minneapolis, MN, USA}
+}
+
+** SAFE
+
+@inproceedings{sullivan2013safe,
+  author = {Gregory T. Sullivan and Silviu Chiricescu and Andr\'{e} DeHon and
+  Delphine Demange and Suraj Iyer and Aleksey Kliger and Greg Morrisett
+  and Benjamin C. Pierce and Howard Reubenstein and Jonathan M. Smith
+  and Arun Thomas and Jesse Tov and Christopher M. White
+  and David Wittenberg},
+  title = {{SAFE}: A Clean-Slate Architecture for Secure Systems},
+  booktitle = 	 {Proceedings of the {IEEE} International Conference on
+  Technologies for Homeland Security},
+  pages = {570-576},
+  year = {2013},
+  month = nov,
+  url = {http://www.crash-safe.org/docs/HST2013-SAFE.html},
+}
+
+@inproceedings{dhawan2014pump,
+	author = {Udit Dhawan and Nikos Vasilakis and Raphael Rubin and Silviu Chiricescu and Jonathan M. Smith and Thomas F. Knight and Benjamin C. Pierce and Andr\'{e} DeHon},
+	title = {{PUMP -- A Programmable Unit for Metadata Processing}},
+	booktitle = {Proceedings of the 3rd International Workshop on Hardware and Architectural Support for Security and Privacy},
+        shortbooktitle={HASP},
+	series = {HASP '14},
+	month = jun,
+	year = {2014},
+	isbn = {},
+	location = {Minneapolis, USA},
+	pages = {},
+	articleno = {},
+	numpages = {8},
+	url = {http://www.crash-safe.org/node/32},
+	doi = {},
+	acmid = {},
+	publisher = {ACM},
+	address = {New York, NY, USA},
+	keywords = {cache coherence, dynamic information flow tracking, metadata coherence, software security},
+}
+
+@inproceedings{dhawan2015pump,
+  author = {Udit Dhawan and
+          C\u{a}t\u{a}lin Hri\c{t}cu and
+          Rafi Rubin and
+          Nikos Vasilakis and
+          Silviu Chiricescu and
+          Jonathan M. Smith and
+          Thomas F. {Knight, Jr.} and
+          Benjamin C. Pierce and
+          Andr\'{e} DeHon},
+  title = {Architectural Support for Software-Defined Metadata Processing},
+  booktitle = {Architectural Support for Programming Languages and Operating Systems ({ASPLOS} 2015)},
+  month     = mar,
+  year      = {2015},
+  address   = {Istanbul, Turkey}
+}
+
+** Mirage
+
+@inproceedings{reimer2008mirage,
+  title={Opening black boxes: using semantic information to combat virtual machine image sprawl},
+  author={Reimer, Darrell and Thomas, Arun and Ammons, Glenn and Mummert, Todd and Alpern, Bowen and Bala, Vasanth},
+  booktitle={Proceedings of the fourth ACM SIGPLAN/SIGOPS international conference on Virtual execution environments},
+  pages={111--120},
+  year={2008},
+  organization={ACM}
+}
+
+@misc{gotofail,
+  title={{Behind iPhone's Critical Security Bug, a Single Bad `Goto'}},
+  author={Kevin Poulsen},
+  day=22,
+  month=feb,
+  year=2014,
+  note={\url{http://www.wired.com/2014/02/gotofail/}}
+}
+
+@misc{llvm-users,
+  author={{LLVM Users}},
+  title={{LLVM Users}},
+  dateaccessed={10 Feb 2015},
+  howpublished = {\url{http://llvm.org/Users.html}}
+}
+
+#+LINK: reading file:RelatedWork/%s
+#+STARTUP: showall
+
+#+BEGIN_COMMENT
+Local Variables:
+mode: org
+End:
+#+END_COMMENT
+
+#  LocalWords:  BibTeX undertainting

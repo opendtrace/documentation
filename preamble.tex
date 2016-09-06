@@ -1,0 +1,79 @@
+%%%% University of Cambridge tech-report formatting; enable when producing
+%%%% tech-report versions of these documents; otherwise, disable.
+%\documentclass[12pt,twoside,openright,a4paper]{report}
+%\setlength{\oddsidemargin}{-0.4mm} % 25 mm left margin
+%\setlength{\evensidemargin}{\oddsidemargin}
+%\setlength{\textwidth}{160mm}      % 25 mm right margin
+%\setlength{\topmargin}{-5.4mm}     % 20 mm top margin
+%\setlength{\headheight}{5mm}
+%\setlength{\headsep}{5mm}
+%\setlength{\footskip}{10mm}
+%\setlength{\textheight}{237mm}     % 20 mm bottom margin
+%%%% .. or regular document
+\documentclass[12pt,letterpaper,twoside,openright,fleqn]{report}
+%%%% End of tech-report vs. regular
+%%%%
+
+%\renewcommand{\baselinestretch}{2} % double space for editors 
+\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{marginnote}
+\usepackage{booktabs}
+\usepackage{bytefield}
+\usepackage{color}
+\definecolor{lightgray}{gray}{0.8}
+\usepackage{times}
+\usepackage{algpseudocode}
+\newcommand{\note}[2]{{\color{blue}[ Note: #1 - #2]}}
+\usepackage{listings}
+\usepackage{setspace}
+\usepackage{amsmath}
+% Must be included later than setspace, otherwise all footnote hyperlinks
+% point to the title page.
+\usepackage{hyperref}
+\definecolor{CodeColour}{rgb}{0.9,0.9,0.9} %Light grey
+\lstset{basicstyle=\small\ttfamily,
+        stringstyle=\textit, %italic strings
+        keywordstyle=\color{red}\textbf, %Bold keywords
+        commentstyle=\color{blue},
+        breaklines=true, % Wrap long lines
+        numbers=left, % Line numbers on the left
+        frame=l, %Border on the left
+        framerule=0.8pt, % Thick border
+        backgroundcolor=\color{CodeColour}, %Coloured code listings
+        numberstyle={\small \oldstylenums},  %tiny, old style line numbers
+		%stepnumber=5, % Number every fifth line
+        numbersep=5pt, % Five points between the line numbers and the text
+        tabsize=4
+}
+\lstdefinelanguage{llvm}
+{
+	morekeywords={private, constant, i8, i32, define, icmp, label, i64, call, void, ret, getelementptr, br, load, align, nounwind},
+	morekeywords={addrspace, inttoptr, ptrtoint, tail},
+	morecomment=[l];
+}%
+
+\lstnewenvironment{ccodelisting}{\lstset{language=C}}{}
+\lstnewenvironment{llvmlisting}{\lstset{language={llvm}}}{}
+\newcommand{\ccode}[1]{\lstinline[backgroundcolor=\color{white},language=C]|#1|}
+\newcommand{\llvmir}[1]{\lstinline[backgroundcolor=\color{white},language={llvm}]|#1|}
+\newcommand{\asm}[1]{\lstinline[backgroundcolor=\color{white},language={}]|#1|}
+\lstnewenvironment{asmcode}{\lstset{language=}}{}
+\newcommand{\regname}[1]{{\small\ttfamily\$#1}}
+
+\hyphenation{CADETS}
+
+\reversemarginpar
+\setlength{\marginparwidth}{1.2in}
+\let\oldmarginpar\marginpar
+\renewcommand\marginpar[1]{\-\oldmarginpar[\raggedright\footnotesize #1]%
+{\raggedright\footnotesize #1}}
+
+\newcommand{\pathname}[1]{{\texttt{#1}}}
+\newcommand{\literal}[1]{{\texttt{#1}}}
+\newcommand{\function}[1]{{\texttt{#1}}}
+\newcommand{\instruction}[1]{{\texttt{#1}}}
+\newcommand{\register}[1]{{\texttt{\%#1}}}
+\newcommand{\registerop}[1]{{\texttt{\textbf{#1}}}}
+\newcommand{\nregs}{{\texttt{\textbf{NREGS}}}}
+\newcommand{\subroutine}[1]{{\texttt{#1}}}

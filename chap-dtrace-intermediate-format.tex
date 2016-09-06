@@ -1,0 +1,137 @@
+
+\section{DTrace Instruction Version}
+
+This specification describes the DTrace Intermediate Format version 2, as
+shipped in Solaris \textbf{XXXRW}, FreeBSD \textbf{XXXRW}, and Mac OS X
+\textbf{XXXRW}.
+
+\section{The DIF Interpreter}
+
+\textbf{XXXRW: Something about instructions}
+
+\textbf{XXXRW: Something about branches}
+
+\textbf{XXXRW: Something about calling subroutines}
+
+\textbf{XXXRW: Something about returning}
+
+\textbf{XXXRW: Something about DIF registers, \nregs{}}
+
+\textbf{XXXRW: Something about the zero register}
+
+\textbf{XXXRW: Something about implied status bits}
+
+\textbf{XXXRW: Something about scratch memory (alloca, user copyin)}
+
+\textbf{XXXRW: Something about the tuple stack}
+
+\textbf{XXXRW: Something about kernel memory access}
+
+\textbf{XXXRW: Something about user memory access}
+
+\textbf{XXXRW: Something about ``by reference''}
+
+\textbf{XXXRW: Something about the integer table}
+
+\textbf{XXXRW: Something about the string table}
+
+\textbf{XXXRW: Something about local variables}
+
+\textbf{XXXRW: Something about thread-local variables}
+
+\textbf{XXXRW: Something about global variables}
+
+\textbf{XXXRW: Something about scalars}
+
+\textbf{XXXRW: Something about arrays}
+
+\textbf{XXXRW: Something about aggregations}
+
+\section{Instruction Format}
+
+Each instruction consists of a 32-bit, native-endian integer whose most
+significant 8 bits contain an opcode allowing the remainder of the instruction
+to be decoded.
+To ease parsing, three major formats (R, B, and W) are used for all DTrace
+instructions, capturing different types of operations: register-to-register
+instructions accepting zero or more register operands; branch instructions
+accepting a target label as a single operand; and wide-immediate instructions
+that accept a 16-bit immediate used to capture both small constant values and
+also indices into various tables.
+
+\subsection{Register Format (R-Format)}
+
+This format accepts zero or ore register operands, supporting instructions
+that include arithmetic and boolean operations, comparison and test
+operations, load and store operations, tuple-stack operations, and the no-op
+instruction.
+
+\begin{center}
+\begin{bytefield}[endianness=big]{32}
+\bitheader{0,7,8,15,16,23,24,31}\\
+\bitbox{8}{op}
+\bitbox{8}{r1}
+\bitbox{8}{r2}
+\bitbox{8}{rd}
+\end{bytefield}
+\end{center}
+
+\begin{description}
+\item[op] Mandatory 8-bit operation identifier
+\item[r1, r2] Optional source registers providing input values to the
+  operation
+\item[rd] Optional destination register acting as the destination of the
+  operation
+\end{description}
+
+\subsection{Branch Format (B-Format)}
+
+This format accepts a single 24-bit integer operand identifying the label that
+is the branch target.
+It is used solely for the \textbf{BRANCH} instruction.
+
+\begin{center}
+\begin{bytefield}[endianness=big]{32}
+\bitheader{0,23,24,31}\\
+\bitbox{8}{op}
+\bitbox{24}{label}
+\end{bytefield}
+\end{center}
+
+\begin{description}
+\item[op] Mandatory 8-bit operation identifier
+\item[label] Mandatory 24-bit integer label
+\end{description}
+
+\subsection{Wide-Immediate Format (W-Format)}
+
+This format accepts an 8-bit register and 16-bit integer argument (frequently
+an index).
+It is used for a range of instructions including those to load values from
+integer and string constant tables, and to load and store variable values.
+
+\begin{center}
+\begin{bytefield}[endianness=big]{32}
+\bitheader{0,7,8,23,24,31}\\
+\bitbox{8}{op}
+\bitbox{16}{idx}
+\bitbox{24}{rs\textbar rd}
+\end{bytefield}
+\end{center}
+
+\begin{description}
+\item[op] Mandatory 8-bit operation identifier
+\item[idx] Mandatory 16-bit integer index
+\item[rs\textbar rd] Optional 8-bit register acting as the source or
+  destination of the operation
+\end{description}
+
+\section{Instructions}
+
+Chapter~\ref{chap:dtrace-instruction-reference} contains a comprehensive
+description of DTrace's instructions.
+
+\section{Subroutines}
+
+Chapter~\ref{chap:dtrace-subroutines} contains a comprehensive description of
+DTrace's built-in subroutines.

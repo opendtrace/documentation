@@ -1,0 +1,145 @@
+This chapter describes the DTrace instruction set.
+
+\section{Instruction List}
+
+\begin{table}
+\begin{center}
+\begin{tabular}{llp{11cm}}
+\toprule
+  Name & Opcode & Description \\
+\midrule
+  \hyperref[insn:or]{\instruction{OR}} & 1 & Bitwise Or \\
+  \hyperref[insn:xor]{\instruction{XOR}} & 2 & Bitwise Exclusive Or \\
+  \hyperref[insn:and]{\instruction{AND}} & 3 & Bitwise And \\
+  \hyperref[insn:sll]{\instruction{SLL}} & 4 & Shift Left Logical \\
+  \hyperref[insn:srl]{\instruction{SRL}} & 5 & Shift Right Logical \\
+  \hyperref[insn:sub]{\instruction{SUB}} & 6 & Subtract \\
+  \hyperref[insn:add]{\instruction{ADD}} & 7 & Add \\
+  \hyperref[insn:mul]{\instruction{MUL}} & 8 & Multiply \\
+  \hyperref[insn:sdiv]{\instruction{SDIV}} & 9 & Divide (Signed) \\
+  \hyperref[insn:udiv]{\instruction{UDIV}} & 10 & Divide (Unsigned) \\
+  \hyperref[insn:srem]{\instruction{SREM}} & 11 & Remainder (Unsigned) \\
+  \hyperref[insn:urem]{\instruction{UREM}} & 12 & Remainder (Signed) \\
+  \hyperref[insn:not]{\instruction{NOT}} & 13 & Bitwise Not \\
+  \hyperref[insn:mov]{\instruction{MOV}} & 14 & Move \\
+  \hyperref[insn:cmp]{\instruction{CMP}} & 15 & Compare \\
+  \hyperref[insn:tst]{\instruction{TST}} & 16 & Test Equal to Zero \\
+\midrule
+  \hyperref[insn:ldsb]{\instruction{LDSB}} & 28 & Load Byte (Signed) \\
+  \hyperref[insn:ldsh]{\instruction{LDSH}} & 29 & Load Halfword (Signed) \\
+  \hyperref[insn:ldsw]{\instruction{LDSW}} & 30 & Load Word (Signed) \\
+  \hyperref[insn:ldub]{\instruction{LDUB}} & 31 & Load Byte (Unsigned) \\
+  \hyperref[insn:lduh]{\instruction{LDUH}} & 32 & Load Halfword (Unsigned) \\
+  \hyperref[insn:lduw]{\instruction{LDUW}} & 33 & Load Word (Unsigned) \\
+  \hyperref[insn:ldx]{\instruction{LDX}} & 34 & Load Doubleword \\
+\midrule
+  \hyperref[insn:ret]{\instruction{RET}} & 35 & Return \\
+  \hyperref[insn:nop]{\instruction{NOP}} & 36 & No Operation \\
+\midrule
+  \hyperref[insn:scmp]{\instruction{SCMP}} & 39 & String Compare \\
+  \hyperref[insn:ldga]{\instruction{LDGA}} & 40 & Load from Global Array \\
+  \hyperref[insn:ldgs]{\instruction{LDGS}} & 41 & Load from Global Scalar \\
+  \hyperref[insn:stgs]{\instruction{STGS}} & 42 & Store to Global Scalar \\
+  \hyperref[insn:ldta]{\instruction{LDTA}} & 43 & Load from Thread-Local Array \\
+  \hyperref[insn:ldts]{\instruction{LDTS}} & 44 & Load from Thread-Local Scalar \\
+  \hyperref[insn:stts]{\instruction{STTS}} & 45 & Store to Thread-Local Scalar \\
+  \hyperref[insn:sra]{\instruction{SRA}} & 46 & Shift Right Arithmatic \\
+\bottomrule
+\end{tabular}
+\end{center}
+\caption{R-Format Instruction List (Part 1)}
+\end{table}
+
+\begin{table}
+\begin{center}
+\begin{tabular}{llp{11cm}}
+\toprule
+  Name & Opcode & Description \\
+\midrule
+  \hyperref[insn:pushtr]{\instruction{PUSHTR}} & 48 & Push a reference onto the tuple stack \\
+  \hyperref[insn:pushtv]{\instruction{PUSHTV}} & 49 & Push a value onto the tuple stack \\
+  \hyperref[insn:popts]{\instruction{POPTS}} & 50 & Pop the tuple stack \\
+  \hyperref[insn:flushts]{\instruction{FLUSHTS}} & 51 & Flush the tuple stack \\
+\midrule
+  \hyperref[insn:allocs]{\instruction{ALLOCS}} & 58 & Allocate scratch space \\
+  \hyperref[insn:copys]{\instruction{COPYS}} & 59 & Copy memory of requested size \\
+  \hyperref[insn:stb]{\instruction{STB}} & 60 & Store byte \\
+  \hyperref[insn:sth]{\instruction{STH}} & 61 & Store halfword \\
+  \hyperref[insn:stw]{\instruction{STW}} & 52 & Store word \\
+  \hyperref[insn:stx]{\instruction{STX}} & 63 & Store doubleword \\
+  \hyperref[insn:uldsb]{\instruction{ULDSB}} & 64 & Load user byte (signed) \\
+  \hyperref[insn:uldsh]{\instruction{ULDSH}} & 65 & Load user halfword (signed) \\
+  \hyperref[insn:uldsw]{\instruction{ULDSW}} & 66 & Load user word (signed) \\
+  \hyperref[insn:uldub]{\instruction{ULDUB}} & 67 & Load user byte (unsigned) \\
+  \hyperref[insn:ulduh]{\instruction{ULDUH}} & 68 & Load user halfword (signed) \\
+  \hyperref[insn:ulduw]{\instruction{ULDUW}} & 69 & Load user word (signed) \\
+  \hyperref[insn:uldx]{\instruction{ULDX}} & 70 & Load user doubleword \\
+  \hyperref[insn:rldsb]{\instruction{RLDSB}} & 71 & If accessible, load byte (signed) \\
+  \hyperref[insn:rldsh]{\instruction{RLDSH}} & 72 & If accessible, load halfword (signed) \\
+  \hyperref[insn:rldsw]{\instruction{RLDSW}} & 73 & If accessible, load word (signed) \\
+  \hyperref[insn:rldub]{\instruction{RLDUB}} & 74 & If accessible, load byte (unsigned) \\
+  \hyperref[insn:rlduh]{\instruction{RLDUH}} & 75 & If accessible, load halfword (unsigned) \\
+  \hyperref[insn:rlduw]{\instruction{RLDUW}} & 75 & If accessible, load word (unsigned) \\
+  \hyperref[insn:rldx]{\instruction{RLDX}} & 77 & If accessible, load doubleword \\
+\bottomrule
+\end{tabular}
+\end{center}
+\caption{R-Format Instruction List (Part 2)}
+\end{table}
+
+\begin{table}
+\begin{center}
+\begin{tabular}{llp{11cm}}
+\toprule
+  Name & Opcode & Description \\
+\midrule
+  \hyperref[insn:ba]{\instruction{BA}} & 17 & Unconditional branch \\
+  \hyperref[insn:be]{\instruction{BE}} & 18 & Branch if equal to zero \\
+  \hyperref[insn:bne]{\instruction{BNE}} & 19 & Branch if not equal to zero \\
+  \hyperref[insn:bg]{\instruction{BG}} & 20 & Branch if greater than (signed) \\
+  \hyperref[insn:bgu]{\instruction{BGU}} & 21 & Branch if greater than (unsigned) \\
+  \hyperref[insn:bge]{\instruction{BGE}} & 22 & Branch if greater than or equal to (signed) \\
+  \hyperref[insn:bgeu]{\instruction{BGEU}} & 23 & Branch if greater than or equal to (unsigned) \\
+  \hyperref[insn:bl]{\instruction{BL}} & 24 & Branch if less than (signed) \\
+  \hyperref[insn:blu]{\instruction{BLU}} & 25 & Branch if less than (unsigned) \\
+  \hyperref[insn:ble]{\instruction{BLE}} & 26 & Branch if less than or equal to (signed) \\
+  \hyperref[insn:bleu]{\instruction{BLEU}} & 27 & Branch if less than or equal to (unsigned) \\
+\bottomrule
+\end{tabular}
+\end{center}
+\caption{B-Format Instruction List}
+\end{table}
+
+\begin{table}
+\begin{center}
+\begin{tabular}{llp{11cm}}
+\toprule
+  Name & Opcode & Description \\
+\midrule
+  \hyperref[insn:setx]{\instruction{SETX}} & 37 & Set register from integer table \\
+  \hyperref[insn:sets]{\instruction{SETS}} & 38 & Set register from string table \\
+\midrule
+  \hyperref[insn:call]{\instruction{CALL}} & 47 & Call subroutine \\
+\midrule
+  \hyperref[insn:ldgaa]{\instruction{LDGAA}} & 52 & Load from global aggregation \\
+  \hyperref[insn:ldtaa]{\instruction{LDTAA}} & 53 & Load from thread-local aggregation \\
+  \hyperref[insn:stgaa]{\instruction{STGAA}} & 54 & Store to global aggregation \\
+  \hyperref[insn:sttaa]{\instruction{STTAA}} & 55 & Store to thread-local aggregation \\
+  \hyperref[insn:ldls]{\instruction{LDLS}} & 56 & Load from local scalar \\
+  \hyperref[insn:stls]{\instruction{STLS}} & 57 & Store to local scalar \\
+\midrule
+  \hyperref[insn:xlate]{\instruction{XLATE}} & 78 & \textbf{XXXRW: Defined but not implemented} \\
+  \hyperref[insn:xlarg]{\instruction{XLARG}} & 79 & \textbf{XXXRW: Defined but not implemented} \\
+\bottomrule
+\end{tabular}
+\end{center}
+\caption{W-Format Instruction List}
+\end{table}
+
+\section{Individual Instructions}
+
+\input{insn-and}
+\input{insn-or}
+\input{insn-sll}
+\input{insn-srl}
+\input{insn-xor}

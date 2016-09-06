@@ -1,0 +1,44 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{XOR}
+\label{insn:xor}
+\subsection*{XOR: Bitwise Exclusive Or}
+
+\subsubsection*{Format}
+
+\textrm{XOR \%rd, \%r1, \%r2}
+
+\begin{center}
+\begin{bytefield}[endianness=big]{32}
+\bitheader{0,7,8,15,16,23,24,31} \\
+\bitbox{8}{0x02}
+\bitbox{8}{r1}
+\bitbox{8}{r2}
+\bitbox{8}{rd}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+This instruction calculates the bitwise exclusive or of the values found in
+registers \register{r1} and \register{r2}, placing the results in register
+\register{rd}.
+
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+%rd = %r1 ^ %r2
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\registerop{r1}, \registerop{r2}, and \registerop{rd} must be less than
+\nregs{}.
+
+\medskip
+\noindent
+\registerop{rd} cannot be \register{r0}.
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.
