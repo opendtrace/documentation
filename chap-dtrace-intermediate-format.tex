@@ -69,7 +69,7 @@ operations, load and store operations, tuple-stack operations, and the no-op
 instruction.
 
 \begin{center}
-\begin{bytefield}[endianness=big]{32}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
 \bitheader{0,7,8,15,16,23,24,31}\\
 \bitbox{8}{op}
 \bitbox{8}{r1}
@@ -93,7 +93,7 @@ is the branch target.
 It is used solely for the \textbf{BRANCH} instruction.
 
 \begin{center}
-\begin{bytefield}[endianness=big]{32}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
 \bitheader{0,23,24,31}\\
 \bitbox{8}{op}
 \bitbox{24}{label}
@@ -113,7 +113,7 @@ It is used for a range of instructions including those to load values from
 integer and string constant tables, and to load and store variable values.
 
 \begin{center}
-\begin{bytefield}[endianness=big]{32}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
 \bitheader{0,7,8,23,24,31}\\
 \bitbox{8}{op}
 \bitbox{16}{idx}
