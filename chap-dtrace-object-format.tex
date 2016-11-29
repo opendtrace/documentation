@@ -3,14 +3,14 @@
 
 DTrace programs can be persistently encoded in the DOF format so that
 they may be embedded in other programs (for example, in an ELF file)
-or in the dtrace driver configuration file for use in anonymous
+or in the DTrace driver configuration file for use in anonymous
 tracing.  The DOF format is versioned and extensible so that it can be
 revised and so that internal data structures can be modified or
 extended compatibly.  All DOF structures use fixed-size types, so the
 32-bit and 64-bit representations are identical and consumers can use
 either data model transparently.
 
-\subsection{Stable Storage Foramt}
+\subsection{Stable Storage Format}
 \label{sec:dof-stable-storage}
 
 \begin{figure}[h]
