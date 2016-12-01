@@ -9,6 +9,7 @@ SOURCE=								\
 	chap-dtrace-object-format.tex				\
 	chap-dtrace-subroutines.tex				\
 	chap-dtrace-variable-records.tex			\
+	chap-dtrace-code.tex					\
 	chap-intro.tex						\
 	insn-and.tex						\
 	insn-or.tex						\
