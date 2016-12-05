@@ -1,22 +1,24 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
+\addcontentsline{toc}{subsection}{rw_write_held}
 \label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\subsection*{rw_write_held: Is this read/write mutex held by a writer}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] Boolean value indicating whether or not a
+  read/write mutex is held by a writer.
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{rw_write_held} subroutine takes a read/write mutex as
+its only argument and returns a boolean value indicating whether or
+not the mutex is held by a writer.
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

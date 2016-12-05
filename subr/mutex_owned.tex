@@ -1,22 +1,23 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
+\addcontentsline{toc}{subsection}{mutex_owned}
 \label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\subsection*{mutex_owned: Is this mutex owned by a thread}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] Boolean value indicating mutex ownership.
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{mutex_owned} subroutine takes a mutex as its argument
+and returns a boolean value indicating whether the mutex is currently
+owned by a thread.
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

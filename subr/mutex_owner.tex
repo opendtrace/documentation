@@ -1,22 +1,23 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
+\addcontentsline{toc}{subsection}{mutex_owner}
 \label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\subsection*{mutex_owner: Report which thread owns a mutex}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{retval}] The kernel thread which owns the mutex
+\item[\registerop{arguments}] 
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{mutex_owner} subroutine returns the kernel thread
+structure which owns the mutex passed at the only argument.
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

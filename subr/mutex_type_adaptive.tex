@@ -1,22 +1,25 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
+\addcontentsline{toc}{subsection}{mutex_type_adaptive}
 \label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\subsection*{mutex_type_adaptive: Is the mutex adaptive}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{retval}] Boolean indication of whether or not the
+  mutex is adaptive.
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{mutex_type_adaptive} subroutine takes a mutex as its
+only arugment and returns a boolean value indicating whether or not
+the mutex is adaptive.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}
