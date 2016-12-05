@@ -1,0 +1,34 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{DUMMY}
+\label{insn:dummy}
+\subsection*{DUMMY: DUMMY}
+
+\subsubsection*{Format}
+
+\textrm{DUMMY \%rd, \%r1, \%r2}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,15,16,23,24,31} \\
+\bitbox{8}{0x01}
+\bitbox{8}{r1}
+\bitbox{8}{r2}
+\bitbox{8}{rd}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+This instruction 
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+%rd = %r1 | %r2
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.
