@@ -25,6 +25,21 @@ code, one in the root of the tree, \pathname{/usr/src} and one in the
 kernel directory \pathname{/usr/src/sys}.  Native FreeBSD scripts are
 located in the \pathname{/usr/share/dtrace} directory.
 
+Because of the user space and kernel split for the cddl code the
+FreeBSD tree has three, separate, \pathname{dtrace.h} files:
+
+\begin{figure}
+  \centering
+\begin{description}
+\item [sys/cddl/contrib/opensolaris/uts/common/sys/dtrace.h] The one
+  you care about.
+\item [cddl/contrib/opensolaris/lib/libdtrace/common/dtrace.h] Library APIs
+\item [cddl/compat/opensolaris/include/dtrace.h] Compatability include
+\end{description}
+  \caption{The various versions of dtrace.h}
+  \label{fig:freebsd-dtrace-h}
+\end{figure}
+
 \section{Mac OS}
 \label{sec:macos-code}
 
