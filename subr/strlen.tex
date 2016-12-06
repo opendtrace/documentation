@@ -1,22 +1,24 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
+\addcontentsline{toc}{subsection}{strlen}
 \label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\subsection*{strlen: DTrace version of the strlen function}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] Length of the string passed as the only argument
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{strlen} subroutine is DTrace's version of the well
+known C library function.  It returns the length, in bytes, of the
+pointer passed as its first argument.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

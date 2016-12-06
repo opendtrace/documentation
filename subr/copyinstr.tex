@@ -1,22 +1,24 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
+\addcontentsline{toc}{subsection}{copyinstr}
 \label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\subsection*{copyinstr: Copy kernel data as a string}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] Pointer to the returned string.
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{copyinstr} subroutine returns a pointer to string of
+kernel data which is located at the first argument and bounded by the
+second argument.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

@@ -7,16 +7,17 @@
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] Pointer to kernel data.
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{copyin} returns a pointer to a buffer which contains
+kernel data copied from the area pointed to by its first argument, up
+to the limit denoted by its second argument.
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

@@ -1,22 +1,23 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
+\addcontentsline{toc}{subsection}{speculation}
 \label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\subsection*{speculation: Activate an inactive speculation}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] Either an active speculation or 0.
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{speculation} subroutine transitions an inactive
+speculation to the active state, and returns it to the caller, or
+returns 0 if there are no inactive speculations available.
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}
