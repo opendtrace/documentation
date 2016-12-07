@@ -70,11 +70,11 @@
 \renewcommand\marginpar[1]{\-\oldmarginpar[\raggedright\footnotesize #1]%
 {\raggedright\footnotesize #1}}
 
-\newcommand{\pathname}[1]{{\texttt{#1}}}
-\newcommand{\literal}[1]{{\texttt{#1}}}
-\newcommand{\function}[1]{{\texttt{#1}}}
+\newcommand{\pathname}[1]{{\texttt{\detokenize{#1}}}}
+\newcommand{\literal}[1]{{\texttt{\detokenize{#1}}}}
+\newcommand{\function}[1]{{\texttt{\detokenize{#1}}}}
 \newcommand{\instruction}[1]{{\texttt{#1}}}
 \newcommand{\register}[1]{{\texttt{\%#1}}}
 \newcommand{\registerop}[1]{{\texttt{\textbf{#1}}}}
 \newcommand{\nregs}{{\texttt{\textbf{NREGS}}}}
-\newcommand{\subroutine}[1]{{\texttt{#1}}}
+\newcommand{\subroutine}[1]{{\texttt{\detokenize{#1}}}}
