@@ -1,25 +1,29 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\addcontentsline{toc}{subsection}{getmajor}
+\label{subr:getmajor}
+\subsection*{getmajor: return major device number}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] Major device number
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{getmajor} subroutine returns the major device number
+from a device structure supplied as the first argument.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}
+
+The \subroutine{getmajor} subroutine is only available on Illumos and
+systems derivice from OpenSolaris.
 
 \subsubsection*{Failure modes}
 

@@ -1,22 +1,24 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\addcontentsline{toc}{subsection}{ntohs}
+\label{subr:ntohs}
+\subsection*{ntohs: convert a short (16 bit) value from network to
+  host byte order}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] short (16 bit) value in host byte order
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{ntohs} subroutine takes a short (16 bit) value as its
+only argument and returns the same value in host byte order.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

@@ -1,18 +1,19 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\addcontentsline{toc}{subsection}{copyinto}
+\label{subr:copyinto}
+\subsection*{copyinto: copy data from a source to a destination}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] VOID
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{copyinto} subroutine copies data from a source pointer
+into a destination pointer bounded by a size given in the second argument.
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}

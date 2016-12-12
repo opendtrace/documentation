@@ -1,22 +1,28 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\addcontentsline{toc}{subsection}{rindex}
+\label{subr:rindex}
+\subsection*{rindex: locate the last matching character in a a string}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] The position of the character or -1 if the
+  character is not found.
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{rindex} subroutine searches from the end of a string
+pointed to by its first argument, for the first instance character
+supplied as its second argument.  The search proceeds until the
+character is found, or an optional limit, supplied as the third
+argument is reached.  If the character is not found then -1 is
+returned to the caller.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

@@ -1,22 +1,23 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\addcontentsline{toc}{subsection}{lltostr}
+\label{subr:lltostr}
+\subsection*{lltostr: convert a long long (64 bit) value to a string}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] string representation of passed value
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{lltostr} subroutine takes a 64 bit value as its only
+argument and returns that value as a human readable string.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

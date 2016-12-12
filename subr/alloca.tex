@@ -1,22 +1,27 @@
 \clearpage
 \phantomsection
 \addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\label{subr:alloca}
+\subsection*{alloca: allocate temporary space}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] Pointer to allocated data or NULL.
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{alloca} subroutine allocates scratch space in the
+DTrace state machine structure.  Although this subroutine does not
+allocate space on the process stack, it does act similarly to the
+alloca macro, in that the space disappears without an explicit call to
+a \subroutine{free} routine, once the DTrace machine state structure
+is deallocated.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

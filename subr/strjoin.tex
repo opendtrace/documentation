@@ -1,22 +1,24 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\addcontentsline{toc}{subsection}{strjoin}
+\label{subr:strjoin}
+\subsection*{strjoin: joing two strings and return the result}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] pointer to the combined string
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{strjoin} subroutine concatenates the two strings
+passed to it as arguments and returns the combined string to the
+caller.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

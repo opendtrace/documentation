@@ -1,25 +1,28 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\addcontentsline{toc}{subsection}{getminor}
+\label{subr:getminor}
+\subsection*{getminor: Get the minor device number from a device structure}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] Minor device number
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{getminor} subroutine returns the minor number from a
+device structure.
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}
+
+The \subroutine{getminor} subroutine is only available on Illumos and
+systems derivice from OpenSolaris.
 
 \subsubsection*{Failure modes}
 

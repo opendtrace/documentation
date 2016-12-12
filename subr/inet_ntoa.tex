@@ -1,22 +1,23 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\addcontentsline{toc}{subsection}{inet-ntoa}
+\label{subr:inet-ntoa}
+\subsection*{inet\_ntoa: convert a 32 bit IPv4 address to a string}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] IPv4 address as a string
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{inet_ntoa} subroutine takes a 32 bit, IPv4, address
+and converts it to a string suitable for humans.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

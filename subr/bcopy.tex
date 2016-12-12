@@ -1,22 +1,24 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\addcontentsline{toc}{subsection}{bcopy}
+\label{subr:bcopy}
+\subsection*{bcopy: copy bytes from source to destination bounded by a
+size}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] VOID
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{bcopy} subroutine copies bytes from a source pointer
+to a destination pointer, within the DTrace machine state scratch
+region, up to the size supplied in the third argument.
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

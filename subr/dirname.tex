@@ -1,22 +1,23 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\addcontentsline{toc}{subsection}{dirname}
+\label{subr:dirname}
+\subsection*{dirname: return the directory component of a pathname}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] A string pointing to the directory component of
+  a pathname.
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{dirname} subroutine returns a string containing the
+directory component of a pathname, without the terminating filename.
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

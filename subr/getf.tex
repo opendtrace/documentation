@@ -1,22 +1,24 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\addcontentsline{toc}{subsection}{getf}
+\label{subr:getf}
+\subsection*{getf: Return a file structure based on a file descriptor}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] Pointer to a valid file structure.
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{getf} subroutine takes a file descriptor as its
+argument and returns a file pointer based on the supplied file
+descriptor.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

@@ -1,22 +1,27 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\addcontentsline{toc}{subsection}{substr}
+\label{subr:substr}
+\subsection*{substr: return a sub string of a string}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] a string representing the substring
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{substr} routine returns a sub-string of a string,
+passed as the first argument, starting from a byte index passed as the
+second argument.  An optional third argument can be used to bound the
+resulting string.  If the optional bounding argument is not supplied
+then the sub-string includes all bytes up to and including the
+terminating NUL character.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

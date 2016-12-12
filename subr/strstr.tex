@@ -1,22 +1,25 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
+\addcontentsline{toc}{subsection}{strstr}
 \label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\subsection*{strstr: locate a string within a string}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] pointer to the string located or NULL if not found
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{ststr} subroutine search a string, passed as its first
+argument, for a sub-string, passed as the second argument.  If the
+sub-string is found a pointer to it is returned to the caller,
+otherwise NULL is returned.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

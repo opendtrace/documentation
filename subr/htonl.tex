@@ -1,22 +1,24 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\addcontentsline{toc}{subsection}{htonl}
+\label{subr:htonl}
+\subsection*{htonl: convert  a  long (32 bit)  value from host to network byte order}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] Long value in network byte order
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{htonl} subroutine takes a long value as its only
+argument and returns the same long value in network byte order,
+suitable for use in network protocols.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

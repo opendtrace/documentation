@@ -1,22 +1,27 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\addcontentsline{toc}{subsection}{index}
+\label{subr:index}
+\subsection*{index: return the byte position of a character in a string}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] Position of character or -1 
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{index} subroutine searches from the beginning of a
+string pointed to by its first argument, for a character supplied as
+the second argument.  The search proceeds until the character is
+found, or an optional limit, supplied as the third argument is
+reached.  If the character is not found then -1 is returned to the
+caller.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

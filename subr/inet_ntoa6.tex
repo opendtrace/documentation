@@ -1,18 +1,20 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\addcontentsline{toc}{subsection}{inet-ntoa6}
+\label{subr:inet-ntoa6}
+\subsection*{inet\_ntoa6: convert a 128 bit IPv6 address to a string}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] IPv6 address as a string
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{inet_ntoa6} subroutine takes a 128 bit, IPv6, address
+and converts it to a string suitable for humans.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}

@@ -1,22 +1,21 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\addcontentsline{toc}{subsection}{uuidstr}
+\label{subr:uuidstr}
+\subsection*{uuidstr: convert a UUID to a string}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] string representation of a UUID
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{uuidstr} subroutine converts a numeric UUID into a string.
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

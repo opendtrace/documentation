@@ -1,8 +1,8 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\addcontentsline{toc}{subsection}{msgsize}
+\label{subr:msgsize}
+\subsection*{msgsize: FILL ME IN}
 
 \subsubsection*{Calling convention}
 
@@ -12,14 +12,15 @@
 
 \subsubsection*{Description}
 
-This subroutine 
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}
+
+The \subroutine{msgsize} subroutine is only available on the Illumos
+operating system.
 
 \subsubsection*{Failure modes}
 

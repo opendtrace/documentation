@@ -1,22 +1,26 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
+\addcontentsline{toc}{subsection}{strrchr}
 \label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\subsection*{strrchr: reverse search a string}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] pointer to the character or NULL if not found
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{strrchr} subroutine searches a string, supplied as the
+first argument, for the last instance of the character passed as the
+second and returns a pointer to the location of the character in the
+string.  If the charaacter is not present in the string then NULL is
+returned.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

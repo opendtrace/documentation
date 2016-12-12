@@ -1,22 +1,27 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\addcontentsline{toc}{subsection}{strtok}
+\label{subr:strtok}
+\subsection*{strtok: string tokenizing subroutine}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] pointer to the next token or NULL
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{strtok} subroutine returns a sequential set of tokens
+from a string passed as its first argument, based on a separator
+passed as its second.  Once the string has been exhausted NULL is
+returned.  In order to find subsequent tokens NULL is passed as the
+first argument.  See this operating system's \subroutine{strtok}
+manual page (strtok(3)) for an example.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

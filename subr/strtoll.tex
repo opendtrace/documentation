@@ -1,22 +1,24 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\addcontentsline{toc}{subsection}{strtoll}
+\label{subr:strtoll}
+\subsection*{strtoll: convert a string representing a number to a
+  long long (64 bit) value}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] a long long (64 bit) value
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{strtoll} takes a number encoding in a string and
+converts it to a long long (64 bit) value.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

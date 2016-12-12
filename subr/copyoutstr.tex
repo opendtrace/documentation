@@ -1,22 +1,22 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
+\addcontentsline{toc}{subsection}{copyoutstr}
 \label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\subsection*{copyoutstr: copy data from kernel to user space, as a string}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] VOID
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{copyoutstr} subroutine copies data from kernel space
+to user space as a string value, bounded by the routine's third argument.
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

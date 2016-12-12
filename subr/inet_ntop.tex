@@ -1,22 +1,26 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\addcontentsline{toc}{subsection}{inet-ntop}
+\label{subr:inet-ntop}
+\subsection*{inet\_ntop: convert an arbitrary Internet address to a string}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] Internet address as a string
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{inet_ntop} subroutine takes either a 128 bit, IPv6,
+address or a 32 bit, IPv4 address, and converts it to a string
+suitable for humans.  The type of address supplied is indeicated by
+the second argument, which must either be \verb|AF_INET| or
+\verb|AF_INET6|.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

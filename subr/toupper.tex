@@ -1,22 +1,24 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\addcontentsline{toc}{subsection}{toupper}
+\label{subr:toupper}
+\subsection*{toupper: convert a string to upper case}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] a string with only upper case letters
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{toupper} subroutine converts the characters of the
+string supplied as its only argument into upper case and returns the
+resulting string.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

@@ -1,22 +1,23 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\addcontentsline{toc}{subsection}{hotnll}
+\label{subr:htonll}
+\subsection*{hotnll: convert a long long (64 bit) value from host to  network byte order}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] A 64 bit value in network byte order
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{htonll} routine takes a 64 bit value as its only
+argument and returns that value in network byte order.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}
