@@ -15,6 +15,7 @@ SOURCE=								\
 	instr/add.tex						\
 	instr/allocs.tex					\
 	instr/and.tex						\
+	instr/ba.tex						\
 	instr/be.tex						\
 	instr/bg.tex						\
 	instr/bge.tex						\

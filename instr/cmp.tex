@@ -11,7 +11,7 @@
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
 \bitheader{0,7,8,15,16,23,24,31} \\
-\bitbox{8}{0x01}
+\bitbox{8}{0x0E}
 \bitbox{8}{r1}
 \bitbox{8}{r2}
 \bitbox{8}{rd}
@@ -22,12 +22,18 @@
 
 The \instruction{cmp} instruction compares the values in
 \registerop{r1} and \registerop{r2}, via subtraction, and sets the
-various comparison bits based on the results.
+various comparison bits based on the results.  The comparison bits,
+shown in Table\ref{tbl:cmp-vars}, are used by the branch instructions
+to make decisions about where the program will execute next.
 
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-%rd = %r1 | %r2
+cc_r = regs[r1] - regs[r2];
+cc_n = cc_r < 0;
+cc_z = cc_r == 0;
+cc_v = 0;
+cc_c = regs[r1] < regs[r2];
 \end{verbatim}
 
 \subsubsection*{Constraints}

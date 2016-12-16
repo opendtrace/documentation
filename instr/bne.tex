@@ -1,30 +1,32 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
+\addcontentsline{toc}{subsection}{BNE}
 \label{insn:dummy}
-\subsection*{DUMMY: DUMMY}
+\subsection*{BNE: branch not equal}
 
 \subsubsection*{Format}
 
-\textrm{DUMMY \%rd, \%r1, \%r2}
+\textrm{BNE label}
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
-\bitheader{0,7,8,15,16,23,24,31} \\
-\bitbox{8}{0x01}
-\bitbox{8}{r1}
-\bitbox{8}{r2}
-\bitbox{8}{rd}
+\bitheader{0,23,24,31} \\
+\bitbox{8}{0x10}
+\bitbox{24}{label}
 \end{bytefield}
 \end{center}
 
 \subsubsection*{Description}
 
-This instruction 
+The \instruction{be} instruction sets the PC to a new label if, and
+only if the result of the last \instruction{cmp} restulted in the zero
+bit (cc\_z) being cleared, or set to 0.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-%rd = %r1 | %r2
+if (cc_z == 0)
+	%pc = label
 \end{verbatim}
 
 \subsubsection*{Constraints}
