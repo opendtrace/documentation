@@ -1,17 +1,17 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
+\addcontentsline{toc}{subsection}{MOV}
 \label{insn:dummy}
-\subsection*{DUMMY: DUMMY}
+\subsection*{MOV: move a value}
 
 \subsubsection*{Format}
 
-\textrm{DUMMY \%rd, \%r1, \%r2}
+\textrm{MOV \%rd, \%r1, \%r2}
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
 \bitheader{0,7,8,15,16,23,24,31} \\
-\bitbox{8}{0x01}
+\bitbox{8}{0x0D}
 \bitbox{8}{r1}
 \bitbox{8}{r2}
 \bitbox{8}{rd}
@@ -20,11 +20,13 @@
 
 \subsubsection*{Description}
 
-This instruction 
+The \instruction{mov} instruction places the value found in
+\registerop{r1} into \registerop{rd}.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-%rd = %r1 | %r2
+regs[rd] = regs[r1]
 \end{verbatim}
 
 \subsubsection*{Constraints}

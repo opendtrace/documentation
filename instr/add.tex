@@ -1,17 +1,17 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
+\addcontentsline{toc}{subsection}{add}
 \label{insn:dummy}
-\subsection*{DUMMY: DUMMY}
+\subsection*{ADD: add two values}
 
 \subsubsection*{Format}
 
-\textrm{DUMMY \%rd, \%r1, \%r2}
+\textrm{add \%r1, \%r2, \%rd}
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
 \bitheader{0,7,8,15,16,23,24,31} \\
-\bitbox{8}{0x01}
+\bitbox{8}{0x07}
 \bitbox{8}{r1}
 \bitbox{8}{r2}
 \bitbox{8}{rd}
@@ -19,12 +19,14 @@
 \end{center}
 
 \subsubsection*{Description}
+The \instruction{add} instruction adds the the values in
+\registerop{r1} and \registerop{r2} and pace the results in register
+\registerop{rd}.
 
-This instruction 
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-%rd = %r1 | %r2
+regs[rd] = regs[r1] + regs[r2]
 \end{verbatim}
 
 \subsubsection*{Constraints}

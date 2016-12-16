@@ -7,6 +7,59 @@ shipped in Solaris \textbf{XXXRW}, FreeBSD \textbf{XXXRW}, and Mac OS X
 
 \section{The DIF Interpreter}
 
+The DTrace Intermediate Format (DIF) interpreter executes instructions
+on behalf of D scripts that are associated with predicates and
+actions.  DIF is a simple, RISC-like, instruction set where each
+instruction consists of a 32-bit, native-endian integer whose most
+significant 8 bits contain an opcode allowing the remainder of the
+instruction to be decoded.  Interpretation is executed in a loop
+within the \subroutine{dtrace_dif_emulate} subroutine, which has, as
+its first argument, a pointer to a DIF Object or
+\struct{dtrace_difo_t}.  Instructions are executed one at a time,
+until they are exhausted or an error causes interpretation to end.
+
+\subsection{Registers}
+\label{sec:dif-registers}
+
+The DTrace virtual machine is made up of eight (8) integer registers
+and eight (8) tuple registers.  The 0th integer register is always contains
+the value zero (0).  All operations are carried out using registers
+\registerop{r1} and \registerop{r2} as operands and \registerop{rd} as
+the destination for all results.
+
+\subsection{Math Instructions}
+\label{sec:dif-math}
+
+Instructions for mathematical operations in DIF have no concept of
+over or underflow.  The division instructions set a flag to indicate a
+division by zero error.
+
+\subsection{Comparison and Test Instructions}
+\label{sec:dif-cmp-tst}
+
+\begin{table}
+  \centering
+    \begin{tabular}{|l|l|}
+      \hline
+      Variable & Meaning\\
+      \hline
+      cc\_r & Value of $r1 - r2$\\
+      cc\_n & Comparison result is negative. \\
+      cc\_z & Comparison result is 0.\\
+      cc\_v & \\
+      cc\_c & Is $r1 < r2$?\\
+      \hline
+  \end{tabular}
+\label{tbl:cmp-vars}
+\end{table}
+
+DIF has three instructions, \instruction{cmp}, \instruction{scmp} and
+\instruction{tst} which can set various result flags, shown in
+Table\ref{tbl:cmp-vars}, which are later used by the branch
+instructions.  The result flags are never returned directly to the
+calling DIF program but are only used internally by the interpretation
+routine.
+
 \textbf{XXXRW: Something about instructions}
 
 \textbf{XXXRW: Something about branches}

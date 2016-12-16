@@ -1,8 +1,8 @@
 \clearpage
 \phantomsection
 \addcontentsline{toc}{subsection}{XOR}
-\label{insn:xor}
-\subsection*{XOR: Bitwise Exclusive Or}
+\label{insn:or}
+\subsection*{XOR: Bitwise Or}
 
 \subsubsection*{Format}
 
@@ -20,14 +20,14 @@
 
 \subsubsection*{Description}
 
-This instruction calculates the bitwise exclusive or of the values found in
-registers \register{r1} and \register{r2}, placing the results in register
-\register{rd}.
+This instruction calculates the bitwise exclusive or of the values
+found in registers \register{r1} and \register{r2}, placing the
+results in register \register{rd}.
 
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-%rd = %r1 ^ %r2
+regs[rd] = regs[r1] ^ regs[r2]
 \end{verbatim}
 
 \subsubsection*{Constraints}

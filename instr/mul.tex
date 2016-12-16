@@ -1,17 +1,17 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
+\addcontentsline{toc}{subsection}{MUL}
 \label{insn:dummy}
-\subsection*{DUMMY: DUMMY}
+\subsection*{MUL: multiply two numbers}
 
 \subsubsection*{Format}
 
-\textrm{DUMMY \%rd, \%r1, \%r2}
+\textrm{MUL \%rd, \%r1, \%r2}
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
 \bitheader{0,7,8,15,16,23,24,31} \\
-\bitbox{8}{0x01}
+\bitbox{8}{0x08}
 \bitbox{8}{r1}
 \bitbox{8}{r2}
 \bitbox{8}{rd}
@@ -20,11 +20,14 @@
 
 \subsubsection*{Description}
 
-This instruction 
+The \instruction{mul} instruction multiplies two numbers, contained in
+\registerop{r1} and \registerop{r2}, together and places the result in
+\registerop{rd}.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-%rd = %r1 | %r2
+regs[rd] = regs[r1] * regs[r2]
 \end{verbatim}
 
 \subsubsection*{Constraints}

@@ -1,12 +1,12 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
+\addcontentsline{toc}{subsection}{CMP}
 \label{insn:dummy}
-\subsection*{DUMMY: DUMMY}
+\subsection*{CMP: compare two values}
 
 \subsubsection*{Format}
 
-\textrm{DUMMY \%rd, \%r1, \%r2}
+\textrm{CMP \%rd, \%r1, \%r2}
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
@@ -20,7 +20,10 @@
 
 \subsubsection*{Description}
 
-This instruction 
+The \instruction{cmp} instruction compares the values in
+\registerop{r1} and \registerop{r2}, via subtraction, and sets the
+various comparison bits based on the results.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
