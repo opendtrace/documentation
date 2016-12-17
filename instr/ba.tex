@@ -1,0 +1,32 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{BA}
+\label{insn:dummy}
+\subsection*{BA: branch absolute}
+
+\subsubsection*{Format}
+
+\textrm{BA label}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,23,24,31} \\
+\bitbox{8}{0x10}
+\bitbox{24}{label}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+This instruction 
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+%pc = label
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.
