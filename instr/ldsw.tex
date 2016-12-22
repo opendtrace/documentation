@@ -1,17 +1,17 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: DUMMY}
+\addcontentsline{toc}{subsection}{LDSB}
+\label{insn:ldsb}
+\subsection*{LDSW: load a 32 bit value}
 
 \subsubsection*{Format}
 
-\textrm{DUMMY \%rd, \%r1, \%r2}
+\textrm{LDSB \%rd, \%r1}
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
 \bitheader{0,7,8,15,16,23,24,31} \\
-\bitbox{8}{0x01}
+\bitbox{8}{0x1E}
 \bitbox{8}{r1}
 \bitbox{8}{r2}
 \bitbox{8}{rd}
@@ -20,11 +20,13 @@
 
 \subsubsection*{Description}
 
-This instruction 
+The \instruction{ldsb} instruction loads a 32-bit value pointed to by
+\registerop{r1} into \registerop{rd}, the results register.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-%rd = %r1 | %r2
+%rd = %r1
 \end{verbatim}
 
 \subsubsection*{Constraints}
