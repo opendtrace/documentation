@@ -1,30 +1,33 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: DUMMY}
+\addcontentsline{toc}{subsection}{BGE}
+\label{insn:bge}
+\subsection*{BGEU: branch greater than or equal to, unsigned}
 
 \subsubsection*{Format}
 
-\textrm{DUMMY \%rd, \%r1, \%r2}
+\textrm{BGEU label}
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
-\bitheader{0,7,8,15,16,23,24,31} \\
-\bitbox{8}{0x01}
-\bitbox{8}{r1}
-\bitbox{8}{r2}
-\bitbox{8}{rd}
+\bitheader{0,23,24,31} \\
+\bitbox{8}{0x16}
+\bitbox{24}{label}
 \end{bytefield}
 \end{center}
 
 \subsubsection*{Description}
 
-This instruction 
+The \instruction{bgeu} instruction jumps to the supplied label if and
+only if the result of the previous comparison indicates that the
+value in register \registerop{r1} was greater than or equal to the
+value in \registerop{r2}.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-%rd = %r1 | %r2
+if (cc_c == 0)
+	pc = label;
 \end{verbatim}
 
 \subsubsection*{Constraints}

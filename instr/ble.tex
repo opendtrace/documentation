@@ -1,30 +1,33 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: DUMMY}
+\addcontentsline{toc}{subsection}{BLE}
+\label{insn:ble}
+\subsection*{BLE: branch less than or equal}
 
 \subsubsection*{Format}
 
-\textrm{DUMMY \%rd, \%r1, \%r2}
+\textrm{BL label}
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
-\bitheader{0,7,8,15,16,23,24,31} \\
-\bitbox{8}{0x01}
-\bitbox{8}{r1}
-\bitbox{8}{r2}
-\bitbox{8}{rd}
+\bitheader{0,23,24,31} \\
+\bitbox{8}{0x1A}
+\bitbox{24}{label}
 \end{bytefield}
 \end{center}
 
 \subsubsection*{Description}
 
-This instruction 
+The \instruction{ble} instruction jumps to the specified label if and
+only if the result of the previous comparison instruction indicated
+that the value in \registerop{r1} was less than, or equal to, the
+value in \registerop{r2}.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-%rd = %r1 | %r2
+if (cc_z | (cc_n ^ cc_v))
+	pc = label
 \end{verbatim}
 
 \subsubsection*{Constraints}
