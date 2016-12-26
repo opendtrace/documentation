@@ -1,17 +1,17 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: DUMMY}
+\addcontentsline{toc}{subsection}{SCMP}
+\label{insn:scmp}
+\subsection*{SCMP: compare two strings}
 
 \subsubsection*{Format}
 
-\textrm{DUMMY \%rd, \%r1, \%r2}
+\textrm{SCMP \%r1, \%r2}
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
 \bitheader{0,7,8,15,16,23,24,31} \\
-\bitbox{8}{0x01}
+\bitbox{8}{0x27}
 \bitbox{8}{r1}
 \bitbox{8}{r2}
 \bitbox{8}{rd}
@@ -20,11 +20,19 @@
 
 \subsubsection*{Description}
 
-This instruction 
+The \instruction{scmp} intruction compares the strings pointed to by
+\registerop{r1} and \registerop{r2} and sets the comparison bits for
+the DIF interpreter based on the result.  The lenght of the comparison
+is bounded by the DTRACEOPT_STRSIZE option set for the system.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-%rd = %r1 | %r2
+cc_r = strncmp(r1, r2, size);
+
+cc_n = cc_r < 0;
+cc_z = cc_r == 0;
+cc_v = cc_c = 0;
 \end{verbatim}
 
 \subsubsection*{Constraints}

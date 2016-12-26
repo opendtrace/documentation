@@ -1,30 +1,30 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: DUMMY}
+\addcontentsline{toc}{subsection}{STGS}
+\label{insn:stgs}
+\subsection*{STGS: store a value into a variable}
 
 \subsubsection*{Format}
 
-\textrm{DUMMY \%rd, \%r1, \%r2}
+\textrm{STGS \%rd, \%r1, \%r2}
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
-\bitheader{0,7,8,15,16,23,24,31} \\
-\bitbox{8}{0x01}
-\bitbox{8}{r1}
-\bitbox{8}{r2}
+\bitheader{0,7,8,23,24,31} \\
+\bitbox{8}{0x2A}
+\bitbox{16}{var}
 \bitbox{8}{rd}
 \end{bytefield}
 \end{center}
 
 \subsubsection*{Description}
+The \instruction{stgs} instruct stores a value from the
+\registerop{rd} register into a user defined variable.
 
-This instruction 
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-%rd = %r1 | %r2
+var = %rd
 \end{verbatim}
 
 \subsubsection*{Constraints}

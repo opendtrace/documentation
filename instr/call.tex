@@ -1,30 +1,33 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: DUMMY}
+\addcontentsline{toc}{subsection}{CALL}
+\label{insn:call}
+\subsection*{CALL: subroutine call}
 
 \subsubsection*{Format}
 
-\textrm{DUMMY \%rd, \%r1, \%r2}
+\textrm{CALL \%rd, \%r1, \%r2}
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
-\bitheader{0,7,8,15,16,23,24,31} \\
-\bitbox{8}{0x01}
-\bitbox{8}{r1}
-\bitbox{8}{r2}
+\bitheader{0,7,8,23,24,31} \\
+\bitbox{8}{0x2F}
+\bitbox{16}{subroutine}
 \bitbox{8}{rd}
 \end{bytefield}
 \end{center}
 
 \subsubsection*{Description}
 
-This instruction 
+The \instruction{call} instruction executes a known DTrace subroutine,
+such as copyinstr(), copyout() etc. and returns any value into
+\registerop{rd}.  Valid subroutines are documented in
+\ref{sec:subroutines}.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-%rd = %r1 | %r2
+%rd = subr()
 \end{verbatim}
 
 \subsubsection*{Constraints}

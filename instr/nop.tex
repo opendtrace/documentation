@@ -1,30 +1,28 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: DUMMY}
+\addcontentsline{toc}{subsection}{NOP}
+\label{insn:nop}
+\subsection*{NOP: DUMMY}
 
 \subsubsection*{Format}
 
-\textrm{DUMMY \%rd, \%r1, \%r2}
+\textrm{NOP}
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
-\bitheader{0,7,8,15,16,23,24,31} \\
-\bitbox{8}{0x01}
-\bitbox{8}{r1}
-\bitbox{8}{r2}
-\bitbox{8}{rd}
+\bitheader{0,31} \\
+\bitbox{8}{0x24}
 \end{bytefield}
 \end{center}
 
 \subsubsection*{Description}
 
-This instruction 
+The \instruction{nop} does nothing and has no side effects on the
+DTrace virtual machine.
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-%rd = %r1 | %r2
+nop
 \end{verbatim}
 
 \subsubsection*{Constraints}

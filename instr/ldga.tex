@@ -1,17 +1,17 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: DUMMY}
+\addcontentsline{toc}{subsection}{LDGA}
+\label{insn:ldga}
+\subsection*{LDGA: load a DTrace built-in variable}
 
 \subsubsection*{Format}
 
-\textrm{DUMMY \%rd, \%r1, \%r2}
+\textrm{LDGA \%rd, \%r1, \%r2}
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
 \bitheader{0,7,8,15,16,23,24,31} \\
-\bitbox{8}{0x01}
+\bitbox{8}{0x28}
 \bitbox{8}{r1}
 \bitbox{8}{r2}
 \bitbox{8}{rd}
@@ -20,11 +20,14 @@
 
 \subsubsection*{Description}
 
-This instruction 
+The \instruction{ldga} instruction looks up the value of a DTrace
+built-in variable based on the value in \registerop{r1} with an
+optional array index in \registerop{r2}.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-%rd = %r1 | %r2
+%rd = var[r1]
 \end{verbatim}
 
 \subsubsection*{Constraints}
