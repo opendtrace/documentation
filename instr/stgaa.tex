@@ -1,30 +1,30 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: DUMMY}
+\addcontentsline{toc}{subsection}{STGAA}
+\label{insn:stgaa}
+\subsection*{STGAA: store a value into a hash by key}
 
 \subsubsection*{Format}
 
-\textrm{DUMMY \%rd, \%r1, \%r2}
+\textrm{STGAA key, \%rd}
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
-\bitheader{0,7,8,15,16,23,24,31} \\
-\bitbox{8}{0x01}
-\bitbox{8}{r1}
-\bitbox{8}{r2}
+\bitheader{0,7,8,23,24,31} \\
+\bitbox{8}{0x46}
+\bitbox{16}{key}
 \bitbox{8}{rd}
 \end{bytefield}
 \end{center}
 
 \subsubsection*{Description}
 
-This instruction 
+The \instruction{stgaa} instruction stores a value, contained in the
+\registerop{rd} register into a hash map based on a key.
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-%rd = %r1 | %r2
+map[key] = %rd
 \end{verbatim}
 
 \subsubsection*{Constraints}

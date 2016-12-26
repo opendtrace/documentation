@@ -111,11 +111,25 @@ argument checks are not carried out when a subroutine is called.
 
 \textbf{XXXRW: Something about the string table}
 
-\textbf{XXXRW: Something about local variables}
+\subsection{Local Variables}
+\label{sec:local-vars}
 
-\textbf{XXXRW: Something about thread-local variables}
+Local variables are local to the D program clause.  In a D program
+these variables are referenced using the \verb|this->| syntax.  
 
-\textbf{XXXRW: Something about global variables}
+\subsection{Thread Local Variables}
+\label{sec:thread-local-vars}
+
+Thread local variables are usable in multiple D program clauses.  In a
+D program the thread local variables are referenced using the
+\verb|self->| syntax.
+
+\subsection{Global Variables}
+\label{sec:globals-vars}
+
+Global variables are global to all the clauses in a D script and are
+references to simple names witin the D script.  Space for global
+variables is statically allocated on each invocation of a script.
 
 \textbf{XXXRW: Something about scalars}
 
