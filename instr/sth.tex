@@ -1,17 +1,17 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: DUMMY}
+\addcontentsline{toc}{subsection}{STH}
+\label{insn:sth}
+\subsection*{STH: store a 16 bit value into memory}
 
 \subsubsection*{Format}
 
-\textrm{DUMMY \%rd, \%r1, \%r2}
+\textrm{STH \%rd, \%r1}
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
 \bitheader{0,7,8,15,16,23,24,31} \\
-\bitbox{8}{0x01}
+\bitbox{8}{0x3D}
 \bitbox{8}{r1}
 \bitbox{8}{r2}
 \bitbox{8}{rd}
@@ -20,11 +20,12 @@
 
 \subsubsection*{Description}
 
-This instruction 
+The \instruction{sth} instruction takes a 16 bit value from \registerop{r1}
+and stores it into the memory location pointed to by \registerop{rd}.
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-%rd = %r1 | %r2
+mem[%rd] = %r1
 \end{verbatim}
 
 \subsubsection*{Constraints}

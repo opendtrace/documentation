@@ -1,17 +1,17 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: DUMMY}
+\addcontentsline{toc}{subsection}{RLDUB}
+\label{insn:rldub}
+\subsection*{RLDUB: restricted load of an  unsigned 8 bit quantity}
 
 \subsubsection*{Format}
 
-\textrm{DUMMY \%rd, \%r1, \%r2}
+\textrm{RLDUB \%rd, \%r1, \%r2}
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
 \bitheader{0,7,8,15,16,23,24,31} \\
-\bitbox{8}{0x01}
+\bitbox{8}{0x4A}
 \bitbox{8}{r1}
 \bitbox{8}{r2}
 \bitbox{8}{rd}
@@ -20,11 +20,14 @@
 
 \subsubsection*{Description}
 
-This instruction 
+The \instruction{rldub} instruction performs a privilege check on the
+memory it is about to read from before loading an unsigned, 8 bit,
+quantity into \registerop{rd}.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-%rd = %r1 | %r2
+%rd = mem[%r1]
 \end{verbatim}
 
 \subsubsection*{Constraints}

@@ -1,17 +1,17 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: DUMMY}
+\addcontentsline{toc}{subsection}{COPYS}
+\label{insn:copys}
+\subsection*{COPYS: copy a string}
 
 \subsubsection*{Format}
 
-\textrm{DUMMY \%rd, \%r1, \%r2}
+\textrm{COPYS \%rd, \%r1, \%r2}
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
 \bitheader{0,7,8,15,16,23,24,31} \\
-\bitbox{8}{0x01}
+\bitbox{8}{0x3B}
 \bitbox{8}{r1}
 \bitbox{8}{r2}
 \bitbox{8}{rd}
@@ -20,11 +20,14 @@
 
 \subsubsection*{Description}
 
-This instruction 
+The \instruction{copys} instruction copies bytes from the string
+pointed to by \registerop{r1} and returns them in \registerop{rd}
+bounded by a size placed into \registerop{r2}.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-%rd = %r1 | %r2
+%rd = copy(r1, r2)
 \end{verbatim}
 
 \subsubsection*{Constraints}

@@ -1,17 +1,17 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: DUMMY}
+\addcontentsline{toc}{subsection}{ULDUB}
+\label{insn:uldub}
+\subsection*{ULDUB: load unsigned 8 bit quantity from user space}
 
 \subsubsection*{Format}
 
-\textrm{DUMMY \%rd, \%r1, \%r2}
+\textrm{ULDUB \%rd, \%r1, \%r2}
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
 \bitheader{0,7,8,15,16,23,24,31} \\
-\bitbox{8}{0x01}
+\bitbox{8}{0x43}
 \bitbox{8}{r1}
 \bitbox{8}{r2}
 \bitbox{8}{rd}
@@ -20,11 +20,13 @@
 
 \subsubsection*{Description}
 
-This instruction 
+The \instruction{uldub} instruction loads a unsigned 8 bit quantity from
+memory in a user space process into the \registerop{rd} register.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-%rd = %r1 | %r2
+%rd = umem[r1]
 \end{verbatim}
 
 \subsubsection*{Constraints}

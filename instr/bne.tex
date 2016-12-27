@@ -1,7 +1,7 @@
 \clearpage
 \phantomsection
 \addcontentsline{toc}{subsection}{BNE}
-\label{insn:dummy}
+\label{insn:bne}
 \subsection*{BNE: branch not equal}
 
 \subsubsection*{Format}
@@ -11,7 +11,7 @@
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
 \bitheader{0,23,24,31} \\
-\bitbox{8}{0x10}
+\bitbox{8}{0x13}
 \bitbox{24}{label}
 \end{bytefield}
 \end{center}

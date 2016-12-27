@@ -1,17 +1,17 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: DUMMY}
+\addcontentsline{toc}{subsection}{RLDX}
+\label{insn:rldx}
+\subsection*{RLDX: restricted load of a 64 bit quantity }
 
 \subsubsection*{Format}
 
-\textrm{DUMMY \%rd, \%r1, \%r2}
+\textrm{RLDX \%rd, \%r1, \%r2}
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
 \bitheader{0,7,8,15,16,23,24,31} \\
-\bitbox{8}{0x01}
+\bitbox{8}{0x4D}
 \bitbox{8}{r1}
 \bitbox{8}{r2}
 \bitbox{8}{rd}
@@ -20,11 +20,14 @@
 
 \subsubsection*{Description}
 
-This instruction 
+The \instruction{rldx} instruction performs a privilege check on the
+memory it is about to read from before loading a 64 bit quantity into
+\registerop{rd}.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-%rd = %r1 | %r2
+%rd = mme[%r1]
 \end{verbatim}
 
 \subsubsection*{Constraints}
