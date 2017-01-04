@@ -1,25 +1,32 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
+\addcontentsline{toc}{subsection}{rw-read-held}
 \label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\subsection*{sx\_shared\_held: Is this shared mutex currently held by
+  a reader}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] Boolean value indicating if this read/write
+  mutex is currently held.
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{sx_shared_held} subroutine takes an sx shared mutex as
+its only argument and returns a boolean value indicating if the mutex
+is currently held by a reader.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}
+
+The \subroutine{sx_shared_held} subroutine is only available on Illumos and
+systems derivice from OpenSolaris.
 
 \subsubsection*{Failure modes}
 

@@ -1,25 +1,32 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
+\addcontentsline{toc}{subsection}{sx-isexclusive}
 \label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\subsection*{sx\_isexclusive: Is the current thread the only one to
+  hold a shared mutex }
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] Boolean value indicating if the current thread
+  is the only one holding a shared mutex.
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{sx_isexclusie} subroutine takes a shared mutex as
+its only arugment and returns a boolean value indicating if the
+current thread is the only one holding it.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}
+
+The \subroutine{sx_isexclusive} subroutine is only available on
+Illumos and systems derivice from OpenSolaris.
 
 \subsubsection*{Failure modes}
 

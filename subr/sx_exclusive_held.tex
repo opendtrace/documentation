@@ -1,25 +1,30 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
-\label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\addcontentsline{toc}{subsection}{sx-exclusive-held}
+\label{subr:sx-exclusive-held}
+\subsection*{sx\_exclusive\_held: Is this sx mutex held exclusively }
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] Boolean value indicating whether or not a
+  the mutex is held exclusively..
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{sx_exclusive_held} subroutine takes an sx shared mutex
+as its only argument and returns a boolean value indicating whether or
+not the mutex is held exclusively.
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}
+
+The \subroutine{sx_exclusive_held} subroutine is only available on Illumos and
+systems derivice from OpenSolaris.
 
 \subsubsection*{Failure modes}
 
