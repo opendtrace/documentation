@@ -1,22 +1,24 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
+\addcontentsline{toc}{subsection}{memref}
 \label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\subsection*{memref: return scratch memory}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{arg0}] Pointer to memory
+\item[\registerop{arg1}] Length of scratch memory to use
+\item[\registerop{rd}] Pointer to a fixed size of scratch memory
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{memref} subroutine allocates memory from scratch
+space and returns that memory to the caller.
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

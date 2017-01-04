@@ -1,22 +1,22 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
+\addcontentsline{toc}{subsection}{random}
 \label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\subsection*{random: return a better pseudo-random number than rand()}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] A pseudo-random number
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{random} subroutine returns a better pseudo-random
+number than the originala \subroutine{rand} subroutine provided by DTrace.
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}

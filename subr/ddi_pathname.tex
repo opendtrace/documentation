@@ -1,25 +1,32 @@
 \clearpage
 \phantomsection
-\addcontentsline{toc}{subsection}{DUMMY}
+\addcontentsline{toc}{subsection}{ddi\_pathname}
 \label{insn:dummy}
-\subsection*{DUMMY: FILL ME IN}
+\subsection*{ddi\_pathname: look up device driver by name}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{arg0}] Pointer to a device node.
+\item[\registerop{arg1}] Device minor number.
+\item[\registerop{rd}] Path within the /devices tree.
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{ddi_pathname} subroutine returns a string describing
+the device driver that implements a device in the system.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
+
 \end{verbatim}
 
 \subsubsection*{Constraints}
+
+The \subroutine{ddi_pathname} subroutine is only available on Illumos and
+systems derivice from OpenSolaris.
 
 \subsubsection*{Failure modes}
 
