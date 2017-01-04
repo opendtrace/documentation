@@ -146,7 +146,6 @@ SOURCE=								\
 	subr/sx_shared_held.tex					\
 	subr/tolower.tex					\
 	subr/toupper.tex					\
-	subr/typeref.tex					\
 	subr/uuidstr.tex
 
 ${TARGET}: ${SOURCE}
