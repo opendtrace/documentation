@@ -100,6 +100,7 @@ SOURCE=								\
 	subr/copyinto.tex					\
 	subr/copyout.tex					\
 	subr/copyoutstr.tex					\
+	subr/copyoutmbuf.tex					\
 	subr/ddi_pathname.tex					\
 	subr/dirname.tex					\
 	subr/getf.tex						\
