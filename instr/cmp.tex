@@ -29,11 +29,11 @@ to make decisions about where the program will execute next.
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-cc_r = regs[r1] - regs[r2];
+cc_r = %r1 - %r2;
 cc_n = cc_r < 0;
 cc_z = cc_r == 0;
 cc_v = 0;
-cc_c = regs[r1] < regs[r2];
+cc_c = %r1 < %r2;
 \end{verbatim}
 
 \subsubsection*{Constraints}
