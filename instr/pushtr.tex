@@ -21,12 +21,17 @@
 \subsubsection*{Description}
 
 The \instruction{pushtr} instruction pushes a reference, contained in
+the \registerop{rd} register onto the stack.  The length is stored for
+a string along with the value.  For a numeric value the size of that
+value is stored.
 
-the \registerop{rd} register onto the stack.
 \subsubsection*{Pseudocode}
 
+The following code shows a string being pushed by value.
+
 \begin{verbatim}
-stack[++index] = %rd
+stack[++index].size = strlen(%rd);
+stack[index].value = %rd
 \end{verbatim}
 
 \subsubsection*{Constraints}

@@ -21,12 +21,15 @@
 \subsubsection*{Description}
 
 The \instruction{pushtv} instruction takes the value contained in
-\registerop{rd} register and pushes it onto the stack.
+\registerop{rd} register and pushes it onto the stack.  Unlike the
+\verb|PUSHTR| instruction, the size of the value is \emph{not} stored
+along with the value.
 
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-stack[++index] = %rd
+stack[++index].value = %rd
+stack[index] = 0;
 \end{verbatim}
 
 \subsubsection*{Constraints}
