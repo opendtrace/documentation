@@ -1,0 +1,31 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{LDTA}
+\label{insn:ldta}
+\subsection*{LDTA: Load thread local array UNIMPLEMENTED}
+
+\subsubsection*{Format}
+
+\textrm{LDTA \%rd, \%r1, \%r2}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,15,16,23,24,31} \\
+\bitbox{8}{0x2B}
+\bitbox{8}{r1}
+\bitbox{8}{r2}
+\bitbox{8}{rd}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{ldta} instruction is unimplemented and reserved for
+future use.
+\subsubsection*{Pseudocode}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

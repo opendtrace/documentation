@@ -1,0 +1,36 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{BL}
+\label{insn:bl}
+\subsection*{BL: branch less than}
+
+\subsubsection*{Format}
+
+\textrm{BL label}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,23,24,31} \\
+\bitbox{8}{0x18}
+\bitbox{24}{label}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{bl} instruction jumps to the specified label if and
+only if the result of the previous comparison instruction indicated
+that the value in \registerop{r1} was strictly less than the value in
+\registerop{r2}.
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+if (cc_n ^ cc_v)
+	pc = label
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

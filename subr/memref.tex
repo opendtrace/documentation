@@ -1,0 +1,28 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{memref}
+\label{insn:dummy}
+\subsection*{memref: return scratch memory}
+
+\subsubsection*{Calling convention}
+
+\begin{description}
+\item[\registerop{arg0}] Pointer to memory
+\item[\registerop{arg1}] Length of scratch memory to use
+\item[\registerop{rd}] Pointer to a fixed size of scratch memory
+\end{description}
+
+\subsubsection*{Description}
+
+The \subroutine{memref} subroutine allocates memory from scratch
+space and returns that memory to the caller.
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This subroutine has no run-time failure modes beyond its constraints.

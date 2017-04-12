@@ -1,0 +1,39 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{TST}
+\label{insn:tst}
+\subsection*{TST: Test the value in r1}
+
+\subsubsection*{Format}
+
+\textrm{TST \%r1}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,15,16,23,24,31} \\
+\bitbox{8}{0x0F}
+\bitbox{8}{r1}
+\bitbox{8}{r2}
+\bitbox{8}{rd}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{tst} instruction checks the value in \registerop{r1}
+to see if it is zero (0).  Only the Z bit (cc\_z) is set by this
+instruction, all other comparison result registers, listed in
+Table\ref{tbl:cmp-vars} are cleared.
+
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+cc_n = cc_v = cc_c = 0;
+cc_z = %r1 == 0;
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

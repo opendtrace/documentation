@@ -1,0 +1,154 @@
+\section{Subroutine calling mechanism}
+
+\section{Subroutine list}
+
+\begin{table}
+\begin{center}
+\begin{tabular}{llp{9cm}}
+\toprule
+  Name & Number & Description \\
+\midrule
+  \hyperref[subr:rand]{\subroutine{rand}} & 0 & Get random \\
+  \hyperref[subr:mutex-owned]{\subroutine{mutex\_owned}} & 1 &
+    Query whether current thread is mutex owner \\
+  \hyperref[subr:mutex-owner]{\subroutine{mutex\_owner}} & 2 &
+    Retrieve mutex owner \\
+  \hyperref[subr:mutex-type-adaptive]{\subroutine{mutex\_type\_adaptive}} & 3 &
+    Query if mutex is adaptive \\
+  \hyperref[subr:mutex-type-spin]{\subroutine{mutex\_type\_spin}} & 4 &
+    Query if mutex is a spinlock \\
+  \hyperref[subr:rw-read-held]{\subroutine{rw\_read\_held}} & 5 &
+    Query whether rwlock is held for read \\
+  \hyperref[subr:rw-write-held]{\subroutine{rw\_write\_held}} & 6 &
+    Query whether current thread holds rwlock for write \\
+  \hyperref[subr:rw-iswriter]{\subroutine{rw\_iswriter}} & 7 &
+    Query whether rwlock is held for write \\
+  \hyperref[subr:copyin]{\subroutine{copyin}} & 8 &
+    Copy in data from userspace \\
+  \hyperref[subr:copyinstr]{\subroutine{copyinstr}} & 9 &
+    Copy in string from userspace \\
+  \hyperref[subr:copyoutmbuf]{\subroutine{copyoutmbuf}} & 9 &
+    Copy data from an mbuf chain\\
+  \hyperref[subr:speculation]{\subroutine{speculation}} & 10 & \\
+  \hyperref[subr:progenyof]{\subroutine{progenyof}} & 11 & \\
+  \hyperref[subr:strlen]{\subroutine{strlen}} & 12 & \\
+  \hyperref[subr:copyout]{\subroutine{copyout}} & 13 & \\
+  \hyperref[subr:copyoutstr]{\subroutine{copyoutstr}} & 14 & \\
+  \hyperref[subr:alloca]{\subroutine{alloca}} & 15 & \\
+  \hyperref[subr:bcopy]{\subroutine{bcopy}} & 16 & \\
+  \hyperref[subr:copyinto]{\subroutine{copyinto}} & 17 & \\
+  \hyperref[subr:msgdsize]{\subroutine{msgdsize}} & 18 & \\
+  \hyperref[subr:msgsize]{\subroutine{msgsize}} & 19 & \\
+  \hyperref[subr:getmajor]{\subroutine{getmajor}} & 20 & \\
+  \hyperref[subr:getminor]{\subroutine{getminor}} & 21 & \\
+  \hyperref[subr:ddi-pathname]{\subroutine{ddi\_pathname}} & 22 & \\
+  \hyperref[subr:strjoin]{\subroutine{strjoin}} & 23  & \\
+  \hyperref[subr:lltostr]{\subroutine{lltostr}} & 24 & \\
+  \hyperref[subr:basename]{\subroutine{basename}} & 25 & \\
+  \hyperref[subr:dirname]{\subroutine{dirname}} & 26 & \\
+  \hyperref[subr:cleanpath]{\subroutine{cleanpath}} & 27 & \\
+  \hyperref[subr:strchr]{\subroutine{strchr}} & 28 & \\
+\bottomrule
+\end{tabular}
+\end{center}
+\caption{DTrace Subroutines (Part 1)}
+\end{table}
+
+\begin{table}
+\begin{center}
+\begin{tabular}{llp{9cm}}
+\toprule
+  Name & Number & Description \\
+\midrule
+  \hyperref[subr:strrchr]{\subroutine{strrchr}} & 29 & \\
+  \hyperref[subr:strstr]{\subroutine{strstr}} & 30 & \\
+  \hyperref[subr:strtok]{\subroutine{strtok}} & 31 & \\
+  \hyperref[subr:substr]{\subroutine{substr}} & 32 & \\
+  \hyperref[subr:index]{\subroutine{index}} & 33 & \\
+  \hyperref[subr:rindex]{\subroutine{rindex}} & 34 & \\
+  \hyperref[subr:htons]{\subroutine{htons}} & 35 & \\
+  \hyperref[subr:htonl]{\subroutine{htonl}} & 36 & \\
+  \hyperref[subr:htonll]{\subroutine{htonll}} & 37 & \\
+  \hyperref[subr:ntohs]{\subroutine{ntohs}} & 38 & \\
+  \hyperref[subr:ntohl]{\subroutine{ntohl}} & 39 & \\
+  \hyperref[subr:ntohll]{\subroutine{ntohll}} & 40 & \\
+  \hyperref[subr:inet-ntop]{\subroutine{inet\_ntop}} & 41 & \\
+  \hyperref[subr:inet-ntoa]{\subroutine{inet\_ntoa}} & 42 & \\
+  \hyperref[subr:inet-ntoa6]{\subroutine{inet\_ntoa6}} & 43 & \\
+  \hyperref[subr:toupper]{\subroutine{toupper}} & 44 & \\
+  \hyperref[subr:tolower]{\subroutine{tolower}} & 45 & \\
+  \hyperref[subr:memref]{\subroutine{memref}} & 46 & \\
+  \hyperref[subr:sx-shared-held]{\subroutine{sx\_shared\_held}} & 48 & \\
+  \hyperref[subr:sx-exclusive-held]{\subroutine{sx\_exclusive\_held}} & 49 & \\
+  \hyperref[subr:sx-isexclusive]{\subroutine{sx\_isexclusive}} & 50 & \\
+  \hyperref[subr:memstr]{\subroutine{memstr}} & 51 & \\
+  \hyperref[subr:getf]{\subroutine{getf}} & 52 & \\
+  \hyperref[subr:json]{\subroutine{json}} & 53 & \\
+  \hyperref[subr:strtoll]{\subroutine{strtoll}} & 54 & \\
+  \hyperref[subr:random]{\subroutine{random}} & 55 & \\
+  \hyperref[subr:uuidstr]{\subroutine{uuidstr}} & 56 & \\
+\bottomrule
+\end{tabular}
+\end{center}
+\caption{DTrace Subroutines (Part 2)}
+\end{table}
+
+\section{Subroutine reference}
+
+\input{subr/rand}
+\input{subr/mutex_owned}
+\input{subr/mutex_owner}
+\input{subr/mutex_type_adaptive}
+\input{subr/mutex_type_spin}
+\input{subr/rw_read_held}
+\input{subr/rw_write_held}
+\input{subr/rw_iswriter}
+\input{subr/copyin}
+\input{subr/copyinstr}
+\input{subr/speculation}
+\input{subr/progenyof}
+\input{subr/strlen}
+\input{subr/copyout}
+\input{subr/copyoutstr}
+\input{subr/copyoutmbuf}
+\input{subr/alloca}
+\input{subr/bcopy}
+\input{subr/copyinto}
+\input{subr/msgdsize}
+\input{subr/msgsize}
+\input{subr/getmajor}
+\input{subr/getminor}
+\input{subr/ddi_pathname}
+\input{subr/strjoin}
+\input{subr/lltostr}
+\input{subr/basename}
+\input{subr/dirname}
+\input{subr/cleanpath}
+\input{subr/strchr}
+\input{subr/strrchr}
+\input{subr/strstr}
+\input{subr/strtok}
+\input{subr/substr}
+\input{subr/index}
+\input{subr/rindex}
+\input{subr/htons}
+\input{subr/htonl}
+\input{subr/htonll}
+\input{subr/ntohs}
+\input{subr/ntohl}
+\input{subr/ntohll}
+\input{subr/inet_ntop}
+\input{subr/inet_ntoa}
+\input{subr/inet_ntoa6}
+\input{subr/toupper}
+\input{subr/tolower}
+\input{subr/memref}
+\input{subr/sx_shared_held}
+\input{subr/sx_exclusive_held}
+\input{subr/sx_isexclusive}
+\input{subr/memstr}
+\input{subr/getf}
+\input{subr/json}
+\input{subr/strtoll}
+\input{subr/random}
+\input{subr/uuidstr}

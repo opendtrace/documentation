@@ -1,0 +1,27 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{speculation}
+\label{insn:dummy}
+\subsection*{speculation: Activate an inactive speculation}
+
+\subsubsection*{Calling convention}
+
+\begin{description}
+\item[\registerop{rd}] Either an active speculation or 0.
+\end{description}
+
+\subsubsection*{Description}
+
+The \subroutine{speculation} subroutine transitions an inactive
+speculation to the active state, and returns it to the caller, or
+returns 0 if there are no inactive speculations available.
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This subroutine has no run-time failure modes beyond its constraints.

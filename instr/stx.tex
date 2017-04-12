@@ -1,0 +1,35 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{STX}
+\label{insn:stx}
+\subsection*{STX: store a 64 bit value into memory}
+
+\subsubsection*{Format}
+
+\textrm{STX \%rd, \%r1}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,15,16,23,24,31} \\
+\bitbox{8}{0x3F}
+\bitbox{8}{r1}
+\bitbox{8}{r2}
+\bitbox{8}{rd}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{stx} instruction takes a 64 bit value from \registerop{r1}
+and stores it into the memory location pointed to by \registerop{rd}.
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+mem[%rd] = %r1
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

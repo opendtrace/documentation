@@ -1,0 +1,36 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{LDTAA}
+\label{insn:ldtaa}
+\subsection*{LDTAA: load a value from a thread private hash map}
+
+\subsubsection*{Format}
+
+\textrm{LDTAA var, \%rd}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,23,24,31} \\
+\bitbox{8}{0x35}
+\bitbox{16}{key}
+\bitbox{8}{rd}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{ldtaa} instruction loads a value into the
+\registerop{rd} register based on a key.  The key is used to lookup
+the value in a thread private, hash map, data structure.
+
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+%rd = map[key]
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

@@ -1,0 +1,19 @@
+\section*{Abstract}
+
+DTrace is a dynamic tracing facility offering full-system instrumentation, a
+high degree of flexibility, and portable semantics across a range of
+operating systems.
+Originally designed and implemented by Sun Microsystems (now Oracle),
+user-facing aspects of DTrace, such as the D language and command-line tools,
+are well defined and documented.
+However, DTrace's internal formats -- the DTrace Intermediate Format (DIF) and
+DTrace Object Format (DOF) -- have primarily been documented through source
+code comments rather than a structured specification.
+This technical report specifies these formats in order to better support the
+development of more comprehensive tests, new underlying execution subtrates
+(such as just-in-time compilation), and future extensions.
+%DIF is a RISC bytecode into which D scripts are compiled, describing the
+%specific executable actions in a script.
+%DOF is the container format containing a set of headers and sections for
+%variables, probe implementations, constants, and other content required to
+%represent a complete script.

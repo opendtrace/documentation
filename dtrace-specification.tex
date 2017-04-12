@@ -1,0 +1,96 @@
+\include{preamble}
+
+\begin{document}
+\title{DTrace Object Format (DOF) and \\
+  DTrace Intermediate Format (DIF) \\
+  Specification \\
+  {\large Version 0.1 - DRAFT}
+}
+
+\date{September 5, 2016}
+
+\author{
+  Robert N. M. Watson and George Neville-Neil \\
+  \\
+  BAE Systems, The University of Cambridge, \\
+    and Memorial University Newfoundland
+}
+
+%% CL tech-report format provides its own cover page
+\begin{minipage}[h]{\textwidth}
+  \maketitle
+
+  \vspace{2in}
+  {\small
+  Approved for public release; distribution is unlimited.
+  Sponsored by the Defense Advanced Research Projects Agency (DARPA) and the
+  Air Force Research Laboratory (AFRL), under contracts FA8650-15-C-7558
+  (``CADETS'') as part of the DARPA Transparent Computing research program.
+  The views, opinions, and/or findings contained in this report are those of the
+  authors and should not be interpreted as representing the official views or
+  policies, either expressed or implied, of the Department of Defense
+  or the U.S. Government.}
+\end{minipage}
+%%
+
+\normalsize
+
+%% CL tech-report format requires page numbering to start at 3
+%\setcounter{page}{3}
+%%
+
+%% For revisions sent for editing, prefer double spacing.
+%\doublespacing
+%%
+
+\clearpage
+
+\input{abstract}
+
+\clearpage
+
+\input{acknowledgments}
+
+\clearpage
+
+\tableofcontents
+
+\clearpage
+
+\chapter{Introduction}
+\label{chap:introduction}
+\input{chap-intro}
+
+\chapter{DTrace Object Format (DOF)}
+\label{chap:dtrace-object-format}
+\input{chap-dtrace-object-format}
+
+\chapter{DTrace Intermediate Format (DIF)}
+\label{chap:dtrace-intermediate-format}
+\input{chap-dtrace-intermediate-format}
+
+\chapter{DTrace Instruction Reference}
+\label{chap:dtrace-instruction-reference}
+\input{chap-dtrace-instruction-reference}
+
+\chapter{DTrace Variable Records}
+\label{chap:dtrace-variable-records}
+\input{chap-dtrace-variable-records}
+
+\chapter{DTrace Subroutines}
+\label{chap:dtrace-subroutines}
+\input{chap-dtrace-subroutines}
+
+\begin{appendices}
+\chapter{Code Organization}
+\label{chap:dtrace-code}
+\input{chap-dtrace-code}
+
+\end{appendices}
+
+\bibliographystyle{abbrv}
+\bibliography{dtrace-specification}
+
+%\chapter*{Index}
+
+\end{document}

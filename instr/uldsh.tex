@@ -1,0 +1,37 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{ULDSH}
+\label{insn:uldsh}
+\subsection*{ULDSH: load a signed 16 bit quantity from user space}
+
+\subsubsection*{Format}
+
+\textrm{ULDSH \%rd, \%r1, \%r2}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,15,16,23,24,31} \\
+\bitbox{8}{0x41}
+\bitbox{8}{r1}
+\bitbox{8}{r2}
+\bitbox{8}{rd}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{uldsh} instruction loads a signed, 16 bit, quantity
+from memory in a user space process into the \registerop{rd} register,
+indexed by \registerop{r1}.
+
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+%rd = umem[r1]
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

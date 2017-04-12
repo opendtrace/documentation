@@ -1,0 +1,36 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{BNE}
+\label{insn:bne}
+\subsection*{BNE: branch not equal}
+
+\subsubsection*{Format}
+
+\textrm{BNE label}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,23,24,31} \\
+\bitbox{8}{0x13}
+\bitbox{24}{label}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{be} instruction sets the PC to a new label if, and
+only if the result of the last \instruction{cmp} restulted in the zero
+bit (cc\_z) being cleared, or set to 0.
+
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+if (cc_z == 0)
+	%pc = label
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

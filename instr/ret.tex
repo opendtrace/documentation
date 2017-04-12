@@ -1,0 +1,31 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{RET}
+\label{insn:ret}
+\subsection*{RET: return}
+
+\subsubsection*{Format}
+
+\textrm{RET \%rd}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,31} \\
+\bitbox{8}{0x23}
+\bitbox{24}{rd}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{ret} instruction returns the value in \registerop{rd}.
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

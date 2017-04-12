@@ -1,0 +1,36 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{LDTS}
+\label{insn:ldts}
+\subsection*{LDTS: load a value from a thread local variable}
+
+\subsubsection*{Format}
+
+\textrm{LDTS \%rd, \%r1, \%r2}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,23,24,31} \\
+\bitbox{8}{0x2C}
+\bitbox{16}{variable}
+\bitbox{8}{rd}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{ldts} instruction loads data from a thread local
+variable into the \registerop{rd} register by reference or by value.
+The \verb|DIF_TF_BYREF| flag is used to determine the appropriate lookup.
+
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+%rd = var
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

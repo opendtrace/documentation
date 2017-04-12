@@ -1,0 +1,34 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{STGS}
+\label{insn:stgs}
+\subsection*{STGS: store a value into a variable}
+
+\subsubsection*{Format}
+
+\textrm{STGS \%rd, \%r1, \%r2}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,23,24,31} \\
+\bitbox{8}{0x2A}
+\bitbox{16}{var}
+\bitbox{8}{rd}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+The \instruction{stgs} instruct stores a value from the
+\registerop{rd} register into a user defined variable.
+
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+var = %rd
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

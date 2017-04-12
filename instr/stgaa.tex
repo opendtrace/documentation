@@ -1,0 +1,34 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{STGAA}
+\label{insn:stgaa}
+\subsection*{STGAA: store a value into a hash by key}
+
+\subsubsection*{Format}
+
+\textrm{STGAA key, \%rd}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,23,24,31} \\
+\bitbox{8}{0x46}
+\bitbox{16}{key}
+\bitbox{8}{rd}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{stgaa} instruction stores a value, contained in the
+\registerop{rd} register into a hash map based on a key.
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+map[key] = %rd
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

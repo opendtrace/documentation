@@ -1,0 +1,31 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{substr}
+\label{subr:substr}
+\subsection*{substr: return a sub string of a string}
+
+\subsubsection*{Calling convention}
+
+\begin{description}
+\item[\registerop{rd}] a string representing the substring
+\end{description}
+
+\subsubsection*{Description}
+
+The \subroutine{substr} routine returns a sub-string of a string,
+passed as the first argument, starting from a byte index passed as the
+second argument.  An optional third argument can be used to bound the
+resulting string.  If the optional bounding argument is not supplied
+then the sub-string includes all bytes up to and including the
+terminating NUL character.
+
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This subroutine has no run-time failure modes beyond its constraints.

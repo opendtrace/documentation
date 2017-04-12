@@ -1,0 +1,44 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{AND}
+\label{insn:and}
+\subsection*{AND: Bitwise And}
+
+\subsubsection*{Format}
+
+\textrm{AND \%rd, \%r1, \%r2}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,15,16,23,24,31} \\
+\bitbox{8}{0x03}
+\bitbox{8}{r1}
+\bitbox{8}{r2}
+\bitbox{8}{rd}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+This instruction calculates the bitwise and of the values found in registers
+\registerop{r1} and \registerop{r2}, placing the results in register
+\registerop{rd}.
+
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+%rd = %r1 & %r2
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\registerop{r1}, \registerop{r2}, and \registerop{rd} must be less than
+n\nregs{}.
+
+\medskip
+\noindent
+\registerop{rd} cannot be \register{r0}.
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

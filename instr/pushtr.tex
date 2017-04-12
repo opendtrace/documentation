@@ -1,0 +1,41 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{PUSHTR}
+\label{insn:pushtr}
+\subsection*{PUSHTR: push a reference onto the stack}
+
+\subsubsection*{Format}
+
+\textrm{PUSHTR \%rd, \%r1, \%r2}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,15,16,23,24,31} \\
+\bitbox{8}{0x30}
+\bitbox{8}{r1}
+\bitbox{8}{r2}
+\bitbox{8}{rd}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{pushtr} instruction pushes a reference, contained in
+the \registerop{rd} register onto the stack.  The length is stored for
+a string along with the value.  For a numeric value the size of that
+value is stored.
+
+\subsubsection*{Pseudocode}
+
+The following code shows a string being pushed by value.
+
+\begin{verbatim}
+stack[++index].size = strlen(%rd);
+stack[index].value = %rd
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

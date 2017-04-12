@@ -1,0 +1,43 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{SCMP}
+\label{insn:scmp}
+\subsection*{SCMP: compare two strings}
+
+\subsubsection*{Format}
+
+\textrm{SCMP \%r1, \%r2}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,15,16,23,24,31} \\
+\bitbox{8}{0x27}
+\bitbox{8}{r1}
+\bitbox{8}{r2}
+\bitbox{8}{rd}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{scmp} intruction compares the strings pointed to by
+\registerop{r1} and \registerop{r2} and sets the comparison bits for
+the DIF interpreter based on the result.  The length of the the
+strings is derived by DTrace itself and the comparison is bounded by
+the \verb|DTRACEOPT_STRSIZE| option set for the system.
+
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+cc_r = strncmp(r1, r2, size);
+
+cc_n = cc_r < 0;
+cc_z = cc_r == 0;
+cc_v = cc_c = 0;
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

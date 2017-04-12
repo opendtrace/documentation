@@ -1,0 +1,36 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{LDX}
+\label{insn:ldx}
+\subsection*{LDX: load 64 bit value}
+
+\subsubsection*{Format}
+
+\textrm{LDX \%rd, \%r1}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,15,16,23,24,31} \\
+\bitbox{8}{0x22}
+\bitbox{8}{r1}
+\bitbox{8}{r2}
+\bitbox{8}{rd}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{ldx} instruction loads a 64 bit value pointed to by
+\registerop{r1} into \registerop{rd}.
+
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+%rd = %r1
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

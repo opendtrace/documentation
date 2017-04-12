@@ -1,0 +1,36 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{SRA}
+\label{insn:sra}
+\subsection*{SRA: Shift right}
+
+\subsubsection*{Format}
+
+\textrm{SRA \%rd, \%r1, \%r2}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,15,16,23,24,31} \\
+\bitbox{8}{0x2E}
+\bitbox{8}{r1}
+\bitbox{8}{r2}
+\bitbox{8}{rd}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{sra} instruction shifts the value in \registerop{r1}
+right by the number of bits indicated in \registerop{r2}.
+
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+%rd = %r1 >> %r2
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

@@ -1,0 +1,31 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{alloca}
+\label{subr:alloca}
+\subsection*{alloca: allocate temporary space}
+
+\subsubsection*{Calling convention}
+
+\begin{description}
+\item[\registerop{rd}] Pointer to allocated data or NULL.
+\end{description}
+
+\subsubsection*{Description}
+
+The \subroutine{alloca} subroutine allocates scratch space in the
+DTrace state machine structure.  Although this subroutine does not
+allocate space on the process stack, it does act similarly to the
+alloca macro, in that the space disappears without an explicit call to
+a \subroutine{free} routine, once the DTrace machine state structure
+is deallocated.
+
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This subroutine has no run-time failure modes beyond its constraints.

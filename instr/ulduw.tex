@@ -1,0 +1,37 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{ULDUW}
+\label{insn:ulduw}
+\subsection*{ULDUW: load an unsigned 32 bit quantity from user space}
+
+\subsubsection*{Format}
+
+\textrm{ULDUW \%rd, \%r1, \%r2}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,15,16,23,24,31} \\
+\bitbox{8}{0x45}
+\bitbox{8}{r1}
+\bitbox{8}{r2}
+\bitbox{8}{rd}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{ulduw} instruction loads an unsigned 32 bit quantity
+from memory in a user space process into the \registerop{rd} register,
+indexed by \registerop{r1}.
+
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+%rd = umem[r1]
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

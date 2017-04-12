@@ -1,0 +1,33 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{sx-isexclusive}
+\label{insn:dummy}
+\subsection*{sx\_isexclusive: Is the current thread the only one to
+  hold a shared mutex }
+
+\subsubsection*{Calling convention}
+
+\begin{description}
+\item[\registerop{rd}] Boolean value indicating if the current thread
+  is the only one holding a shared mutex.
+\end{description}
+
+\subsubsection*{Description}
+
+The \subroutine{sx_isexclusie} subroutine takes a shared mutex as
+its only arugment and returns a boolean value indicating if the
+current thread is the only one holding it.
+
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+The \subroutine{sx_isexclusive} subroutine is only available on
+Illumos and systems derivice from OpenSolaris.
+
+\subsubsection*{Failure modes}
+
+This subroutine has no run-time failure modes beyond its constraints.

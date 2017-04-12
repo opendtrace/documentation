@@ -1,0 +1,39 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{SDIV}
+\label{insn:sdiv}
+\subsection*{SDIV: signed division}
+
+\subsubsection*{Format}
+
+\textrm{SDIV \%rd, \%r1, \%r2}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,15,16,23,24,31} \\
+\bitbox{8}{0x09}
+\bitbox{8}{r1}
+\bitbox{8}{r2}
+\bitbox{8}{rd}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{sdiv} instruction divides the value contained in
+\registerop{r2} into that contained in \registerop{r1} placing the
+results into \registerop{rd}.  The values in both \registerop{r1} and
+\registerop{r2} are first promoted to signed, 64 bit values, before
+the division operation is carried out.
+
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+%rd = (int64_t)%r1 / (inst64_t)%r2
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

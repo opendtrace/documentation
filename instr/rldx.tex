@@ -1,0 +1,37 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{RLDX}
+\label{insn:rldx}
+\subsection*{RLDX: restricted load of a 64 bit quantity }
+
+\subsubsection*{Format}
+
+\textrm{RLDX \%rd, \%r1, \%r2}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,15,16,23,24,31} \\
+\bitbox{8}{0x4D}
+\bitbox{8}{r1}
+\bitbox{8}{r2}
+\bitbox{8}{rd}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{rldx} instruction performs a privilege check on the
+memory it is about to read from before loading a 64 bit quantity into
+\registerop{rd}, indexed by \registerop{r1}.
+
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+%rd = mem[%r1]
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

@@ -1,0 +1,67 @@
+DTrace is a dynamic tracing facility integrated into the Solaris, FreeBSD,
+and Mac OS X operating systems -- with ports also available for Linux and
+Windows.
+Dynamic tracing allows system administrators and software developers to
+develop short scripts (in the D programming language) that instruct DTrace to
+instrument aspects of system operation, gather data, and present it for human
+interpretation or mechanical processing.
+While there is excellent documentation available for the D programming
+language, command-line tools, and general DTrace-based investigation and
+operation, the internal formats to DTrace are generally documented via the
+source code.
+This report acts as a de facto specification for those formats, including
+the DTrace Intermediate Format (DIF), which is a bytecode that D scripts are
+compiled into for safe execution within the kernel, and the DTrace Object
+Format (DOF), which bundles together complete scripts along with their
+associated constants and metadata.
+
+%\section{Motivation}
+\section{Background}
+
+\textbf{XXRW: Ideally, there would be a more detailed description of both the
+usage model, and also the architectural elements, of DTrace here.
+That and some citations to DTrace documentation, the FreeBSD/Solaris books,
+etc.}
+
+\section{Version History}
+
+\begin{description}
+\item[0.1] This is the first version of the \textit{DTrace Formats
+  Specification}, made available for early review and collaborative
+  development.
+\end{description}
+
+\section{Document Structure}
+
+This report specifies a number of aspects of DTrace's operation:
+
+\begin{description}
+\item[The DTrace Object Format (DOF)] described in
+  Chapter~\ref{chap:dtrace-object-format} is a file-like format linking
+  together a set of sections describing DTrace code, string constants, and
+  other aspects of a complete compiled DTrace script.
+
+\item[The DTrace Intermediate Format (DIF)] is the bytecode that the
+  executable elements of DTrace scripts are compiled to.
+  This is a simple RISC-like instruction set with constrained execution
+  properties (e.g., only forward branches).
+  Chapter~\ref{chap:dtrace-intermediate-format} describes the instruction
+  format and common instruction semantics.
+
+\item[DTrace Instructions] are the individual RISC instructions performing
+  a variety of operations including register access, memory access, arithmetic
+  operations, and calling various built-in subroutines available to scripts in
+  execution.
+  Chapter~\ref{chap:dtrace-instruction-reference} enumerates the instructions,
+  their arguments, and their semantics.
+
+\item[DTrace Variable Records] describe the set of variables (local, global,
+  or thread-local) operated on by a DTrace script.
+  Chapter~\ref{chap:dtrace-variable-records} specifies this record format.
+
+\item[DTrace Subroutines] are available to scripts, providing access to
+  higher-level behavior, such as memory copying, string comparison, and so on.
+  Chapter~\ref{chap:dtrace-subroutines} describes the available built-in
+  subroutines.
+
+\end{description}

@@ -1,0 +1,34 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{LDGS}
+\label{insn:ldgs}
+\subsection*{LDGS: Load a user defined variable}
+
+\subsubsection*{Format}
+
+\textrm{LDGS \%rd, \%r1, \%r2}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,23,24,31} \\
+\bitbox{8}{0x29}
+\bitbox{16}{var}
+\bitbox{8}{rd}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{ldgs} instruction looks up a user defined variable in
+a DIF program and places its value into \registerop{rd}.
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+%rd = var
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

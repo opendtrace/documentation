@@ -1,0 +1,34 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{POPTS}
+\label{insn:popts}
+\subsection*{POPTS: pop a value from the stack}
+
+\subsubsection*{Format}
+
+\textrm{POPTS}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,31} \\
+\bitbox{8}{0x32}
+\bitbox{24}{0}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{popts} pops the stack, moving the stack's index to
+next position down from the top, without returning any value.
+
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+stack[index--]
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

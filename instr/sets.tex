@@ -1,0 +1,34 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{SETS}
+\label{insn:sets}
+\subsection*{SETS: retrieve string from the string table}
+
+\subsubsection*{Format}
+
+\textrm{SETS strindex, \%rd}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,15,16,31} \\
+\bitbox{8}{0x26}
+\bitbox{8}{rd}
+\bitbox{16}{index}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{sets} instruction looks up a string stored in the DIF
+string table and places a pointer to the value into \registerop{rd}.
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+%rd = strtab + index
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

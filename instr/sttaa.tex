@@ -1,0 +1,34 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{STTAA}
+\label{insn:sttaa}
+\subsection*{STTAA: store a value into a thread private, hash by key}
+
+\subsubsection*{Format}
+
+\textrm{STTAA key, \%rd}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,23,24,31} \\
+\bitbox{8}{0x47}
+\bitbox{16}{key}
+\bitbox{8}{rd}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{sttaa} instruction stores a value, contained in the
+\registerop{rd} register into a thread private, hash map based on a key.
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+map[key] = %rd
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

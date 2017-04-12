@@ -1,0 +1,33 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{FLUSHTS}
+\label{insn:flushts}
+\subsection*{FLUSHTS: flush the stack}
+
+\subsubsection*{Format}
+
+\textrm{FLUSHTS}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,31} \\
+\bitbox{8}{0x33}
+\bitbox{24}{0}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{flushts} instruction flushes the stack, by resetting
+the stack pointer to 0.
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+%sp = 0;
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

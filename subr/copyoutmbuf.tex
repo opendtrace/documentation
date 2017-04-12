@@ -1,0 +1,33 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{copyoutmbuf}
+\label{subr:copyoutmbuf}
+\subsection*{copyoutmbuf: copy data from an mbuf chain}
+
+\subsubsection*{Calling convention}
+
+\begin{description}
+\item[\registerop{arg0}] pointer to mbuf
+\item[\registerop{arg1}] amount of data to copy
+\item[\registerop{rd}] pointer to copied data
+\end{description}
+
+\subsubsection*{Description}
+
+The \subroutine{copyoutmbuf} subroutine copies data from an mbuf
+chain out a destination pointer bounded by a size given in the second
+argument.  If the second argument exceeds the size of the data in the
+mbuf chain then it is reduced to the correct length.
+
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+The \subroutine{copyoutmbuf} subroutine is only supported on FreeBSD.
+
+\subsubsection*{Failure modes}
+
+This subroutine has no run-time failure modes beyond its constraints.

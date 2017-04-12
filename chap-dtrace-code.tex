@@ -1,0 +1,64 @@
+DTrace was originally developed on \pathname{OpenSolaris} which had a
+unique way of organizing code.  One key thing to note is that there
+are \em{two different} \pathname{dtrace.h} include files, one for the
+kernel and one for the user space code.
+
+\section{Illumos}
+\label{sec:illumos-code}
+
+The original source of DTrace came from OpenSolaris which has morphed
+into Illumos.  As this was the original place that the code resided
+there was no reason to split things along OS or license boundaries.
+The main DTrace command resides in \pathname{cmd}, the supporting
+libraries are in \pathname{lib/libdtrace} and the kernel code is in
+the \pathname{uts/common}, \pathname{uts/intel}, \pathname{uts/sparc},
+and related directories.
+
+\section{FreeBSD}
+\label{sec:freebsd-code}
+
+Within FreeBSD the DTrace code has been split between that which came
+from Sun's OpenSolaris (now Illumos) and is therefore under the CDDL
+and the code which has been written natively on FreeBSD, and is
+therefore under a BSD license.  There are two locations for the cddl
+code, one in the root of the tree, \pathname{/usr/src} and one in the
+kernel directory \pathname{/usr/src/sys}.  Native FreeBSD scripts are
+located in the \pathname{/usr/share/dtrace} directory.
+
+Because of the user space and kernel split for the cddl code the
+FreeBSD tree has three, separate, \pathname{dtrace.h} files:
+
+\begin{figure}
+  \centering
+\begin{description}
+\item [sys/cddl/contrib/opensolaris/uts/common/sys/dtrace.h] The one
+  you care about.
+\item [cddl/contrib/opensolaris/lib/libdtrace/common/dtrace.h] Library APIs
+\item [cddl/compat/opensolaris/include/dtrace.h] Compatability include
+\end{description}
+  \caption{The various versions of dtrace.h}
+  \label{fig:freebsd-dtrace-h}
+\end{figure}
+
+\section{Mac OS}
+\label{sec:macos-code}
+
+Open source code from Apple is supplied in discrete pacakges.  The
+DTrace code on Mac OS is split between the \pathname{xnu} kernel and
+the rest of the code which is contained in a \pathname{dtrace} code
+drop.  The kernel includes a very small number of files that are
+absolutely necessary to build the kernel itself, including the driver
+code.  All of the kernle code is collected into the
+\pathname{xnu/bsd/dev/dtrace/} directory with the Mac OS translators,
+the D files that know about the internals of kernel data structures,
+are contained in the \pathname{scripts} sub-directory.  In the
+\pathname{OpenDTrace} repositories there Mac OS kernel code resides in
+\url{https://github.com/opendtrace/xnu} while the rest of the code
+resides in \url{https://github.com/opendtrace/macos-dtrace}.  These
+repositories are updated as soon as Apple drops their tarballs onto
+\url{https://opensource.apple.com/tarballs/}.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "dtrace-specification"
+%%% End:

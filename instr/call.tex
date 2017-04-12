@@ -1,0 +1,37 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{CALL}
+\label{insn:call}
+\subsection*{CALL: subroutine call}
+
+\subsubsection*{Format}
+
+\textrm{CALL \%rd, \%r1, \%r2}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,23,24,31} \\
+\bitbox{8}{0x2F}
+\bitbox{16}{subroutine}
+\bitbox{8}{rd}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{call} instruction executes a known DTrace subroutine,
+such as copyinstr(), copyout() etc. and returns any value into
+\registerop{rd}.  Valid subroutines are documented in
+\ref{sec:subroutines}.
+
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+%rd = subr()
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

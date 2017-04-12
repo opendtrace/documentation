@@ -1,0 +1,33 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{XLATE}
+\label{insn:xlate}
+\subsection*{XLATE: }
+
+\subsubsection*{Format}
+
+\textrm{XLATE \%rd, \%r1, \%r2}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,15,16,23,24,31} \\
+\bitbox{8}{0x4E}
+\bitbox{8}{r1}
+\bitbox{8}{r2}
+\bitbox{8}{rd}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{xlate} instruction extracts translated data indicated
+at current the current translation index and returns the data in
+\registerop{rd}.
+
+\subsubsection*{Pseudocode}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

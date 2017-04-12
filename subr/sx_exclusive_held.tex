@@ -1,0 +1,31 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{sx-exclusive-held}
+\label{subr:sx-exclusive-held}
+\subsection*{sx\_exclusive\_held: Is this sx mutex held exclusively }
+
+\subsubsection*{Calling convention}
+
+\begin{description}
+\item[\registerop{rd}] Boolean value indicating whether or not a
+  the mutex is held exclusively..
+\end{description}
+
+\subsubsection*{Description}
+
+The \subroutine{sx_exclusive_held} subroutine takes an sx shared mutex
+as its only argument and returns a boolean value indicating whether or
+not the mutex is held exclusively.
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+The \subroutine{sx_exclusive_held} subroutine is only available on Illumos and
+systems derivice from OpenSolaris.
+
+\subsubsection*{Failure modes}
+
+This subroutine has no run-time failure modes beyond its constraints.

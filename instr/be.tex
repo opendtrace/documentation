@@ -1,0 +1,36 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{BE}
+\label{insn:be}
+\subsection*{BE: branch equal}
+
+\subsubsection*{Format}
+
+\textrm{BE label}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,23,24,31} \\
+\bitbox{8}{0x12}
+\bitbox{24}{label}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{be} instruction sets the PC to a new label if, and
+only if the result of the last \instruction{cmp} or \instruction{tst}
+set the zero bit (cc\_z) to a value other than 0.
+
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+if (cc_z)
+	%pc = label
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

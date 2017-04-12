@@ -1,0 +1,30 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{basename}
+\label{subr:basename}
+\subsection*{basename: return the file name portion of a pathname}
+
+\subsubsection*{Calling convention}
+
+\begin{description}
+\item[\registerop{rd}] A pointer to a scratch space string containing
+  the filename.
+\end{description}
+
+\subsubsection*{Description}
+
+The \subroutine{basename} subroutine takes a single string argument,
+containing a path, and returns a pointer to the file name portion of
+the supplied string.  The space for the resulting string is contained
+in the DTrace machine state structure, \verb|mstate| which is
+automatically de-allocated.
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This subroutine has no run-time failure modes beyond its constraints.

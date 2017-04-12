@@ -1,0 +1,40 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{ALLOCS}
+\label{insn:allocs}
+\subsection*{ALLOCS: allocate a string}
+
+\subsubsection*{Format}
+
+\textrm{ALLOCS \%rd, \%r1}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,15,16,23,24,31} \\
+\bitbox{8}{0x3A}
+\bitbox{8}{r1}
+\bitbox{8}{r2}
+\bitbox{8}{rd}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{allocs} instruction allocates a string in the DIF
+scratch space, based on the size in \registerop{r1} and returns the
+pointer to that string in register \registerop{rd}.  A failed
+allocation returns a 0.
+
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+ptr = scratch_space;
+scratch_space += size;
+%rd = ptr
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.

@@ -1,0 +1,35 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{STLS}
+\label{insn:stls}
+\subsection*{STLS: store a value in a local variable}
+
+\subsubsection*{Format}
+
+\textrm{STLS variable, \%rd}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,7,8,23,24,31} \\
+\bitbox{8}{0x49}
+\bitbox{16}{variable}
+\bitbox{8}{rd}
+\end{bytefield}
+\end{center}
+
+\subsubsection*{Description}
+
+The \instruction{stls} instruction takes a value from the
+\registerop{rd} register and stores it in a variable.  
+
+\subsubsection*{Pseudocode}
+
+\begin{verbatim}
+var = %rd
+\end{verbatim}
+
+\subsubsection*{Constraints}
+
+\subsubsection*{Failure modes}
+
+This instruction has no run-time failure modes beyond its constraints.
