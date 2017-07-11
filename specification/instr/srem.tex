@@ -21,10 +21,11 @@
 \subsubsection*{Description}
 
 The \instruction{srem} instruction divides the value contained in
-\registerop{r2} into that contained in \registerop{r1} placing the
-remainder into \registerop{rd}.  The values in both \registerop{r1} and
-\registerop{r2} are first promoted to signed, 64 bit values, before
-the division operation is carried out.
+\registerop{r2} into that contained in \registerop{r1} placing the remainder
+into \registerop{rd}.  The values in both \registerop{r1} and \registerop{r2}
+are first promoted to signed, 64 bit values, before the division operation is
+carried out. The \instruction{srem} instruction follows the remainder definition
+in C99 and will return a negative remainder if applicable.
 
 \subsubsection*{Pseudocode}
 
