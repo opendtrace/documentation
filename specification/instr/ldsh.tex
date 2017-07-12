@@ -21,7 +21,9 @@
 \subsubsection*{Description}
 
 The \instruction{ldsh} instruction loads a 16-bit value pointed to by
-\registerop{r1} into \registerop{rd}, the results register.
+\registerop{r1} into \registerop{rd}, the results register. This instruction is
+a \textbf{signed} instruction and will perform sign extenstion on the resulting
+register when applicable.
 
 \subsubsection*{Pseudocode}
 

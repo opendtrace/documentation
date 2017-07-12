@@ -20,8 +20,10 @@
 
 \subsubsection*{Description}
 
-The \instruction{ldsb} instruction loads a 32-bit value pointed to by
-\registerop{r1} into \registerop{rd}, the results register.
+The \instruction{ldsw} instruction loads a 32-bit value pointed to by
+\registerop{r1} into \registerop{rd}, the results register. This instruction is
+a \textbf{signed} instruction and will perform sign extension on the resulting
+register when applicable.
 
 \subsubsection*{Pseudocode}
 

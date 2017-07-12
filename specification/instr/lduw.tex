@@ -20,9 +20,9 @@
 
 \subsubsection*{Description}
 
-The \instruction{ldsb} instruction loads an unsigned 32-bit value
-pointed to by \registerop{r1} into \registerop{rd}, the results
-register.
+The \instruction{lduw} instruction loads a 32-bit value pointed to by
+\registerop{r1} into \registerop{rd}, the results register. This is an
+\textbf{unsigned} instruction and will not perform sign extension in any case.
 
 \subsubsection*{Pseudocode}
 
