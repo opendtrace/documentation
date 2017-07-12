@@ -21,7 +21,8 @@
 \subsubsection*{Description}
 
 The \instruction{ldx} instruction loads a 64 bit value pointed to by
-\registerop{r1} into \registerop{rd}.
+\registerop{r1} into \registerop{rd}. Much like conventional RISC architectures,
+it does not perform sign extension, as this is considered to be the widest type.
 
 \subsubsection*{Pseudocode}
 

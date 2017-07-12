@@ -21,7 +21,8 @@
 \subsubsection*{Description}
 
 The \instruction{lduh} instruction loads a 16-bit value pointed to by
-\registerop{r1} into \registerop{rd}, the results register.
+\registerop{r1} into \registerop{rd}, the results register. This is an
+\textbf{unsigned} instruction and will not perform sign extension in any case.
 
 \subsubsection*{Pseudocode}
 
