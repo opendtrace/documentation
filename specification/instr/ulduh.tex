@@ -20,9 +20,11 @@
 
 \subsubsection*{Description}
 
-The \instruction{ulduh} instruction loads an unsigned, 16 bit,
-quantity from memory in a user space process into the \registerop{rd}
-register, indexed by \registerop{r1}.
+The \instruction{ulduh} instruction loads an unsigned, 16 bit, quantity from
+memory in a user space process into the \registerop{rd} register, indexed by
+\registerop{r1}. This is an \textbf{unsigned} instruction and will not perform
+sign extension in any case.
+
 
 \subsubsection*{Pseudocode}
 
