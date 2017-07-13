@@ -20,9 +20,10 @@
 
 \subsubsection*{Description}
 
-The \instruction{uldsb} instruction loads a signed 8 bit quantity from
-memory in a user space process into the \registerop{rd} register,
-indexed by \registerop{r1}.
+The \instruction{uldsb} instruction loads a signed 8 bit quantity from memory in
+a user space process into the \registerop{rd} register, indexed by
+\registerop{r1}. This instruction is a \textbf{signed} instruction and will
+perform sign extension on the resulting register when applicable.
 
 \subsubsection*{Pseudocode}
 

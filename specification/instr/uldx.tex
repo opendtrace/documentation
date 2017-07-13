@@ -20,9 +20,10 @@
 
 \subsubsection*{Description}
 
-The \instruction{uldx} instruction loads a 64 bit value from a user
-space program's memory into the \registerop{rd} register, indexed by
-\registerop{r1}.
+The \instruction{uldx} instruction loads a 64 bit value from a user space
+program's memory into the \registerop{rd} register, indexed by \registerop{r1}.
+Much like conventional RISC architectures, it does not perform sign extension,
+as this is considered the widest type.
 
 \subsubsection*{Pseudocode}
 
