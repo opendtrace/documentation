@@ -177,6 +177,26 @@ instruction.
   operation
 \end{description}
 
+
+Furthermore, a modified version of the Register Format is used when loading and storing to array variables in DTrace. The main difference between the regular Register Format and the modified one used for arrays, is that the \registerop{r1} register location is used as the variable identificator, and the \registerop{r2} register location is used as an optional index in the array.
+
+\begin{center}
+	\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+	\bitheader{0,7,8,15,16,23,24,31}\\
+	\bitbox{8}{op}
+	\bitbox{8}{var}
+	\bitbox{8}{ndx}
+	\bitbox{8}{rd}
+	\end{bytefield}
+\end{center}
+
+\begin{description}
+	\item[op] Mandatory 8-bit operation identifier
+	\item[var] The variable identifier
+	\item[ndx] Optional index of the array variable to be accessed
+	\item[rd] Optional destination register acting as the destination of the operation
+\end{description}
+
 \subsection{Branch Format (B-Format)}
 
 This format accepts a single 24-bit integer operand identifying the label that
@@ -201,7 +221,7 @@ It is used solely for the \textbf{BRANCH} instruction.
 This format accepts an 8-bit register and 16-bit integer argument (frequently
 an index).
 It is used for a range of instructions including those to load values from
-integer and string constant tables, and to load and store variable values.
+integer and string constant tables, and to load and store variable values that are scalars.
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
