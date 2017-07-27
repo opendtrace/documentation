@@ -20,7 +20,8 @@
 \subsubsection*{Description}
 
 The \instruction{setx} instruction looks up an integer value stored in
-the DIF integer table and places it into \registerop{rd}.
+the DIF integer table and places it into \registerop{rd}. This instruction
+performs no bounds checking.
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}

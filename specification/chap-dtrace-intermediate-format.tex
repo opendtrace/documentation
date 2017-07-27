@@ -16,7 +16,10 @@ instruction to be decoded.  Interpretation is executed in a loop
 within the \subroutine{dtrace_dif_emulate} subroutine, which has, as
 its first argument, a pointer to a DIF Object or
 \struct{dtrace_difo_t}.  Instructions are executed one at a time,
-until they are exhausted or an error causes interpretation to end.
+until they are exhausted or an error causes interpretation to end. The DIF
+objects are verified in the \subroutine{dtrace_difo_validate} subroutine and
+ignore any bounds checking within the \subroutine{dtrace_dif_emulate}
+subroutine for precisely this reason.
 
 \subsection{Registers}
 \label{sec:dif-registers}
@@ -56,14 +59,22 @@ division by zero error.
 
 DIF has three instructions, \instruction{cmp}, \instruction{scmp} and
 \instruction{tst} which can set various result flags, shown in
-Table\ref{tbl:cmp-vars}, which are later used by the branch
+Table~\ref{tbl:cmp-vars}, which are later used by the branch
 instructions.  The result flags are never returned directly to the
 calling DIF program but are only used internally by the interpretation
 routine.
 
 \textbf{XXXRW: Something about instructions}
 
-\textbf{XXXRW: Something about branches}
+\subsection{Branching Instructions}
+
+DIF has eleven branching instructions split into two types: signed and unsigned
+branching instructions. The signed branching instructions take into account
+that the number may be negative, while the unsigned instructions are meant to
+be used with exclusively positive numbers. One thing all of the branching
+instructions have in common is that they load the new \register{pc} register
+from the \registerop{label} field in the Branch Format as will described in
+Subsection~\ref{subsec:b-format}.
 
 \subsection{Subroutine Calls}
 \label{sec:subroutines}
@@ -178,7 +189,12 @@ instruction.
 \end{description}
 
 
-Furthermore, a modified version of the Register Format is used when loading and storing to array variables in DTrace. The main difference between the regular Register Format and the modified one used for arrays, is that the \registerop{r1} register location is used as the variable identificator, and the \registerop{r2} register location is used as an optional index in the array.
+Furthermore, a modified version of the Register Format is used when loading and
+storing to array variables in DTrace. The main difference between the regular
+Register Format and the modified one used for arrays, is that the
+\registerop{r1} register location is used as the variable identificator, and
+the \registerop{r2} register location is used as an optional index in the
+array.
 
 \begin{center}
 	\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
@@ -194,10 +210,12 @@ Furthermore, a modified version of the Register Format is used when loading and 
 	\item[op] Mandatory 8-bit operation identifier
 	\item[var] The variable identifier
 	\item[ndx] Optional index of the array variable to be accessed
-	\item[rd] Optional destination register acting as the destination of the operation
+	\item[rd] Optional destination register acting as the destination of the
+operation
 \end{description}
 
 \subsection{Branch Format (B-Format)}
+\label{subsec:b-format}
 
 This format accepts a single 24-bit integer operand identifying the label that
 is the branch target.
@@ -221,7 +239,8 @@ It is used solely for the \textbf{BRANCH} instruction.
 This format accepts an 8-bit register and 16-bit integer argument (frequently
 an index).
 It is used for a range of instructions including those to load values from
-integer and string constant tables, and to load and store variable values that are scalars.
+integer and string constant tables, and to load and store variable values that
+are scalars.
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
