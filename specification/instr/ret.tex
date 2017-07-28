@@ -18,10 +18,13 @@
 
 \subsubsection*{Description}
 
-The \instruction{ret} instruction returns the value in \registerop{rd}.
-\subsubsection*{Pseudocode}
+The \instruction{ret} instruction returns the value in \registerop{rd}. This
+instruction also sets the \register{pc} register to the length of the DIFO text
+section.
 
+\subsubsection*{Pseudocode}
 \begin{verbatim}
+%pc = textlen
 \end{verbatim}
 
 \subsubsection*{Constraints}
