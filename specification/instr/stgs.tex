@@ -26,7 +26,7 @@ flag, which allows loading of data bounded by the limits found in the
 dtrace\_vcanload() function. Unlike \instruction{ldgs}, \instruction{stgs} can
 not store to pre-defined variables in DTrace, and instead allows access only to
 user defined variables. The variable is accessed by the \registerop{var} field
-and is required to be large or equal to DIF\_VAR\_OTHER\_UBASE. The result of
+and is required to be larger or equal to DIF\_VAR\_OTHER\_UBASE. The result of
 this operation is stored in the \registerop{rd} register.
 
 \subsubsection*{Pseudocode}
