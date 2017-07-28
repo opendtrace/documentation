@@ -18,8 +18,8 @@ its first argument, a pointer to a DIF Object or
 \struct{dtrace_difo_t}.  Instructions are executed one at a time,
 until they are exhausted or an error causes interpretation to end. The DIF
 objects are verified in the \subroutine{dtrace_difo_validate} subroutine and
-ignore any bounds checking within the \subroutine{dtrace_dif_emulate}
-subroutine for precisely this reason.
+the DIF interpreter ignores any bounds checking within the
+\subroutine{dtrace_dif_emulate} subroutine for precisely this reason.
 
 \subsection{Registers}
 \label{sec:dif-registers}
@@ -140,8 +140,14 @@ D program the thread local variables are referenced using the
 \label{sec:globals-vars}
 
 Global variables are global to all the clauses in a D script and are
-references to simple names witin the D script.  Space for global
-variables is statically allocated on each invocation of a script.
+references to simple names within the D script.  Space for global
+variables is statically allocated on each invocation of a script. Additionally,
+global variables are identified using the modified register format as
+will be describ
+ed in Subsection~\ref{subsec:r-format} the case of arrays and the
+wide-immediate format which will be described in
+Subsection~\ref{subsec:w-format} in the case of scalar variables inside of the
+\subroutine{dtrace_dif_variable} subroutine.
 
 \textbf{XXXRW: Something about scalars}
 
@@ -164,7 +170,7 @@ that accept a 16-bit immediate used to capture both small constant values and
 also indices into various tables.
 
 \subsection{Register Format (R-Format)}
-
+\label{subsec:r-format}
 This format accepts zero or more register operands, supporting instructions
 that include arithmetic and boolean operations, comparison and test
 operations, load and store operations, tuple-stack operations, and the no-op
@@ -235,6 +241,7 @@ It is used solely for the \textbf{BRANCH} instruction.
 \end{description}
 
 \subsection{Wide-Immediate Format (W-Format)}
+\label{subsec:w-format}
 
 This format accepts an 8-bit register and 16-bit integer argument (frequently
 an index).
