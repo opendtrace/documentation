@@ -19,14 +19,14 @@
 
 \subsubsection*{Description}
 
-Much like \instruction{ldgs}, the instruction \instruction{stgs} operates
+Similar to \instruction{ldgs}, the instruction \instruction{stgs} operates
 exclusively on scalar variables and can not contain indices. However, the
 instruction may allow loading of data by reference using the DIF\_TF\_BYREF
 flag, which allows loading of data bounded by the limits found in the
 dtrace\_vcanload() function. Unlike \instruction{ldgs}, \instruction{stgs} can
 not store to pre-defined variables in DTrace, and instead allows access only to
 user defined variables. The variable is accessed by the \registerop{var} field
-and is required to be larger or equal to DIF\_VAR\_OTHER\_UBASE. The result of
+and is required to be large or equal to DIF\_VAR\_OTHER\_UBASE. The result of
 this operation is stored in the \registerop{rd} register.
 
 \subsubsection*{Pseudocode}
@@ -45,4 +45,4 @@ else
 \subsubsection*{Failure modes}
 
 This instruction will fail if the supplied value in the \registerop{var} field
-is lesser than DIF\_VAR\_OTHER\_UBASE.
+is less than DIF\_VAR\_OTHER\_UBASE.

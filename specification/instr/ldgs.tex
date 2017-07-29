@@ -19,15 +19,15 @@
 
 \subsubsection*{Description}
 
-The \instruction{ldgs} instruction functions in two ways and is intended to be
-used only for scalar values. The first mode of operation is when the value
-provided in \registerop{var} is lesser than DIF\_VAR\_OTHER\_UBASE. This will
+The \instruction{ldgs} instruction has two modes of operation and is intended to
+be used only for scalar values. The first mode of operation is when the value
+provided in \registerop{var} is less than DIF\_VAR\_OTHER\_UBASE. This will
 cause DTrace to look up a pre-defined scalar variable such as curthread, while
 the second mode of operation will result in looking up a user defined variable
 in a DIF program. The result of this instruction will be put into the register
 \registerop{rd}. \\
 
-Contrary to the \instruction{ldga} instruction, the \registerop{var} field is
+Unlike the \instruction{ldga} instruction, the \registerop{var} field is
 16 bits long, as opposed to 8 bits due to the fact that the variable that is
 being loaded is a scalar and does not require indexing operations.
 \subsubsection*{Pseudocode}

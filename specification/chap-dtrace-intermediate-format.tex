@@ -19,7 +19,8 @@ its first argument, a pointer to a DIF Object or
 until they are exhausted or an error causes interpretation to end. The DIF
 objects are verified in the \subroutine{dtrace_difo_validate} subroutine and
 the DIF interpreter ignores any bounds checking within the
-\subroutine{dtrace_dif_emulate} subroutine for precisely this reason.
+\subroutine{dtrace_dif_emulate} subroutine precisely because
+\subroutine{dtrace_difo_validate} performs the necessary checks.
 
 \subsection{Registers}
 \label{sec:dif-registers}
@@ -68,13 +69,12 @@ routine.
 
 \subsection{Branching Instructions}
 
-DIF has eleven branching instructions split into two types: signed and unsigned
-branching instructions. The signed branching instructions take into account
-that the number may be negative, while the unsigned instructions are meant to
-be used with exclusively positive numbers. One thing all of the branching
-instructions have in common is that they load the new \register{pc} register
-from the \registerop{label} field in the Branch Format as will described in
-Subsection~\ref{subsec:b-format}.
+DIF has eleven split into two types: signed and unsigned branching instructions.
+The signed branching instructions take into account that the number may be
+negative, while the unsigned instructions are meant to be used with exclusively
+positive numbers. One thing all of the branching instructions have in common is
+that they load the new \register{pc} register from the \registerop{label} field
+in the Branch Format described in Subsection~\ref{subsec:b-format}.
 
 \subsection{Subroutine Calls}
 \label{sec:subroutines}
@@ -139,15 +139,13 @@ D program the thread local variables are referenced using the
 \subsection{Global Variables}
 \label{sec:globals-vars}
 
-Global variables are global to all the clauses in a D script and are
-references to simple names within the D script.  Space for global
-variables is statically allocated on each invocation of a script. Additionally,
-global variables are identified using the modified register format as
-will be describ
-ed in Subsection~\ref{subsec:r-format} the case of arrays and the
-wide-immediate format which will be described in
-Subsection~\ref{subsec:w-format} in the case of scalar variables inside of the
-\subroutine{dtrace_dif_variable} subroutine.
+Global variables are global to all the clauses in a D script and are references
+to simple names within the D script.  Space for global variables is statically
+allocated on each invocation of a script. Additionally, global variables are
+identified using the modified register format as describ ed in
+Subsection~\ref{subsec:r-format} the case of arrays and the wide-immediate
+format which will be described in Subsection~\ref{subsec:w-format} in the case
+of scalar variables inside of the \subroutine{dtrace_dif_variable} subroutine.
 
 \textbf{XXXRW: Something about scalars}
 
@@ -195,12 +193,11 @@ instruction.
 \end{description}
 
 
-Furthermore, a modified version of the Register Format is used when loading and
-storing to array variables in DTrace. The main difference between the regular
-Register Format and the modified one used for arrays, is that the
-\registerop{r1} register location is used as the variable identificator, and
-the \registerop{r2} register location is used as an optional index in the
-array.
+A modified version of the Register Format is used when loading and
+storing data in array variables in DTrace. The main difference between the
+regular Register Format and the modified one used for arrays, is that the
+\registerop{r1} register location is used as the variable identificator, and the
+\registerop{r2} register location is used as an optional index in the array.
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
@@ -246,8 +243,8 @@ It is used solely for the \textbf{BRANCH} instruction.
 This format accepts an 8-bit register and 16-bit integer argument (frequently
 an index).
 It is used for a range of instructions including those to load values from
-integer and string constant tables, and to load and store variable values that
-are scalars.
+integer and string constant tables, as well as those that store scalar values in
+variables.
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
