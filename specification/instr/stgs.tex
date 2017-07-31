@@ -18,17 +18,31 @@
 \end{center}
 
 \subsubsection*{Description}
-The \instruction{stgs} instruct stores a value from the
-\registerop{rd} register into a user defined variable.
+
+Similar to \instruction{ldgs}, the instruction \instruction{stgs} operates
+exclusively on scalar variables and can not contain indices. However, the
+instruction may allow loading of data by reference using the DIF\_TF\_BYREF
+flag, which allows loading of data bounded by the limits found in the
+dtrace\_vcanload() function. Unlike \instruction{ldgs}, \instruction{stgs} can
+not store to pre-defined variables in DTrace, and instead allows access only to
+user defined variables. The variable is accessed by the \registerop{var} field
+and is required to be large or equal to DIF\_VAR\_OTHER\_UBASE. The result of
+this operation is stored in the \registerop{rd} register.
 
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-var = %rd
+assert(var >= DIF_VAR_OTHER_UBASE)
+var -= DIF_VAR_OTHER_UBASE
+if (flags & DIF_TF_BYREF)
+    var = copyin(%rd)
+else
+    var = %rd
 \end{verbatim}
 
 \subsubsection*{Constraints}
 
 \subsubsection*{Failure modes}
 
-This instruction has no run-time failure modes beyond its constraints.
+This instruction will fail if the supplied value in the \registerop{var} field
+is less than DIF\_VAR\_OTHER\_UBASE.
