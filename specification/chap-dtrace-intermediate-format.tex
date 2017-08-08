@@ -85,7 +85,7 @@ are centrally dispatched from the \function{dtrace_dif_subr} function.  Within
 DIF subroutines are triggered via the \instruction{CALL} instruction. The
 arguments to these subroutines are passed through the tupregs variable through
 use of the \instruction{PUSHTR} and \instruction{PUSHTV} instructions. The
-return values of the subroutines are provided through the \register{rd}
+return values of the subroutines are provided through the \registerop{rd}
 register. The subroutine identifier is placed in the \registerop{idx} field of
 the W-Format descrbied in Subsection~\ref{subsec:w-format}. Any subroutine that
 is provided to DTrace \em{must} go via these mechanisms.
@@ -249,7 +249,7 @@ This format accepts an 8-bit register and 16-bit integer argument (frequently an
 index).  It is used for a range of instructions including those to load values
 from integer and string constant tables, as well as those that store scalar
 values in variables. In addition to that, it is used in the \instruction{CALL}
-instruction in order to specify the \register{rd} register and the subroutine
+instruction in order to specify the \registerop{rd} register and the subroutine
 identifier.
 
 \begin{center}
