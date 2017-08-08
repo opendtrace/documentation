@@ -79,11 +79,15 @@ in the Branch Format described in Subsection~\ref{subsec:b-format}.
 \subsection{Subroutine Calls}
 \label{sec:subroutines}
 
-DTrace provides an extensive set of subroutines for use by D
-programs.  The subroutines are implemented within the kernel code via
-a set of functions which are centrally dispatched from the
-\function{dtrace_dif_subr} function.  Within DIF subroutines are
-triggered via the \instruction{CALL} instruction.  Any subroutine that
+DTrace provides an extensive set of subroutines for use by D programs.  The
+subroutines are implemented within the kernel code via a set of functions which
+are centrally dispatched from the \function{dtrace_dif_subr} function.  Within
+DIF subroutines are triggered via the \instruction{CALL} instruction. The
+arguments to these subroutines are passed through the tupregs variable through
+use of the \instruction{PUSHTR} and \instruction{PUSHTV} instructions. The
+return values of the subroutines are provided through the \registerop{rd}
+register. The subroutine identifier is placed in the \registerop{idx} field of
+the W-Format descrbied in Subsection~\ref{subsec:w-format}. Any subroutine that
 is provided to DTrace \em{must} go via these mechanisms.
 
 \begin{figure}
@@ -97,11 +101,12 @@ is provided to DTrace \em{must} go via these mechanisms.
 \label{fig:argcheck}
 \end{figure}
 
-According to a comment in the code, see Figure~\ref{fig:argcheck},
-argument checks are not carried out when a subroutine is called.
+According to a comment in the code, see Figure~\ref{fig:argcheck}, argument
+checks are not carried out when a subroutine is called. These checks are
+performed in the \function{dtrace_difo_validate} function at load time.
 
-
-\textbf{XXXRW: Something about returning}
+\textbf{XXXDS: Are these comments related to the Subroutine Calls section, or
+overall?}
 
 \textbf{XXXRW: Something about DIF registers, \nregs{}}
 
@@ -145,7 +150,7 @@ allocated on each invocation of a script. Additionally, global variables are
 identified using the modified register format as describ ed in
 Subsection~\ref{subsec:r-format} the case of arrays and the wide-immediate
 format which will be described in Subsection~\ref{subsec:w-format} in the case
-of scalar variables inside of the \subroutine{dtrace_dif_variable} subroutine.
+of scalar variables inside of the \function{dtrace_dif_variable} subroutine.
 
 \textbf{XXXRW: Something about scalars}
 
@@ -240,11 +245,12 @@ It is used solely for the \textbf{BRANCH} instruction.
 \subsection{Wide-Immediate Format (W-Format)}
 \label{subsec:w-format}
 
-This format accepts an 8-bit register and 16-bit integer argument (frequently
-an index).
-It is used for a range of instructions including those to load values from
-integer and string constant tables, as well as those that store scalar values in
-variables.
+This format accepts an 8-bit register and 16-bit integer argument (frequently an
+index).  It is used for a range of instructions including those to load values
+from integer and string constant tables, as well as those that store scalar
+values in variables. In addition to that, it is used in the \instruction{CALL}
+instruction in order to specify the \registerop{rd} register and the subroutine
+identifier.
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
