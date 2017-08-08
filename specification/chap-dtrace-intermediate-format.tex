@@ -90,16 +90,14 @@ register. The subroutine identifier is placed in the \registerop{idx} field of
 the W-Format descrbied in Subsection~\ref{subsec:w-format}. Any subroutine that
 is provided to DTrace \em{must} go via these mechanisms.
 
-\begin{figure}
 \begin{quote}
   Notice that we don't bother validating the proper number of
   arguments or their types in the tuple stack.  This isn't needed
   because all argument interpretation is safe because of our load
   safety -- the worst that can happen is that a bogus program can
   obtain bogus results.
-\end{quote}
 \label{fig:argcheck}
-\end{figure}
+\end{quote}
 
 According to a comment in the code, see Figure~\ref{fig:argcheck}, argument
 checks are not carried out when a subroutine is called. These checks are
