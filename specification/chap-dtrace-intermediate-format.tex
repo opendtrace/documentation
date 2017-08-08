@@ -13,14 +13,14 @@ actions.  DIF is a simple, RISC-like, instruction set where each
 instruction consists of a 32-bit, native-endian integer whose most
 significant 8 bits contain an opcode allowing the remainder of the
 instruction to be decoded.  Interpretation is executed in a loop
-within the \subroutine{dtrace_dif_emulate} subroutine, which has, as
+within the \function{dtrace_dif_emulate} function, which has, as
 its first argument, a pointer to a DIF Object or
 \struct{dtrace_difo_t}.  Instructions are executed one at a time,
 until they are exhausted or an error causes interpretation to end. The DIF
-objects are verified in the \subroutine{dtrace_difo_validate} subroutine and
+objects are verified in the \function{dtrace_difo_validate} function and
 the DIF interpreter ignores any bounds checking within the
-\subroutine{dtrace_dif_emulate} subroutine precisely because
-\subroutine{dtrace_difo_validate} performs the necessary checks.
+\function{dtrace_dif_emulate} function precisely because
+\function{dtrace_difo_validate} performs the necessary checks.
 
 \subsection{Registers}
 \label{sec:dif-registers}
@@ -148,7 +148,7 @@ allocated on each invocation of a script. Additionally, global variables are
 identified using the modified register format as describ ed in
 Subsection~\ref{subsec:r-format} the case of arrays and the wide-immediate
 format which will be described in Subsection~\ref{subsec:w-format} in the case
-of scalar variables inside of the \function{dtrace_dif_variable} subroutine.
+of scalar variables inside of the \function{dtrace_dif_variable} function.
 
 \textbf{XXXRW: Something about scalars}
 
