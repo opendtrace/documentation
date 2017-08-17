@@ -2,21 +2,23 @@
 \phantomsection
 \addcontentsline{toc}{subsection}{cleanpath}
 \label{subr:cleanpath}
-\subsection*{cleanpath: }
+\subsection*{cleanpath: return the cleaned up pathname}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] A pointer to the scratch space string containing the
+	cleaned up pathname.
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{cleanpath} subroutine takes a single string argument, containing
+a path, and returns a pointer to a string containing the cleaned up pathname.
+
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
 \end{verbatim}
 
 \subsubsection*{Constraints}
