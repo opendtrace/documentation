@@ -1,15 +1,15 @@
-TARGET=dtrace-specification.pdf
+TARGET=opendtrace-specification.pdf
 
 SOURCE=								\
-	dtrace-specification.tex				\
+	opendtrace-specification.tex				\
 	abstract.tex						\
 	acknowledgments.tex					\
-	chap-dtrace-instruction-reference.tex			\
-	chap-dtrace-intermediate-format.tex			\
-	chap-dtrace-object-format.tex				\
-	chap-dtrace-subroutines.tex				\
-	chap-dtrace-variable-records.tex			\
-	chap-dtrace-code.tex					\
+	chap-opendtrace-instruction-reference.tex		\
+	chap-opendtrace-intermediate-format.tex			\
+	chap-opendtrace-object-format.tex			\
+	chap-opendtrace-subroutines.tex				\
+	chap-opendtrace-variable-records.tex			\
+	chap-opendtrace-code.tex				\
 	chap-intro.tex						\
 	preamble.tex						\
 	instr/add.tex						\
