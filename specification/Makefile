@@ -1,7 +1,9 @@
 TARGET=opendtrace-specification.pdf
 
+MAIN_TEX=opendtrace-specification.tex
+
 SOURCE=								\
-	opendtrace-specification.tex				\
+	${MAIN_TEX}						\
 	abstract.tex						\
 	acknowledgments.tex					\
 	chap-opendtrace-instruction-reference.tex		\
@@ -150,7 +152,7 @@ SOURCE=								\
 	subr/uuidstr.tex
 
 ${TARGET}: ${SOURCE}
-	latexmk -pdf -bibtex $<
+	latexmk -pdf -bibtex ${MAIN_TEX}
 
 clean:
 	latexmk -C
