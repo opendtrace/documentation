@@ -13,12 +13,15 @@
 \subsubsection*{Description}
 
 The \subroutine{strlen} subroutine is DTrace's version of the well
-known C library function.  It returns the length, in bytes, of the
-pointer passed as its first argument.
+known C library function.  It returns the length, in bytes, of the string
+pointed to by the pointer passed in as its first argument. The string must be
+NULL terminated.
 
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
+string = stack[0].value
+%rd = strlen(string)
 \end{verbatim}
 
 \subsubsection*{Constraints}

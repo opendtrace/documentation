@@ -19,6 +19,12 @@ space and returns that memory to the caller.
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
+size = sizeof(uintptr_t) * 2
+memref = scratch_space
+memref[0] = stack[0].value
+memref[1] = stack[1].value
+scratch_space += size
+%rd = memref
 \end{verbatim}
 
 \subsubsection*{Constraints}

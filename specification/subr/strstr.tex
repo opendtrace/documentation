@@ -12,7 +12,7 @@
 
 \subsubsection*{Description}
 
-The \subroutine{ststr} subroutine search a string, passed as its first
+The \subroutine{strstr} subroutine search a string, passed as its first
 argument, for a sub-string, passed as the second argument.  If the
 sub-string is found a pointer to it is returned to the caller,
 otherwise NULL is returned.
@@ -20,6 +20,9 @@ otherwise NULL is returned.
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
+big = stack[0].value
+little = stack[1].value
+%rd = strstr(big, little)
 \end{verbatim}
 
 \subsubsection*{Constraints}
