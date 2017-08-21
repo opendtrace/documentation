@@ -8,6 +8,7 @@ SOURCE=								\
 	acknowledgments.tex					\
 	chap-intro.tex						\
 	chap-opendtrace-operation.tex				\
+	chap-opendtrace-ctf.tex				\
 	chap-opendtrace-instruction-reference.tex		\
 	chap-opendtrace-intermediate-format.tex			\
 	chap-opendtrace-object-format.tex			\
