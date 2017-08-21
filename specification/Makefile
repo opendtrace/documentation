@@ -6,13 +6,14 @@ SOURCE=								\
 	${MAIN_TEX}						\
 	abstract.tex						\
 	acknowledgments.tex					\
+	chap-intro.tex						\
+	chap-opendtrace-operation.tex				\
 	chap-opendtrace-instruction-reference.tex		\
 	chap-opendtrace-intermediate-format.tex			\
 	chap-opendtrace-object-format.tex			\
 	chap-opendtrace-subroutines.tex				\
 	chap-opendtrace-variable-records.tex			\
 	chap-opendtrace-code.tex				\
-	chap-intro.tex						\
 	preamble.tex						\
 	instr/add.tex						\
 	instr/allocs.tex					\
