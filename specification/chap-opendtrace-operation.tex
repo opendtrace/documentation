@@ -1,3 +1,11 @@
+The components that make up OpenDTrace interact with each other to
+implement an operational model for dynamic tracing.  At the highest
+level there are three components to OpenDTrace: tools, such as
+\texttt{ctfconvert} which take compiled object code and generate new
+ELF/DWARF sections that delineate the trace points, the kernel module,
+which is responsible for adding and removing trace points at run time,
+and the libraries, which tie it all together.
+
 \section{Privilege Model}
 \label{sec:privilege}
 
