@@ -31,6 +31,14 @@ first = stack[0].value
 second = stack[1].value
 combined = scratch_space
 
+if (not can_load(first)) or (not can_load(second)):
+    %rd = 0
+    return
+
+if no room in scratch:
+    %rd = 0
+    return
+
 for i = 0 ... len(first):
     combined(i) = first(i)
 
