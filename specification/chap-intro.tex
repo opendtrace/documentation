@@ -54,6 +54,17 @@ privileges.  Some operating systems, such as Illumos, provide a more
 nuanced privilege model, the details of which are discussed further in
 Section~\ref{}.
 
+Tracepoints are collected into one of many \emph{providers} which dictate
+the capabilites of the tracepoint and how it interacts with the overall
+tracing system.  Providers exist for system calls (\texttt{syscall}),
+function boundary tracing (\texttt{fbt}), timing services (\texttt{profile}),
+as well as specific subsystems such as the network (\texttt{ip}, \texttt{tcp}),
+filesystem (\texttt{vfs}) and process scheduler (\texttt{proc}).
+Arbitrary trace points can be added to the kernel via the
+statically defined trace point (\texttt{sdt}) provider.  User space programs
+are traced either with the \texttt{pid} provider or using the 
+statically defined trace point (\texttt{usdt}) provider.q
+
 \section{Version History}
 
 \begin{description}
