@@ -4,10 +4,17 @@
 \label{subr:toupper}
 \subsection*{toupper: convert a string to upper case}
 
+\subsubsection*{Subroutine prototype}
+
+\begin{verbatim}
+char * toupper(const char *string);
+\end{verbatim}
+
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] a string with only upper case letters
+\item[\registerop{arg0}] Pointer to the string
+\item[\registerop{rd}] A string with only upper case letters
 \end{description}
 
 \subsubsection*{Description}
@@ -23,10 +30,10 @@ string = stack[0].value
 destination = scratch_space
 
 for i = 0 ... len(string):
-    c = string(i)
+    c = string[i]
     if c is lowercase:
         c = uppercase(c)
-    destination(i) = c
+    destination[i] = c
 
 scratch_space += len(string)
 %rd = destination

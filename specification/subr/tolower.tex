@@ -4,10 +4,17 @@
 \label{subr:tolower}
 \subsection*{tolower: convert a string to all lower case characters}
 
+\subsubsection*{Subroutine prototype}
+
+\begin{verbatim}
+char * tolower(const char *string);
+\end{verbatim}
+
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] an all lower case string
+\item[\registerop{arg0}] Pointer to the string
+\item[\registerop{rd}] An all lower case string
 \end{description}
 
 \subsubsection*{Description}
@@ -23,10 +30,10 @@ string = stack[0].value
 destination = scratch_space
 
 for i = 0 ... len(string):
-    c = string(i)
+    c = string[i]
     if c is uppercase:
         c = lowercase(c)
-    destination(i) = c
+    destination[i] = c
 
 scratch_space += len(string)
 %rd = destination

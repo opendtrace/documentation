@@ -4,16 +4,24 @@
 \label{subr:strstr}
 \subsection*{strstr: locate a string within a string}
 
+\subsubsection*{Subroutine prototype}
+
+\begin{verbatim}
+char * strstr(const char *big, const char *little);
+\end{verbatim}
+
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] pointer to the string located or NULL if not found
+\item[\registerop{arg0}] Pointer to the string to be searched through
+\item[\registerop{arg1}] Pointer to the string to search for
+\item[\registerop{rd}] Pointer to the string located or NULL if not found
 \end{description}
 
 \subsubsection*{Description}
 
 The \subroutine{strstr} subroutine search a string, passed as its first
-argument, for a sub-string, passed as the second argument.  If the
+argument, for a sub-string, passed as the second argument. If the
 sub-string is found a pointer to it is returned to the caller,
 otherwise NULL is returned.
 

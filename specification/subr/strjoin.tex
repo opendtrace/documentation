@@ -4,10 +4,18 @@
 \label{subr:strjoin}
 \subsection*{strjoin: joing two strings and return the result}
 
+\subsubsection*{Subroutine prototype}
+
+\begin{verbatim}
+char * strjoin(const char *first, const char *second);
+\end{verbatim}
+
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] pointer to the combined string
+\item[\registerop{arg0}] Pointer to the first string
+\item[\registerop{arg1}] Pointer to the second string
+\item[\registerop{rd}] Pointer to the combined string
 \end{description}
 
 \subsubsection*{Description}
@@ -19,6 +27,26 @@ caller.
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
+first = stack[0].value
+second = stack[1].value
+combined = scratch_space
+
+if (not can_load(first)) or (not can_load(second)):
+    %rd = 0
+    return
+
+if no room in scratch:
+    %rd = 0
+    return
+
+for i = 0 ... len(first):
+    combined[i] = first[i]
+
+for j = 0 ... len(second):
+    combined[i + j] = second[j]
+
+scratch_space += len(combined)
+%rd = combined
 \end{verbatim}
 
 \subsubsection*{Constraints}

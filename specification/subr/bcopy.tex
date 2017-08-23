@@ -5,9 +5,18 @@
 \subsection*{bcopy: copy bytes from source to destination bounded by a
 size}
 
+\subsubsection*{Subroutine prototype}
+
+\begin{verbatim}
+void bcopy(const void *source, void *destination, size_t length);
+\end{verbatim}
+
 \subsubsection*{Calling convention}
 
 \begin{description}
+\item[\registerop{arg0}] Pointer to the source memory
+\item[\registerop{arg1}] Pointer to the destination scratch memory
+\item[\registerop{arg2}] Amount of bytes to copy
 \item[\registerop{rd}] VOID
 \end{description}
 
@@ -22,7 +31,16 @@ region, up to the size supplied in the third argument.
 source = stack[0].value
 destination = stack[1].value
 length = stack[2].value
-bcopy(source, destination, length)
+
+if destination not in scratch:
+    return
+
+if not can_load(source):
+    %rd = 0
+    return
+
+for i = 0 ... length:
+    destination[i] = source[i]
 \end{verbatim}
 
 \subsubsection*{Constraints}

@@ -4,9 +4,16 @@
 \label{subr:strlen}
 \subsection*{strlen: DTrace version of the strlen function}
 
+\subsubsection*{Subroutine prototype}
+
+\begin{verbatim}
+size_t strlen(const char *string);
+\end{verbatim}
+
 \subsubsection*{Calling convention}
 
 \begin{description}
+\item[\registerop{arg0}] Pointer to the string
 \item[\registerop{rd}] Length of the string passed as the only argument
 \end{description}
 
