@@ -4,10 +4,17 @@
 \label{subr:toupper}
 \subsection*{toupper: convert a string to upper case}
 
+\subsubsection*{Subroutine prototype}
+
+\begin{verbatim}
+char * toupper(const char *string);
+\end{verbatim}
+
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] a string with only upper case letters
+\item[\registerop{arg0}] Pointer to the string
+\item[\registerop{rd}] A string with only upper case letters
 \end{description}
 
 \subsubsection*{Description}
