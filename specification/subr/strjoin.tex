@@ -40,10 +40,10 @@ if no room in scratch:
     return
 
 for i = 0 ... len(first):
-    combined(i) = first(i)
+    combined[i] = first[i]
 
 for j = 0 ... len(second):
-    combined(i + j) = second(j)
+    combined[i + j] = second[j]
 
 scratch_space += len(combined)
 %rd = combined

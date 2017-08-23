@@ -30,10 +30,10 @@ string = stack[0].value
 destination = scratch_space
 
 for i = 0 ... len(string):
-    c = string(i)
+    c = string[i]
     if c is uppercase:
         c = lowercase(c)
-    destination(i) = c
+    destination[i] = c
 
 scratch_space += len(string)
 %rd = destination
