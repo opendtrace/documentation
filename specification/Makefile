@@ -15,6 +15,7 @@ SOURCE=								\
 	chap-opendtrace-subroutines.tex				\
 	chap-opendtrace-variable-records.tex			\
 	chap-opendtrace-code.tex				\
+	chap-opendtrace-dlang.tex				\
 	preamble.tex						\
 	instr/add.tex						\
 	instr/allocs.tex					\
