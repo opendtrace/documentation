@@ -6,7 +6,7 @@
 
 \subsubsection*{Format}
 
-\textrm{SETS strindex, \%rd}
+\textrm{SETS \%rd, strindex}
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
@@ -20,7 +20,8 @@
 \subsubsection*{Description}
 
 The \instruction{sets} instruction looks up a string stored in the DIF
-string table and places a pointer to the value into \registerop{rd}.
+string table and places a pointer to the value into \registerop{rd}. This
+instruction performs no bounds checking.
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
