@@ -6,15 +6,15 @@
 
 \subsubsection*{Format}
 
-\textrm{PUSHTV \%rd, \%r1, \%r2}
+\textrm{PUSHTV type, \%r0, \%rs}
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
 \bitheader{0,7,8,15,16,23,24,31} \\
 \bitbox{8}{0x31}
-\bitbox{8}{r1}
-\bitbox{8}{r2}
-\bitbox{8}{rd}
+\bitbox{8}{type}
+\bitbox{8}{r0}
+\bitbox{8}{rs}
 \end{bytefield}
 \end{center}
 
@@ -28,7 +28,7 @@ along with the value.
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
-stack[++index].value = %rd
+stack[++index].value = %rs
 stack[index] = 0;
 \end{verbatim}
 
