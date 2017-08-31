@@ -6,14 +6,14 @@
 
 \subsubsection*{Format}
 
-\textrm{LDGA \%rd, var, index}
+\textrm{LDGA \%rd, var, \%r2}
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
 \bitheader{0,7,8,15,16,23,24,31}\\
 \bitbox{8}{op}
 \bitbox{8}{var}
-\bitbox{8}{ndx}
+\bitbox{8}{r2}
 \bitbox{8}{rd}
 \end{bytefield}
 \end{center}
@@ -22,14 +22,16 @@
 
 The \instruction{ldga} instruction looks up the value of a DTrace
 built-in variable based on the value in \registerop{var} with an
-optional array index in \registerop{ndx}. \\
+optional array index in the register \register{r2}. \\
 
 Unlike the \instruction{ldgs}, the variable identifier is 8 bits long, and
-the other 8 bits are used to act as an array index.
+the other 8 bits are used to identify the register which contains the index of
+the array.
 
 \subsubsection*{Pseudocode}
 
 \begin{verbatim}
+index = %r2
 %rd = var[index]
 \end{verbatim}
 
