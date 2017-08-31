@@ -2,7 +2,7 @@
 \phantomsection
 \addcontentsline{toc}{subsection}{SRA}
 \label{insn:sra}
-\subsection*{SRA: Shift right}
+\subsection*{SRA: Shift Right Arithmetic}
 
 \subsubsection*{Format}
 
@@ -20,8 +20,9 @@
 
 \subsubsection*{Description}
 
-The \instruction{sra} instruction shifts the value in \registerop{r1}
-right by the number of bits indicated in \registerop{r2}.
+The \instruction{sra} instruction shifts the value in \registerop{r1} right by
+the number of bits indicated in \registerop{r2}, placing the results in register
+\registerop{rd}.  This instruction only operates on \textbf{signed} integers.
 
 \subsubsection*{Pseudocode}
 
@@ -30,6 +31,13 @@ right by the number of bits indicated in \registerop{r2}.
 \end{verbatim}
 
 \subsubsection*{Constraints}
+
+\registerop{r1}, \registerop{r2}, and \registerop{rd} must be less than
+\nregs{}.
+
+\medskip
+\noindent
+\registerop{rd} cannot be \register{r0}.
 
 \subsubsection*{Failure modes}
 

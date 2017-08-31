@@ -6,32 +6,36 @@
 
 \subsubsection*{Format}
 
-\textrm{PUSHTR \%rd, \%r1, \%r2}
+\textrm{PUSHTR type, \%r2, \%rs}
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
 \bitheader{0,7,8,15,16,23,24,31} \\
 \bitbox{8}{0x30}
-\bitbox{8}{r1}
+\bitbox{8}{type}
 \bitbox{8}{r2}
-\bitbox{8}{rd}
+\bitbox{8}{rs}
 \end{bytefield}
 \end{center}
 
 \subsubsection*{Description}
 
 The \instruction{pushtr} instruction pushes a reference, contained in
-the \registerop{rd} register onto the stack.  The length is stored for
+the \registerop{rs} register onto the stack.  The length is stored for
 a string along with the value.  For a numeric value the size of that
 value is stored.
 
 \subsubsection*{Pseudocode}
 
-The following code shows a string being pushed by value.
-
 \begin{verbatim}
-stack[++index].size = strlen(%rd);
-stack[index].value = %rd
+value = %rs
+if type is string:
+    size = strlen(value)
+else:
+    size = %r2
+
+stack[++index].size = size
+stack[index].value = value
 \end{verbatim}
 
 \subsubsection*{Constraints}
