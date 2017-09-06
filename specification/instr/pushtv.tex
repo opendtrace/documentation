@@ -6,13 +6,13 @@
 
 \subsubsection*{Format}
 
-\textrm{PUSHTV type, \%r0, \%rs}
+\textrm{PUSHTV \%rs}
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
 \bitheader{0,7,8,15,16,23,24,31} \\
 \bitbox{8}{0x31}
-\bitbox{8}{type}
+\bitbox{8}{r0}
 \bitbox{8}{r0}
 \bitbox{8}{rs}
 \end{bytefield}
@@ -29,7 +29,7 @@ along with the value.
 
 \begin{verbatim}
 stack[++index].value = %rs
-stack[index] = 0;
+stack[index].size = 0;
 \end{verbatim}
 
 \subsubsection*{Constraints}
