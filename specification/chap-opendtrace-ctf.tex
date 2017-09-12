@@ -28,15 +28,92 @@ Figure~\ref{fig:ctf-stable-storage-format} shows all of the components
 of the CTF section as they would be found on stable storage.  The file
 header stores a magic number and version information, encoding flags,
 and the byte offset of each of the sections relative to the end of the
-header itself.  If the CTF data has been uniquified against another
-set of CTF data, a reference to that data also appears in the the
-header.  This reference is the name of the label corresponding to the
-types uniquified against.
+header itself.  As of this writing the most current version of CTF is
+version two (2).  The preamblem including the magic number, version
+and flags take up the first 32 bits of the header, the remaining
+fields take up 32 bits each, independent of the word size of the
+architecture.
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,8,16,31} \\
+\bitbox{16}{magic}
+\bitbox{8}{version}
+\bitbox{8}{flags}\\
+\bitbox{32}{reference to parent label}\\
+\bitbox{32}{reference to basename of parent}\\
+\bitbox{32}{label section offset}\\
+\bitbox{32}{function section offset}\\
+\bitbox{32}{type section offset}\\
+\bitbox{32}{string section offset}\\
+\bitbox{32}{size of string section (bytes)}\\
+\end{bytefield}
+\end{center}
+
+The CTF section makes heavy use of references between the sub-sections
+to fully describe the datatypes in a program as well as the functions,
+the function's argument list, and the fucntion's return value.  The
+\verb|data objects| and \verb|functions| sections depend upon the
+\verb|types| section, which encodes all of the datatypes that have
+been during the CTF conversion process.  Each type has a unique number
+and name, as well as a size and encoding.  Types may refer to other,
+more primitive types by uses of a reference, e.g. a \verb|uint32_t|
+will actually refer to a \verb|unsigned int|.  Types are broken up by
+what they are, referred to as their kind.
+
+
+\begin{tabular}{|l|l}
+\hline
+\verb|CTF_K_UNKNOWN| & unknown type (used for padding)\\
+\verb|CTF_K_INTEGER| & variant data is \verb|CTF_INT_DATA()| (see below)\\
+\verb|CTF_K_FLOAT| & variant data is \verb|CTF_FP_DATA()| (see below)\\
+\verb|CTF_K_POINTER| & \verb|ctt_type| is referenced type\\
+\verb|CTF_K_ARRAY| & variant data is single \verb|ctf_array_t|\\
+  \verb|CTF_K_FUNCTION| & \verb|ctt_type| is return type\\
+  variant data is list of argument types (\verb|ushort_t|'s)\\
+\verb|CTF_K_STRUCT| & variant data is list of \verb|ctf_member_t|'s\\
+\verb|CTF_K_UNION| & variant data is list of \verb|ctf_member_t|'s\\
+\verb|CTF_K_ENUM| & variant data is list of \verb|ctf_enum_t|'s\\
+\verb|CTF_K_FORWARD| & no additional data; \verb|ctt_name| is tag\\
+\verb|CTF_K_TYPEDEF| & \verb|ctt_type| is referenced type\\
+\verb|CTF_K_VOLATILE| & \verb|ctt_type| is base type\\
+\verb|CTF_K_CONST| & \verb|ctt_type| is base type\\
+\verb|CTF_K_RESTRICT| & \verb|ctt_type| is base type\\
+\hline
+\end{tabular}
+
+Complex data types, such as structures, are also contained in the
+\verb|types| section, and are encoded as a structure with a name that
+references the string table.
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,16,31} \\
+\bitbox{32}{name}\\
+\bitbox{16}{kind or length}
+\bitbox{16}{size or type}\\
+\bitbox{32}{high 32 bits of size (in bytes)}\\
+\bitbox{32}{low 32 bits of size (in bytes)}
+\end{bytefield}
+\end{center}
+
+If the CTF data has been uniquified against another set of CTF data, a
+reference to that data appears in the reference to the paretn label.
+This reference is the name of the label corresponding to the types
+uniquified against.
 
 Following the header is a list of labels, used to group the types
 included in the data types section.  Each label is accompanied by a
 type ID i.  A given label refers to the group of types whose IDs are
-in the range [0, i].
+in the range [0, i].  Labels and type ids are both 32 bits in length.
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,31} \\
+\bitbox{32}{label}\\
+\bitbox{32}{type index}\\
+\end{bytefield}
+\end{center}
 
 Data object and function records are stored in the same order as they
 appear in the corresponding symbol table, except that symbols marked
