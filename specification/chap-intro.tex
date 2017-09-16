@@ -2,19 +2,21 @@ OpenDTrace is a dynamic tracing facility integrated into the Solaris, FreeBSD,
 and Mac OS X operating systems -- with ports also available for Linux and
 Windows.
 Dynamic tracing allows system administrators and software developers to
-develop short scripts (in the D programming language) that instruct
-OpenDTrace to
+develop short scripts (in the D programming language) that instruct OpenDTrace to
 instrument aspects of system operation, gather data, and present it for human
 interpretation or mechanical processing.
-While there is documentation available for the D programming
-language, command-line tools, and general DTrace-based investigation and
-operation, the internal formats to OpenDTrace are documented via the
+While there is excellent documentation available for the D programming
+language, command-line tools, and general OpenDTrace-based investigation and
+operation, the internal formats to OpenDTrace are generally documented via the
 source code.
 This report acts as a de facto specification for those formats, including
 the DTrace Intermediate Format (DIF), which is a bytecode that D scripts are
 compiled into for safe execution within the kernel, and the DTrace Object
 Format (DOF), which bundles together complete scripts along with their
 associated constants and metadata.
+Throughout this report we use the term \textit{OpenDTrace} to refer to
+the project and the source code, as a whole, but continue to use the
+historic, and simpler, \textit{DTrace} to refer to 
 
 %\section{Motivation}
 \section{Background}
