@@ -52,14 +52,14 @@ architecture.
 
 The CTF section makes heavy use of references between the sub-sections
 to fully describe the datatypes in a program as well as the functions,
-the function's argument list, and the fucntion's return value.  The
+the function's argument list, and the function's return value.  The
 \verb|data objects| and \verb|functions| sections depend upon the
 \verb|types| section, which encodes all of the datatypes that have
 been during the CTF conversion process.  Each type has a unique number
 and name, as well as a size and encoding.  Types may refer to other,
 more primitive types by uses of a reference, e.g. a \verb|uint32_t|
 will actually refer to a \verb|unsigned int|.  Types are broken up by
-what they are, referred to as their kind.
+what they represent, referred to as their \emph{kind}.
 
 
 \begin{tabular}{|l|l}
@@ -90,61 +90,100 @@ references the string table.
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
 \bitheader{0,16,31} \\
 \bitbox{32}{name}\\
-\bitbox{16}{kind or length}
+\bitbox{16}{info}
+\bitbox{16}{size or type}\\
+\end{bytefield}
+\end{center}
+
+A simple type, one who's size is less than 64 Kbytes, are stored
+in a \verb|ctf_stype|.  The \verb|name| is a reference to a string
+in the string table.  The \verb|info| field is encoded differently
+for each type, as will be explained fully in the rest of this chapter.
+The last field is either the size, in bytes, of the structure or it
+is a reference to another type, encoded using the referenced type's
+ID.  The majority of types in a C program will fit within a
+\verb|ctf_stype|.
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,16,31} \\
+\bitbox{32}{name}\\
+\bitbox{16}{info}
 \bitbox{16}{size or type}\\
 \bitbox{32}{high 32 bits of size (in bytes)}\\
 \bitbox{32}{low 32 bits of size (in bytes)}
 \end{bytefield}
 \end{center}
 
-If the CTF data has been uniquified against another set of CTF data, a
-reference to that data appears in the reference to the paretn label.
-This reference is the name of the label corresponding to the types
-uniquified against.
-
-Following the header is a list of labels, used to group the types
-included in the data types section.  Each label is accompanied by a
-type ID i.  A given label refers to the group of types whose IDs are
-in the range [0, i].  Labels and type ids are both 32 bits in length.
+Types that are larger than 64Kbytes are encoded using a \verb|ctf_type|
+structure.  The \verb|name| and \verb|info| fields of this, larger,
+\verb|ctf_type| are the same as the smaller \verb|ctf_stype|, but the
+\verb|size| field is always set to \verb|CTF_LSIZE_SENT|, the sentinal
+value that tells the consumer that this is a larger structure.  A
+\verb|ctf_type| structure can encode an extremely large type, since
+it provides 64 bits for the size, and that size is being expressed in
+bytes.
 
 \begin{center}
-\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
-\bitheader{0,31} \\
-\bitbox{32}{label}\\
-\bitbox{32}{type index}\\
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{16}
+\bitheader{0,9,10,15} \\
+\bitbox{5}{kind}\\
+\bitbox{1}{isroot}\\
+\bitbox{10}{vlen}
 \end{bytefield}
 \end{center}
 
-Data object and function records are stored in the same order as they
-appear in the corresponding symbol table, except that symbols marked
-\verb|SHN_UNDEF| are not stored and symbols that have no type data are padded
-out with zeroes.  For each data object, the type ID (a small integer)
-is recorded.  For each function, the type ID of the return type and
-argument types is recorded.
+The \verb|info| field is further broken down into a number of sub-fields
+which encoded the \verb|kind|, \verb|vlen| (variable length) and whether
+or not this is a root type \verb|isroot|.
 
-The data types section is a list of variable size records that
-represent each type, in order by their ID.  The types themselves form
-a directed graph, where each node may contain one or more outgoing
-edges to other type nodes, denoted by their ID.
+Each of the integral types, such as integers, floats, pointers, arrays, etc.
+has its own encoding.  Integers are the simplest type and are unsigned by
+default.  An integer type is encoded in a single, 32 bit, field
 
-Strings are recorded as a string table ID (0 or 1) and a byte offset
-into the string table.  String table 0 is the internal CTF string
-table.  String table 1 is the external string table, which is the
-string table associated with the ELF symbol table for this object.
-CTF does not record any strings that are already in the symbol table,
-and the CTF string table does not contain any duplicated strings.
+\begin{center}
+\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+\bitheader{0,16,24,31} \\
+\bitbox{8}{flags}\\
+\bitbox{8}{offset}\\
+\bitbox{16}{size in bits}
+\end{bytefield}
+\end{center}
 
-If the CTF data has been merged with another parent CTF object, some
-outgoing edges may refer to type nodes that exist in another CTF
-object.  The debugger and libctf library are responsible for
-connecting the appropriate objects together so that the full set of
-types can be explored and manipulated.
+The \verb|flags| field indicates whether the integer is signed,
+contains character data, is a boolean or is to be displayed
+with a varags style of formatting.
 
+Floating point numbers have the exact same fields to describe them
+but a larger number of possible flags, to match the larger
+number of ways in which floating point numbers may be stored.
+The flags and descriptions of the currently supported floating
+point encodings are given in \ref{}
 
-\section{Data Types}
-\label{sec:ctf-data-types}
+begin{tabular}{|l|l}
+\hline
+CTF_FP_SINGLE	& IEEE 32-bit float encoding\\
+CTF_FP_DOUBLE	& IEEE 64-bit float encoding\
+CTF_FP_CPLX	& Complex encoding\\
+CTF_FP_DCPLX	& Double complex encoding\\
+CTF_FP_LDCPLX	& Long double complex encoding\\
+CTF_FP_LDOUBLE	& Long double encoding\\
+CTF_FP_INTRVL	& Interval (2x32-bit) encoding\\
+CTF_FP_DINTRVL	& Double interval (2x64-bit) encoding\\
+CTF_FP_LDINTRVL	& Long double interval (2x128-bit) encoding\\
+CTF_FP_IMAGRY	& Imaginary (32-bit) encoding\\
+CTF_FP_DIMAGRY	& Long imaginary (64-bit) encoding\\
+CTF_FP_LDIMAGRY	& Long long imaginary (128-bit) encoding
+\hline
+\end{tabular}
 
-CTF encodes the following ANSI C data types
+The functions section encodes the function name, as well as its arguments
+and return value.  The types of the arguments and the return value
+reference the \verb|types| section.  The arguments to the function
+are encoded as a list.
+
+All strings are encoded in the \verb|string table| and are referenced by
+a numeric id from the other sections.
 
 %%% Local Variables:
 %%% mode: latex
