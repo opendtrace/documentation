@@ -61,24 +61,23 @@ more primitive types by uses of a reference, e.g. a \verb|uint32_t|
 will actually refer to a \verb|unsigned int|.  Types are broken up by
 what they represent, referred to as their \emph{kind}.
 
-
 \begin{tabular}{|l|l}
 \hline
-\verb|CTF_K_UNKNOWN| & unknown type (used for padding)\\
-\verb|CTF_K_INTEGER| & variant data is \verb|CTF_INT_DATA()| (see below)\\
-\verb|CTF_K_FLOAT| & variant data is \verb|CTF_FP_DATA()| (see below)\\
-\verb|CTF_K_POINTER| & \verb|ctt_type| is referenced type\\
-\verb|CTF_K_ARRAY| & variant data is single \verb|ctf_array_t|\\
+\verb|CTF_K_UNKNOWN|    & unknown type (used for padding) \\
+\verb|CTF_K_INTEGER|    & variant data is \verb|CTF_INT_DATA()| (see below)\\
+\verb|CTF_K_FLOAT|      & variant data is \verb|CTF_FP_DATA()| (see below)\\
+\verb|CTF_K_POINTER|    & \verb|ctt_type| is referenced type\\
+\verb|CTF_K_ARRAY|      & variant data is single \verb|ctf_array_t|\\
   \verb|CTF_K_FUNCTION| & \verb|ctt_type| is return type\\
   variant data is list of argument types (\verb|ushort_t|'s)\\
-\verb|CTF_K_STRUCT| & variant data is list of \verb|ctf_member_t|'s\\
-\verb|CTF_K_UNION| & variant data is list of \verb|ctf_member_t|'s\\
-\verb|CTF_K_ENUM| & variant data is list of \verb|ctf_enum_t|'s\\
-\verb|CTF_K_FORWARD| & no additional data; \verb|ctt_name| is tag\\
-\verb|CTF_K_TYPEDEF| & \verb|ctt_type| is referenced type\\
-\verb|CTF_K_VOLATILE| & \verb|ctt_type| is base type\\
-\verb|CTF_K_CONST| & \verb|ctt_type| is base type\\
-\verb|CTF_K_RESTRICT| & \verb|ctt_type| is base type\\
+\verb|CTF_K_STRUCT|     & variant data is list of \verb|ctf_member_t|'s\\
+\verb|CTF_K_UNION|      & variant data is list of \verb|ctf_member_t|'s\\
+\verb|CTF_K_ENUM|       & variant data is list of \verb|ctf_enum_t|'s\\
+\verb|CTF_K_FORWARD|    & no additional data; \verb|ctt_name| is tag\\
+\verb|CTF_K_TYPEDEF|    & \verb|ctt_type| is referenced type\\
+\verb|CTF_K_VOLATILE|   & \verb|ctt_type| is base type\\
+\verb|CTF_K_CONST|      & \verb|ctt_type| is base type\\
+\verb|CTF_K_RESTRICT|   & \verb|ctt_type| is base type\\
 \hline
 \end{tabular}
 
@@ -111,7 +110,7 @@ ID.  The majority of types in a C program will fit within a
 \bitbox{16}{info}
 \bitbox{16}{size or type}\\
 \bitbox{32}{high 32 bits of size (in bytes)}\\
-\bitbox{32}{low 32 bits of size (in bytes)}
+\bitbox{32}{low 32 bits of size (in bytes)}\\
 \end{bytefield}
 \end{center}
 
@@ -124,12 +123,13 @@ value that tells the consumer that this is a larger structure.  A
 it provides 64 bits for the size, and that size is being expressed in
 bytes.
 
+% TODO: This is terribly rendered.
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{16}
-\bitheader{0,9,10,15} \\
+\bitheader{0,9,10,15}\\
 \bitbox{5}{kind}\\
 \bitbox{1}{isroot}\\
-\bitbox{10}{vlen}
+\bitbox{10}{vlen}\\
 \end{bytefield}
 \end{center}
 
@@ -144,8 +144,8 @@ default.  An integer type is encoded in a single, 32 bit, field
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
 \bitheader{0,16,24,31} \\
-\bitbox{8}{flags}\\
-\bitbox{8}{offset}\\
+\bitbox{8}{flags}
+\bitbox{8}{offset}
 \bitbox{16}{size in bits}
 \end{bytefield}
 \end{center}
@@ -158,22 +158,22 @@ Floating point numbers have the exact same fields to describe them
 but a larger number of possible flags, to match the larger
 number of ways in which floating point numbers may be stored.
 The flags and descriptions of the currently supported floating
-point encodings are given in \ref{}
+point encodings are given in ... 
 
-begin{tabular}{|l|l}
+\begin{tabular}{|l|l}
 \hline
-CTF_FP_SINGLE	& IEEE 32-bit float encoding\\
-CTF_FP_DOUBLE	& IEEE 64-bit float encoding\
-CTF_FP_CPLX	& Complex encoding\\
-CTF_FP_DCPLX	& Double complex encoding\\
-CTF_FP_LDCPLX	& Long double complex encoding\\
-CTF_FP_LDOUBLE	& Long double encoding\\
-CTF_FP_INTRVL	& Interval (2x32-bit) encoding\\
-CTF_FP_DINTRVL	& Double interval (2x64-bit) encoding\\
-CTF_FP_LDINTRVL	& Long double interval (2x128-bit) encoding\\
-CTF_FP_IMAGRY	& Imaginary (32-bit) encoding\\
-CTF_FP_DIMAGRY	& Long imaginary (64-bit) encoding\\
-CTF_FP_LDIMAGRY	& Long long imaginary (128-bit) encoding
+\verb|CTF_FP_SINGLE|   & IEEE 32-bit float encoding\\
+\verb|CTF_FP_DOUBLE|   & IEEE 64-bit float encoding\\
+\verb|CTF_FP_CPLX|     & Complex encoding\\
+\verb|CTF_FP_DCPLX|    & Double complex encoding\\
+\verb|CTF_FP_LDCPLX|   & Long double complex encoding\\
+\verb|CTF_FP_LDOUBLE|  & Long double encoding\\
+\verb|CTF_FP_INTRVL|   & Interval (2x32-bit) encoding\\
+\verb|CTF_FP_DINTRVL|  & Double interval (2x64-bit) encoding\\
+\verb|CTF_FP_LDINTRVL| & Long double interval (2x128-bit) encoding\\
+\verb|CTF_FP_IMAGRY|   & Imaginary (32-bit) encoding\\
+\verb|CTF_FP_DIMAGRY|  & Long imaginary (64-bit) encoding\\
+\verb|CTF_FP_LDIMAGRY| & Long long imaginary (128-bit) encoding\\
 \hline
 \end{tabular}
 
