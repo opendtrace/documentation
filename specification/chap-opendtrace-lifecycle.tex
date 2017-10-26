@@ -34,35 +34,12 @@ The DTrace kernel model is the heart of the DTrace framework.
 
 % Lifecycle figure goes here
 
-%Narative on the lifecycle of an instrumentation
-* DTrace Kernel Module is loaded
-* Audit Kernel Module Loaded
-	* Registers provider
-* Script is input into CLI triggering instrumentation
-	* Script is compiled
-		* Request made for probe argument descriptions
+% Narative on the lifecycle of an instrumentation
+% DTrace Kernel Module is loaded
+% Audit Kernel Module Loaded
+	% Registers provider
+% Script is input into CLI triggering instrumentation
+	% Script is compiled
+		% Request made for probe argument descriptions
 
-\section{Existing API Boundries}
-
-% Main Boundries
-	% Provider to Framework
-	% Framework to Provider
-	% Kernel - Userland
-		% ioctls
-		% ECBs
-		% DIF/DIFO/DOF
-	% User Instrumentation via D
-
-\section{DTrace Component Functional Dependencies}
-
-% To remove D language you would need to replace compiler
-	% Needs to produce ECB in DIF/DIFO/DOF
-	% Needs to implement ioctl for querying framework
-
-% To replace the CLI
-	% Need a compiler to generate ECBs
-	% Need to implement comms via ioctl
-	% Need a mechanism to display results
-	% *** Think more about how the display could be separated, using RPC for buffer ***
-		% Uninfied display for the distributed use case
 
