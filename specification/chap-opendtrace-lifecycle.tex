@@ -1,0 +1,68 @@
+\section{DTrace Components}
+
+There are three main components of DTrace, the kernel module, a set of providers and the DTrace commnad line utility (DTrace CLI). The kernel module and providers run in kernel mode and are responible for collecting data specified by the instrumentation and transmitting it back to userland. The DTrace CLI is the users interface to instrument the system providing the mechanisms for specifying instrumentation and displaying the results. Each component is discussed in greater detail in the following sections.
+
+\subsection{Kernel Module}
+
+The DTrace kernel model is the heart of the DTrace framework. 
+
+% Responsibilities
+	% Keeping registry of providers
+	% Keeping list of ECBs specifying instrumentation
+	% Call back for providers when a probe point is reacted
+	% Intermediary between CLI and provider when compiling scripts
+	% Transferring instrumentation results to the CLI 
+
+\subsection{Provider}
+
+% Responsibilities
+	% Provides DTrace probe points
+	% Registers itself with DTraace when available
+	% Tracks when probes are enabled
+	% Calls kernel model when probe is reached	
+
+\subsection{DTrace CLI}
+
+% Responsibilities
+	% Userland interface
+	% Accepts and compiles D scripts
+	% Provides ECBs to framework to be run when probes reached
+	% Provides buffers to framework for instrumentation data
+	% Displays instrumentation results
+
+\section{Typical DTrace Lifecycle}
+
+% Lifecycle figure goes here
+
+%Narative on the lifecycle of an instrumentation
+* DTrace Kernel Module is loaded
+* Audit Kernel Module Loaded
+	* Registers provider
+* Script is input into CLI triggering instrumentation
+	* Script is compiled
+		* Request made for probe argument descriptions
+
+\section{Existing API Boundries}
+
+% Main Boundries
+	% Provider to Framework
+	% Framework to Provider
+	% Kernel - Userland
+		% ioctls
+		% ECBs
+		% DIF/DIFO/DOF
+	% User Instrumentation via D
+
+\section{DTrace Component Functional Dependencies}
+
+% To remove D language you would need to replace compiler
+	% Needs to produce ECB in DIF/DIFO/DOF
+	% Needs to implement ioctl for querying framework
+
+% To replace the CLI
+	% Need a compiler to generate ECBs
+	% Need to implement comms via ioctl
+	% Need a mechanism to display results
+	% *** Think more about how the display could be separated, using RPC for buffer ***
+		% Uninfied display for the distributed use case
+
