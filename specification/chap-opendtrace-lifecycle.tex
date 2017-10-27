@@ -1,6 +1,8 @@
+
+
 \section{DTrace Components}
 
-There are three main components of DTrace, the kernel module, a set of providers and the DTrace commnad line utility (DTrace CLI). The kernel module and providers run in kernel mode and are responible for collecting data specified by the instrumentation and transmitting it back to userland. The DTrace CLI is the users interface to instrument the system providing the mechanisms for specifying instrumentation and displaying the results. Each component is discussed in greater detail in the following sections.
+There are three main components of DTrace, the kernel module, a set of providers and the DTrace command line utility (DTrace CLI). The kernel module and providers run in kernel mode and are responsible for collecting data specified by the instrumentation and transmitting it back to userland. The DTrace CLI is the users interface to instrument the system providing the mechanisms for specifying instrumentation and displaying the results. Each component is discussed in greater detail in the following sections.
 
 \subsection{Kernel Module}
 
@@ -17,9 +19,12 @@ The DTrace kernel model is the heart of the DTrace framework.
 
 % Responsibilities
 	% Provides DTrace probe points
-	% Registers itself with DTraace when available
+	% Registers itself with DTrace when available
 	% Tracks when probes are enabled
 	% Calls kernel model when probe is reached	
+
+% Discuss providers supplied by DTrace and when/how they are loaded
+% Discuss custom providers  
 
 \subsection{DTrace CLI}
 
@@ -30,16 +35,32 @@ The DTrace kernel model is the heart of the DTrace framework.
 	% Provides buffers to framework for instrumentation data
 	% Displays instrumentation results
 
-\section{Typical DTrace Lifecycle}
+\section{Typical DTrace Life Cycle}
 
-% Lifecycle figure goes here
+% Life cycle figure goes here
 
-% Narative on the lifecycle of an instrumentation
-% DTrace Kernel Module is loaded
-% Audit Kernel Module Loaded
-	% Registers provider
-% Script is input into CLI triggering instrumentation
-	% Script is compiled
-		% Request made for probe argument descriptions
+The life cycle a generic example of instrumentation with DTrace is giving in Figure \ref{fig:lifecycle}. For the purposes of this example it is assumed that the DTrace kernel module has already been loaded (usually at boot). Built in DTrace providers are commonly loaded alongside the kernel module, so the example considers a generic provider loaded sometime after boot.
+
+% Narrative on the life cycle of an instrumentation
+	% DTrace Kernel Module is loaded
+	% Audit Kernel Module Loaded
+		% Registers provider with kernel model
+	% Script is input into CLI triggering instrumentation
+		% Script is compiled by CLI
+			% Request made for probe argument descriptions
+				% via ioctls
+			% Kernel module confirms provider provides probe
+				% TODO Double Check under which conditions
+			% Kernel module queries provider for argument type
+			% Kernel provides argument descriptions
+				% TODO Check how description are returned
+		% ECB is generated and provided to kernel module
+	% Kernel module tells provider to enable instrumented probes
+	% When instrumented event occurs provider calls dtrace_probe function
+		% Kernel module processes the ECBs
+		% Resulting data is placed in buffer of CLI instance corresponding to ECB
+		% CLI reads data from the buffer and displays results
+			% TODO Double check where final display format is processed
+
 
 
