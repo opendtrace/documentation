@@ -80,10 +80,12 @@ what they represent, referred to as their \emph{kind}.
 \verb|CTF_K_RESTRICT|   & \verb|ctt_type| is base type\\
 \hline
 \end{tabular}
+\end{table}
 
-Complex data types, such as structures, are also contained in the
-\verb|types| section, and are encoded as a structure with a name that
-references the string table.
+Table\ref{tbl:ctf-kinds} lists the kinds of base data types that are
+encoded by CTF.  Complex data types, such as structures, are also
+contained in the \verb|types| section, and are encoded as a structure
+with a name that references the string table.
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
