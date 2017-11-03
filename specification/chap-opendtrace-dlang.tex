@@ -9,6 +9,26 @@ elaborate on its properties in multithreaded environments.
 %%% TeX-master: "dtrace-specification"
 %%% End:
 
+\section{Variables}
+\label{sec:d-variables}
+DTrace implements three different scopes of variables. The first scope of D variables
+is the global scope. These are variables that are visible to every probe and across all
+threads, allowing the user to write scripts that carry state across multiple threads should
+it be necessary. The second is the thread-local scope. These variables are prefixed with
+\texttt{self->} and are only visible within a single software thread. The last scope
+of variables that D implements are clause-local variables. These variables are implemented
+per-thread and are identified by the prefix \texttt{this->}. Clause-local variables should
+be initialised in each probe before their use, as the value is otherwise considered undefined.
+
+% TODO: We should fill this out with explanations about each type of variables. This is only
+% for *variables*, NOT aggregations. They go in their own section.
+
+\subsection{Global variables}
+
+\subsection{Thread-local variables}
+
+\subsection{Clause-local variables}
+
 \section{Multithreading}
 
 Software threads are a key component of a modern operating system and were the
@@ -22,16 +42,15 @@ scheduler.
 % XXX: This is very vague because saying that DTrace guarantees something is
 % a very bold statement. For example, saying that it guarantees thread safety
 % when creating dynamic variables would be a little over the top, as this has
-% not been verified at all.
+% not been verified at all. We should think about this a bit more.
 
 When tracing, DTrace guarantees that it can not be preempted inside of the
 \function{dtrace\_probe} function, but it does not guarantee that everything in
 the DIF will be thread-safe.
 
-\subsection{Variables}
+\subsection{Global variables}
 
-As mentioned in (some previous section in this chapter), DTrace implements three
-different scopes of variables. Global variables are not stored in thread-local storage,
+Global variables are not stored in thread-local storage,
 while thread-local and clause-local variables are. This means that in a
 multithreaded environment, global variables should be used sparingly. While it
 is evident that storing to a global variable may be overwritten with another
@@ -89,4 +108,26 @@ stgs %r2, num_syscalls
 It is clear that the value in the \registerop{r2} register will be lost because the register
 \registerop{r4} is stored to the same location afterwards. It is worth noting that this
 behaviour is not observed because the thread was preempted, but simply by the fact that DTrace
-does not guarantee any ordering outside of each CPU core.
+does not guarantee any ordering outside of each CPU core. This behaviour applies to all of the
+operations performed on global variables and as a result, they should only be used in probes that
+are guaranteed to fire on a single thread.
+
+\noindent
+Often the desired behaviour with global variables can be achieved through aggregations. The above
+script ought to be written in the following way in order to be thread-safe:
+
+\begin{verbatim}
+syscall:::entry
+{
+    @num_syscalls = count();
+}
+
+dtrace:::END
+{
+    printa(@num_syscalls);
+}
+\end{verbatim}
+
+\subsection{Thread-local variables}
+
+\subsection{Clause-local variables}
