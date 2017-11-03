@@ -1,8 +1,92 @@
-The D language is a restricted subset of the C language that is
-interpreted within the OpenDTrace system \cite{Kernighan:1988}.  In
-this chapter we give a formal definition of D.
+The D language is a language inspired by the AWK programming language
+\cite{Aho:1987:APL:29361} and the C programming language
+\cite{Kernighan:1988}. In this chapter, we give a formal definition of
+the D programming language that is deployed in OpenDTrace, as well as
+elaborate on its properties in multithreaded environments.
 
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "dtrace-specification"
 %%% End:
+
+\section{Multithreading}
+
+Software threads are a key component of a modern operating system and were the
+reason many design decisions have been made in DTrace. These threads may be
+supported by having many processors implemented in hardware, preemption of a
+single processor or through preemption of multiple processors using the
+scheduler.
+
+\subsection{DTrace guarantees}
+
+% XXX: This is very vague because saying that DTrace guarantees something is
+% a very bold statement. For example, saying that it guarantees thread safety
+% when creating dynamic variables would be a little over the top, as this has
+% not been verified at all.
+
+When tracing, DTrace guarantees that it can not be preempted inside of the
+\function{dtrace\_probe} function, but it does not guarantee that everything in
+the DIF will be thread-safe.
+
+\subsection{Variables}
+
+As mentioned in (some previous section in this chapter), DTrace implements three
+different scopes of variables. Global variables are not stored in thread-local storage,
+while thread-local and clause-local variables are. This means that in a
+multithreaded environment, global variables should be used sparingly. While it
+is evident that storing to a global variable may be overwritten with another
+probe that stores something else in the same one, there is more subtle behaviour
+at hand. Consider the following example:
+
+\begin{verbatim}
+dtrace:::BEGIN
+{
+    num_syscalls = 0;
+}
+
+syscall:::entry
+{
+    num_syscalls++;
+}
+
+dtrace:::END
+{
+    printf("Number of syscalls: %d\n", num_syscalls);
+}
+\end{verbatim}
+
+\noindent
+Because DIF performs all of it operations on virtual machine's registers as opposed
+to variables in memory, the ++ operator is not atomic. The above example when compiled
+to DIF will look as follows:
+
+\begin{verbatim}
+ldgs %r1, num_syscalls /* Load the current value into %r1 */
+setx %r2, inttab[0]    /* Load 1 into %r2 */
+add  %r2, %r1, %r2     /* Add %r1 and %r2 and store into %r2 */
+stgs %r2, num_syscalls /* Store the result back into num_syscalls */
+\end{verbatim}
+
+\noindent
+This DIF section is safe, as long as the num\_syscalls variable is not visible from any
+other thread. If it is visible and accessible from another thread, it suffers from a race
+condition which results in wrong information being given to the user. Consider the following:
+
+\begin{verbatim}
+      Thread 1                     Thread 2
+
+ldgs %r1, num_syscalls
+                              ldgs %r3, num_syscalls
+                              setx %r4, inttab[0]
+                              add  %r4, %r3, %r4
+setx %r2, inttab[0]
+add  %r2, %r1, %r2
+stgs %r2, num_syscalls
+                              stgs %r4, num_syscalls
+\end{verbatim}
+
+\noindent
+It is clear that the value in the \registerop{r2} register will be lost because the register
+\registerop{r4} is stored to the same location afterwards. It is worth noting that this
+behaviour is not observed because the thread was preempted, but simply by the fact that DTrace
+does not guarantee any ordering outside of each CPU core.
