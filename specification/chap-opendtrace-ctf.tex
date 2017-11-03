@@ -29,26 +29,29 @@ of the CTF section as they would be found on stable storage.  The file
 header stores a magic number and version information, encoding flags,
 and the byte offset of each of the sections relative to the end of the
 header itself.  As of this writing the most current version of CTF is
-version two (2).  The preamblem including the magic number, version
-and flags take up the first 32 bits of the header, the remaining
+version two (2).  The preamble, including the magic number, version
+and flags, take up the first 32 bits of the header, the remaining
 fields take up 32 bits each, independent of the word size of the
 architecture.
 
-\begin{center}
-\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
-\bitheader{0,8,16,31} \\
-\bitbox{16}{magic}
-\bitbox{8}{version}
-\bitbox{8}{flags}\\
-\bitbox{32}{reference to parent label}\\
-\bitbox{32}{reference to basename of parent}\\
-\bitbox{32}{label section offset}\\
-\bitbox{32}{function section offset}\\
-\bitbox{32}{type section offset}\\
-\bitbox{32}{string section offset}\\
-\bitbox{32}{size of string section (bytes)}\\
-\end{bytefield}
-\end{center}
+\begin{figure}
+  \centering
+  \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+    \bitheader{0,8,16,31} \\
+    \bitbox{16}{magic}
+    \bitbox{8}{version}
+    \bitbox{8}{flags}\\
+    \bitbox{32}{reference to parent label}\\
+    \bitbox{32}{reference to basename of parent}\\
+    \bitbox{32}{label section offset}\\
+    \bitbox{32}{function section offset}\\
+    \bitbox{32}{type section offset}\\
+    \bitbox{32}{string section offset}\\
+    \bitbox{32}{size of string section (bytes)}\\
+  \end{bytefield}
+  \caption{Overall CTF section encoding}
+  \label{fig:ctf-overall}
+\end{figure}
 
 The CTF section makes heavy use of references between the sub-sections
 to fully describe the datatypes in a program as well as the functions,
@@ -92,70 +95,83 @@ encoded by CTF.  Complex data types, such as structures, are also
 contained in the \verb|types| section, and are encoded as a structure
 with a name that references the string table.
 
-\begin{center}
-\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
-\bitheader{0,16,31} \\
-\bitbox{32}{name}\\
-\bitbox{16}{info}
-\bitbox{16}{size or type}\\
-\end{bytefield}
-\end{center}
+\begin{figure}
+  \centering
+  \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+    \bitheader{0,16,31} \\
+    \bitbox{32}{name}\\
+    \bitbox{16}{info}
+    \bitbox{16}{size or type}\\
+  \end{bytefield}
+  \caption{A simple type}
+  \label{fig:ctf-stype}
+\end{figure}
 
-A simple type, one who's size is less than 64 Kbytes, are stored
-in a \verb|ctf_stype|.  The \verb|name| is a reference to a string
-in the string table.  The \verb|info| field is encoded differently
-for each type, as will be explained fully in the rest of this chapter.
-The last field is either the size, in bytes, of the structure or it
-is a reference to another type, encoded using the referenced type's
-ID.  The majority of types in a C program will fit within a
-\verb|ctf_stype|.
+A simple type, one who's size is less than 64 Kbytes, is stored in a
+\verb|ctf_stype|, Figure~\ref{fig:ctf-stype}.  The \verb|name| is a
+reference to a string in the string table.  The \verb|info| field is
+encoded differently for each type, as will be explained fully in the
+rest of this chapter.  The last field is either the size, in bytes, of
+the structure or it is a reference to another type, encoded using the
+referenced type's ID.  The majority of types in a C program will fit
+within a \verb|ctf_stype|.
 
-\begin{center}
-\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
-\bitheader{0,16,31} \\
-\bitbox{32}{name}\\
-\bitbox{16}{info}
-\bitbox{16}{size or type}\\
-\bitbox{32}{high 32 bits of size (in bytes)}\\
-\bitbox{32}{low 32 bits of size (in bytes)}\\
-\end{bytefield}
-\end{center}
+\begin{figure}
+  \centering
+  \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+    \bitheader{0,16,31} \\
+    \bitbox{32}{name}\\
+    \bitbox{16}{info}
+    \bitbox{16}{size or type}\\
+    \bitbox{32}{high 32 bits of size (in bytes)}\\
+    \bitbox{32}{low 32 bits of size (in bytes)}\\
+  \end{bytefield}
+  \caption{A large type}
+  \label{fig:ctf-type}
+\end{figure}
 
-Types that are larger than 64Kbytes are encoded using a \verb|ctf_type|
-structure.  The \verb|name| and \verb|info| fields of this, larger,
-\verb|ctf_type| are the same as the smaller \verb|ctf_stype|, but the
-\verb|size| field is always set to \verb|CTF_LSIZE_SENT|, the sentinal
-value that tells the consumer that this is a larger structure.  A
-\verb|ctf_type| structure can encode an extremely large type, since
-it provides 64 bits for the size, and that size is being expressed in
-bytes.
+Types that are larger than 64Kbytes are encoded using a
+\verb|ctf_type| structure, shown in Figure~\ref{fig:ctf-type}.  The
+\verb|name| and \verb|info| fields of this, larger, \verb|ctf_type|
+are the same as the smaller \verb|ctf_stype|, but the \verb|size|
+field is always set to \verb|CTF_LSIZE_SENT|, the sentinal value that
+tells the consumer that this is a larger structure.  A \verb|ctf_type|
+structure can encode an extremely large type, since it provides 64
+bits for the size, and that size is being expressed in bytes.
 
-% TODO: This is terribly rendered.
-\begin{center}
-\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{16}
-\bitheader{0,9,10,15}\\
-\bitbox{5}{kind}
-\bitbox{1}{r}
-\bitbox{10}{vlen}
-\end{bytefield}
-\end{center}
+\begin{figure}
+  \centering
+  \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{16}
+    \bitheader{0,9,10,15}\\
+    \bitbox{5}{kind}
+    \bitbox{1}{r}
+    \bitbox{10}{vlen}
+  \end{bytefield}
+  \caption{Info field encoding}
+  \label{fig:ctf-info-field}  
+\end{figure}
 
-The \verb|info| field is further broken down into a number of sub-fields
-which encoded the \verb|kind|, \verb|vlen| (variable length) and whether
-or not this is a root type \verb|isroot|.
+The \verb|info| field, shown in Figure\ref{fig:ctf-info-field}, is
+further broken down into a number of sub-fields which encoded the
+\verb|kind|, \verb|vlen| (variable length) and whether or not this is
+a root type \verb|isroot|.
 
 Each of the integral types, such as integers, floats, pointers, arrays, etc.
 has its own encoding.  Integers are the simplest type and are unsigned by
-default.  An integer type is encoded in a single, 32 bit, field
+default.  An integer type is encoded in a single, 32 bit, field, as
+seen in Figure~\ref{fig:ctf-integral}.
 
-\begin{center}
-\begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
-\bitheader{0,16,24,31} \\
-\bitbox{8}{flags}
-\bitbox{8}{offset}
-\bitbox{16}{size in bits}
-\end{bytefield}
-\end{center}
+\begin{figure}
+  \centering
+  \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
+    \bitheader{0,16,24,31} \\
+    \bitbox{8}{flags}
+    \bitbox{8}{offset}
+    \bitbox{16}{size in bits}
+  \end{bytefield}
+  \caption{Integral type encoding}
+  \label{fig:ctf-integral}
+\end{figure}
 
 The \verb|flags| field indicates whether the integer is signed,
 contains character data, is a boolean or is to be displayed
@@ -165,7 +181,7 @@ Floating point numbers have the exact same fields to describe them
 but a larger number of possible flags, to match the larger
 number of ways in which floating point numbers may be stored.
 The flags and descriptions of the currently supported floating
-point encodings are given in ... 
+point encodings are given in Table~\ref{tbl:ctf-kinds}.
 
 \begin{table}
   \centering
@@ -196,7 +212,7 @@ are encoded as a list.
 
 All strings are encoded in the \verb|string table| and are referenced by
 a numeric id from the other sections.
-l
+
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "dtrace-specification"
