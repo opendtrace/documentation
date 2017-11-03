@@ -9,6 +9,20 @@ elaborate on its properties in multithreaded environments.
 %%% TeX-master: "dtrace-specification"
 %%% End:
 
+\section{Grammar definition}
+
+% TODO: Here we use something like the Extended Backus-Naur Form (EBNF) to describe
+% the D language syntactically.
+
+\section{Safety}
+
+% TODO: Explain what the safety guarantees of the D language are, so that we can
+% refer to them later on.
+
+\section{Aggregations}
+
+% TODO: Write the section on aggregations.
+
 \section{Variables}
 \label{sec:d-variables}
 DTrace implements three different scopes of variables. The first scope of D variables
@@ -46,7 +60,9 @@ scheduler.
 
 When tracing, DTrace guarantees that it can not be preempted inside of the
 \function{dtrace\_probe} function, but it does not guarantee that everything in
-the DIF will be thread-safe.
+the executing DIF will be thread-safe. In addition to that, DTrace does not allow
+access to locking primitives. This is because a programming error might violate
+the safety guarantees that DTrace was designed to provide the user with.
 
 \subsection{Global variables}
 
@@ -93,7 +109,6 @@ condition which results in wrong information being given to the user. Consider t
 
 \begin{verbatim}
       Thread 1                     Thread 2
-
 ldgs %r1, num_syscalls
                               ldgs %r3, num_syscalls
                               setx %r4, inttab[0]
