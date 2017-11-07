@@ -6,14 +6,9 @@ There are three main components of DTrace, the kernel module, a set of providers
 
 \subsection{Kernel Module}
 
-The DTrace kernel model is the heart of the DTrace framework. 
+The DTrace kernel model is the heart of the DTrace framework. This module is responsible for the coordination of all other components use in instrumentation. It keeps track of all registered providers and informs them when to enable or disable their probes. When a providers probe fires, the DTrace kernel module is responsible for executing the necessary instrumentation code and providing the data its consumers.
 
-% Responsibilities
-	% Keeping registry of providers
-	% Keeping list of ECBs specifying instrumentation
-	% Call back for providers when a probe point is reacted
-	% Intermediary between CLI and provider when compiling scripts
-	% Transferring instrumentation results to the CLI 
+The kernel module is also the intermediary between the DTrace User interface and the providers. When compiling user scripts, the kernel module provides the D compiler with probe arguments and types. Once compiled, scripts are handed off to the module as Enabling Code Blocks (ECBs) to be executed as probes first. Once executed, the data is handed back to the user interface for display to the end user.
 
 \subsection{Provider}
 
