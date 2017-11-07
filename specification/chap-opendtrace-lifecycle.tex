@@ -12,6 +12,12 @@ The kernel module is also the intermediary between the DTrace User interface and
 
 \subsection{Provider}
 
+Providers in DTrace provide the probe points that are used to instrument code and provide data to the end user. Dtrace provides a set of providers within the framework (see Table XXX), but developers can developer their own to provide more information from their code. These providers are often developed as separate kernel models, but there is a mechanism Userspace Defined Static Tracing (USDT) to allow for providers to be written for userspace processes. USDT is covered in Chapter XXX.
+
+A provider is simply a collection of probe points. These probes as functions that are run when certain points of the code are reached. The probe gathers data of interest and calls back into the DTrace Kernel module for further processing. Since the overhead of probes should be avoided when data is not required, the provider is responsible for tracking when probes are enables and implementing a mechanism for the kernel module to update their state.
+
+
+
 % Responsibilities
 	% Provides DTrace probe points
 	% Registers itself with DTrace when available
@@ -23,6 +29,7 @@ The kernel module is also the intermediary between the DTrace User interface and
 
 \subsection{DTrace CLI}
 
+% Break out two components: CLI and libdtrace
 % Responsibilities
 	% Userland interface
 	% Accepts and compiles D scripts
