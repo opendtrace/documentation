@@ -11,8 +11,8 @@ as elaborate on its properties in multithreaded environments.
 
 \section{Grammar definition}
 
-% TODO: Here we use something like the Extended Backus-Naur Form (EBNF) to describe
-% the D language syntactically.
+% TODO: Here we use something like the Extended Backus-Naur Form (EBNF) to
+% describe the D language syntactically.
 
 \section{Safety}
 
@@ -25,17 +25,19 @@ as elaborate on its properties in multithreaded environments.
 
 \section{Variables}
 \label{sec:d-variables}
-DTrace implements three different scopes of variables. The first scope of D variables
-is the global scope. These are variables that are visible to every probe and across all
-threads, allowing the user to write scripts that carry state across multiple threads should
-it be necessary. The second is the thread-local scope. These variables are prefixed with
-\texttt{self->} and are only visible within a single software thread. The last scope
-of variables that D implements are clause-local variables. These variables are implemented
-per-thread and are identified by the prefix \texttt{this->}. Clause-local variables should
-be initialised in each probe before their use, as the value is otherwise considered undefined.
+DTrace implements three different scopes of variables. The first scope of D
+variables is the global scope. These are variables that are visible to every
+probe and across all threads, allowing the user to write scripts that carry
+state across multiple threads should it be necessary. The second is the
+thread-local scope. These variables are prefixed with \texttt{self->} and are
+only visible within a single software thread. The last scope of variables that D
+implements are clause-local variables. These variables are implemented
+per-thread and are identified by the prefix \texttt{this->}. Clause-local
+variables should be initialised in each probe before their use, as the value is
+otherwise considered undefined.
 
-% TODO: We should fill this out with explanations about each type of variables. This is only
-% for *variables*, NOT aggregations. They go in their own section.
+% TODO: We should fill this out with explanations about each type of variables.
+% This is only for *variables*, NOT aggregations. They go in their own section.
 
 \subsection{Global variables}
 
@@ -61,9 +63,9 @@ scheduler.
 
 When tracing, DTrace guarantees that it can not be preempted inside of the
 \function{dtrace_probe} function, but it does not guarantee that everything in
-the executing DIF will be thread-safe. In addition to that, DTrace does not allow
-access to locking primitives. This is because a programming error might violate
-the safety guarantees that DTrace was designed to provide the user with.
+the executing DIF will be thread-safe. In addition to that, DTrace does not
+allow access to locking primitives. This is because a programming error might
+violate the safety guarantees that DTrace was designed to provide the user with.
 
 \subsection{Global variables}
 
@@ -92,9 +94,9 @@ dtrace:::END
 \end{verbatim}
 
 \noindent
-Because DIF performs all of it operations on virtual machine's registers as opposed
-to variables in memory, the ++ operator is not atomic. The above example when compiled
-to DIF will look as follows:
+Because DIF performs all of it operations on virtual machine's registers as
+opposed to variables in memory, the ++ operator is not atomic. The above example
+when compiled to DIF will look as follows:
 
 \begin{verbatim}
 ldgs %r1, num_syscalls /* Load the current value into %r1 */
@@ -104,9 +106,10 @@ stgs %r2, num_syscalls /* Store the result back into num_syscalls */
 \end{verbatim}
 
 \noindent
-This DIF section is safe, as long as the num\_syscalls variable is not visible from any
-other thread. If it is visible and accessible from another thread, it suffers from a race
-condition which results in wrong information being given to the user. Consider the following:
+This DIF section is safe, as long as the num\_syscalls variable is not visible
+from any other thread. If it is visible and accessible from another thread, it
+suffers from a race condition which results in wrong information being given to
+the user. Consider the following:
 
 \begin{verbatim}
       Thread 1                     Thread 2
@@ -121,16 +124,18 @@ stgs %r2, num_syscalls
 \end{verbatim}
 
 \noindent
-It is clear that the value in the \registerop{r2} register will be lost because the register
-\registerop{r4} is stored to the same location afterwards. It is worth noting that this
-behaviour is not observed because the thread was preempted, but simply by the fact that DTrace
-does not guarantee any ordering outside of each CPU core. This behaviour applies to all of the
-operations performed on global variables and as a result, they should only be used in probes that
-are guaranteed to fire on a single thread.
+It is clear that the value in the \registerop{r2} register will be lost because
+the register \registerop{r4} is stored to the same location afterwards. It is
+worth noting that this behaviour is not observed because the thread was
+preempted, but simply by the fact that DTrace does not guarantee any ordering
+outside of each CPU core. This behaviour applies to all of the operations
+performed on global variables and as a result, they should only be used in
+probes that are guaranteed to fire on a single thread.
 
 \noindent
-Often the desired behaviour with global variables can be achieved through aggregations. The above
-script ought to be written in the following way in order to be thread-safe:
+Often the desired behaviour with global variables can be achieved through
+aggregations. The above script ought to be written in the following way in order
+to be thread-safe:
 
 \begin{verbatim}
 syscall:::entry
@@ -146,7 +151,7 @@ dtrace:::END
 
 \subsection{Thread-local variables}
 
-As mentioned in Subsection~\ref{subsec:thread-local-variables}, thread-local variables are only
-visible within a single thread.
+As mentioned in Subsection~\ref{subsec:thread-local-variables}, thread-local
+variables are only visible within a single thread.
 
 \subsection{Clause-local variables}
