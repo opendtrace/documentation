@@ -1,8 +1,8 @@
 The D language is a language inspired by the AWK programming language
 \cite{Aho:1987:APL:29361} and the C programming language
-\cite{Kernighan:1988}. In this chapter, we give a formal definition of
-the D programming language that is deployed in OpenDTrace, as well as
-elaborate on its properties in multithreaded environments.
+\cite{Kernighan:1988}\cite{DTrace2004}. In this chapter, we give a formal
+definition of the D programming language that is deployed in OpenDTrace, as well
+as elaborate on its properties in multithreaded environments.
 
 %%% Local Variables:
 %%% mode: latex
@@ -40,6 +40,7 @@ be initialised in each probe before their use, as the value is otherwise conside
 \subsection{Global variables}
 
 \subsection{Thread-local variables}
+\label{subsec:thread-local-variables}
 
 \subsection{Clause-local variables}
 
@@ -59,7 +60,7 @@ scheduler.
 % not been verified at all. We should think about this a bit more.
 
 When tracing, DTrace guarantees that it can not be preempted inside of the
-\function{dtrace\_probe} function, but it does not guarantee that everything in
+\function{dtrace_probe} function, but it does not guarantee that everything in
 the executing DIF will be thread-safe. In addition to that, DTrace does not allow
 access to locking primitives. This is because a programming error might violate
 the safety guarantees that DTrace was designed to provide the user with.
@@ -144,5 +145,8 @@ dtrace:::END
 \end{verbatim}
 
 \subsection{Thread-local variables}
+
+As mentioned in Subsection~\ref{subsec:thread-local-variables}, thread-local variables are only
+visible within a single thread.
 
 \subsection{Clause-local variables}
