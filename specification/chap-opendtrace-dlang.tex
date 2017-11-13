@@ -95,8 +95,8 @@ dtrace:::END
 
 \noindent
 Because DIF performs all of it operations on virtual machine's registers as
-opposed to variables in memory, the ++ operator is not atomic. The above example
-when compiled to DIF will look as follows:
+opposed to variables in memory, the ++ operator is not atomic. When we compile
+the syscall:::entry clause, we get the following DIF output:
 
 \begin{verbatim}
 ldgs %r1, num_syscalls /* Load the current value into %r1 */
