@@ -1,40 +1,40 @@
 The D language is a language inspired by the AWK programming language
 \cite{Aho:1987:APL:29361} and the C programming language
-\cite{Kernighan:1988}\cite{DTrace2004}. In this chapter, we give a formal
-definition of the D programming language that is deployed in OpenDTrace, as well
-as elaborate on its properties in multithreaded environments.
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: "dtrace-specification"
-%%% End:
+\cite{Kernighan:1988}\cite{DTrace2004}. In this chapter, we give a
+formal definition of the D programming language that is a part of
+OpenDTrace, as well as elaborate on its properties in multithreaded
+environments.
 
 \section{Grammar definition}
+\label{sec:grammar}
 
 % TODO: Here we use something like the Extended Backus-Naur Form (EBNF) to
 % describe the D language syntactically.
 
 \section{Safety}
+\label{sec:safety}
 
 % TODO: Explain what the safety guarantees of the D language are, so that we can
 % refer to them later on.
 
 \section{Aggregations}
+\label{sec:aggregations}
 
 % TODO: Write the section on aggregations.
 
 \section{Variables}
 \label{sec:d-variables}
-DTrace implements three different scopes of variables. The first scope of D
-variables is the global scope. These are variables that are visible to every
-probe and across all threads, allowing the user to write scripts that carry
-state across multiple threads should it be necessary. The second is the
-thread-local scope. These variables are prefixed with \texttt{self->} and are
-only visible within a single software thread. The last scope of variables that D
-implements are clause-local variables. These variables are implemented
-per-thread and are identified by the prefix \texttt{this->}. Clause-local
-variables should be initialised in each probe before their use, as the value is
-otherwise considered undefined.
+DTrace implements three different scopes of variables: global,
+thread-local and clause-local. Global variables are visible to every
+probe and across all threads, allowing the user to write scripts that
+carry state across multiple threads should it be
+necessary. Thread-local variables are only visible within a single
+software thread, they are represented in source code as prefixed with
+\texttt{self->}. Clause-local variables are implemented on a
+per-thread basis and are identified by the prefix
+\texttt{this->}. Clause-local variables should be initialised in each
+probe before their use, as the value is otherwise considered
+undefined.
 
 % TODO: We should fill this out with explanations about each type of variables.
 % This is only for *variables*, NOT aggregations. They go in their own section.
@@ -48,62 +48,64 @@ otherwise considered undefined.
 
 \section{Multithreading}
 
-Software threads are a key component of a modern operating system and were the
-reason many design decisions have been made in DTrace. These threads may be
-supported by having many processors implemented in hardware, preemption of a
-single processor or through preemption of multiple processors using the
-scheduler.
+% XXX: This is very vague because saying that DTrace guarantees
+% something is a very bold statement. For example, saying that it
+% guarantees thread safety when creating dynamic variables would be a
+% little over the top, as this has not been verified at all. We should
+% think about this a bit more.
 
-\subsection{DTrace guarantees}
-
-% XXX: This is very vague because saying that DTrace guarantees something is
-% a very bold statement. For example, saying that it guarantees thread safety
-% when creating dynamic variables would be a little over the top, as this has
-% not been verified at all. We should think about this a bit more.
-
-When tracing, DTrace guarantees that it can not be preempted inside of the
-\function{dtrace_probe} function, but it does not guarantee that everything in
-the executing DIF will be thread-safe. In addition to that, DTrace does not
-allow access to locking primitives. This is because a programming error might
-violate the safety guarantees that DTrace was designed to provide the user with.
+When tracing, DTrace guarantees that it can not be preempted inside of
+the \function{dtrace_probe} function, but it does not guarantee that
+everything in the executing DIF will be thread-safe. DTrace does not
+allow access to locking primitives, because a programming error might
+violate the safety guarantees that OpenDTrace was designed to provide.
 
 \subsection{Global variables}
 
-Global variables are not stored in thread-local storage,
-while thread-local and clause-local variables are. This means that in a
-multithreaded environment, global variables should be used sparingly. While it
-is evident that storing to a global variable may be overwritten with another
-probe that stores something else in the same one, there is more subtle behaviour
-at hand. Consider the following example:
+Global variables are not stored in thread-local storage, while
+thread-local and clause-local variables are. In a multithreaded
+environment, global variables should be used sparingly. While it is
+evident that a value stored in a global variable may be overwritten by
+another probe at any time, there is more subtle behavior at
+hand. Consider the following example:
 
-\begin{verbatim}
-dtrace:::BEGIN
-{
-    num_syscalls = 0;
-}
-
-syscall:::entry
-{
-    num_syscalls++;
-}
-
-dtrace:::END
-{
-    printf("Number of syscalls: %d\n", num_syscalls);
-}
-\end{verbatim}
+\begin{figure}
+  \begin{lstlisting}
+    dtrace:::BEGIN
+    {
+      num_syscalls = 0;
+    }
+    
+    syscall:::entry
+    {
+      num_syscalls++;
+    }
+    
+    dtrace:::END
+    {
+      printf("Number of syscalls: %d\n", num_syscalls);
+    }
+  \end{lstlisting}
+  \caption{Global Variable Usage}
+  \label{fig:global-var-usage}
+\end{figure}
 
 \noindent
-Because DIF performs all of it operations on virtual machine's registers as
-opposed to variables in memory, the ++ operator is not atomic. When we compile
-the syscall:::entry clause, we get the following DIF output:
+Because DIF performs all of sit operations on a virtual machine's
+registers as opposed to variables in memory, the ++ operator is not
+atomic. When we compile the syscall:::entry clause, we get the
+following DIF output:
 
-\begin{verbatim}
+\begin{figure}
+\begin{lstlisting}
 ldgs %r1, num_syscalls /* Load the current value into %r1 */
 setx %r2, inttab[0]    /* Load 1 into %r2 */
 add  %r2, %r1, %r2     /* Add %r1 and %r2 and store into %r2 */
 stgs %r2, num_syscalls /* Store the result back into num_syscalls */
-\end{verbatim}
+\end{lstlisting}
+\caption{DIF Assembly}
+  \label{fig:dif-asm}
+\end{figure}
 
 \noindent
 This DIF section is safe, as long as the num\_syscalls variable is not visible
@@ -111,7 +113,8 @@ from any other thread. If it is visible and accessible from another thread, it
 suffers from a race condition which results in wrong information being given to
 the user. Consider the following:
 
-\begin{verbatim}
+\begin{figure}
+  \begin{lstlisting}
       Thread 1                     Thread 2
 ldgs %r1, num_syscalls
                               ldgs %r3, num_syscalls
@@ -121,7 +124,10 @@ setx %r2, inttab[0]
 add  %r2, %r1, %r2
 stgs %r2, num_syscalls
                               stgs %r4, num_syscalls
-\end{verbatim}
+  \end{lstlisting}
+  \caption{Race Condition}
+  \label{fig:race}
+\end{figure}
 
 \noindent
 It is clear that the value in the \registerop{r2} register will be lost because
@@ -137,17 +143,21 @@ Often the desired behaviour with global variables can be achieved through
 aggregations. The above script ought to be written in the following way in order
 to be thread-safe:
 
-\begin{verbatim}
-syscall:::entry
-{
-    @num_syscalls = count();
-}
+\begin{figure}
+  \begin{lstlisting}
+    syscall:::entry
+    {
+      @num_syscalls = count();
+    }
 
-dtrace:::END
-{
-    printa(@num_syscalls);
-}
-\end{verbatim}
+    dtrace:::END
+    {
+      printa(@num_syscalls);
+    }
+  \end{lstlisting}
+  \caption{Avoiding the race condition}
+  \label{fig:avoiding-the-race}
+\end{figure}
 
 \subsection{Thread-local variables}
 

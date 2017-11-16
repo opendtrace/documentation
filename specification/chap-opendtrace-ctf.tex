@@ -57,10 +57,10 @@ The CTF section makes heavy use of references between the sub-sections
 to fully describe the datatypes in a program as well as the functions,
 the function's argument list, and the function's return value.  The
 \verb|data objects| and \verb|functions| sections depend upon the
-\verb|types| section, which encodes all of the datatypes that have
+\verb|type| section, which encodes all of the datatypes that have
 been during the CTF conversion process.  Each type has a unique number
 and name, as well as a size and encoding.  Types may refer to other,
-more primitive types by uses of a reference, e.g. a \verb|uint32_t|
+more primitive types by use of a reference, e.g. a \verb|uint32_t|
 will actually refer to a \verb|unsigned int|.  Types are broken up by
 what they represent, referred to as their \emph{kind}.
 
@@ -137,7 +137,7 @@ are the same as the smaller \verb|ctf_stype|, but the \verb|size|
 field is always set to \verb|CTF_LSIZE_SENT|, the sentinal value that
 tells the consumer that this is a larger structure.  A \verb|ctf_type|
 structure can encode an extremely large type, since it provides 64
-bits for the size, and that size is being expressed in bytes.
+bits for the size, and that size is expressed in bytes.
 
 \begin{figure}
   \centering

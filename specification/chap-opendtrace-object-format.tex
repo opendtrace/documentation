@@ -1,7 +1,7 @@
 \section{Introduction}
 \label{sec:dof-intro}
 
-DTrace programs can be persistently encoded in the DOF format so that
+OpenDTrace programs are persistently encoded in the DOF format so that
 they may be embedded in other programs (for example, in an ELF file)
 or in the DTrace driver configuration file for use in anonymous
 tracing.  The DOF format is versioned and extensible so that it can be
@@ -21,20 +21,21 @@ either data model transparently.
 \end{figure}
 
 When a DOF file resides on stable storage it is stored in the format
-shown in Figure~\ref{fig:dof-stable-storage-format}. The file header stores
-meta-data including a magic number, data model for the
+shown in Figure~\ref{fig:dof-stable-storage-format}. The file header
+stores meta-data including a magic number, data model for the
 instrumentation, data encoding, and properties of the DIF code within.
 The header describes its own size and the size of the section headers.
 By convention, an array of section headers follows the file header,
-and then the data for all loadable sections and unloadable sections.
-This permits consumer code to easily download the headers and all
-loadable data into the DTrace driver in one contiguous chunk, omitting
-other extraneous sections.
+and then the data for all loadable sections and sections which cannot
+be loaded, also called unloadable sections.  This data layout permits
+consumer code to easily download the headers and all loadable data
+into the DTrace driver in one contiguous chunk, omitting other
+extraneous sections.
 
 The section headers describe the size, offset, alignment, and section
 type for each section.  Sections are described using a set of \verb|#defines|
 that tell the consumer what kind of data is expected.  Sections can
-contain links to other sections by storing a \verb|{dof_secidx_t|, an index
+contain links to other sections by storing a \verb|dof_secidx_t|, an index
 into the section header array, inside of the section data structures.
 The section header includes an entry size so that sections with data
 arrays can grow their structures.

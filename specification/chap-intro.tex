@@ -1,22 +1,18 @@
-OpenDTrace is a dynamic tracing facility integrated into the Solaris, FreeBSD,
-and Mac OS X operating systems -- with ports also available for Linux and
-Windows.
-Dynamic tracing allows system administrators and software developers to
-develop short scripts (in the D programming language) that instruct OpenDTrace to
-instrument aspects of system operation, gather data, and present it for human
-interpretation or mechanical processing.
-While there is excellent documentation available for the D programming
-language, command-line tools, and general OpenDTrace-based investigation and
-operation, the internal formats to OpenDTrace are generally documented via the
-source code.
-This report acts as a de facto specification for those formats, including
-the DTrace Intermediate Format (DIF), which is a bytecode that D scripts are
-compiled into for safe execution within the kernel, and the DTrace Object
-Format (DOF), which bundles together complete scripts along with their
-associated constants and metadata.
-Throughout this report we use the term \textit{OpenDTrace} to refer to
-the project and the source code, as a whole, but continue to use the
-historic, and simpler, \textit{DTrace} to refer to 
+OpenDTrace is a dynamic tracing facility integrated into the Solaris,
+FreeBSD, and Mac OS X operating systems -- with ports also available
+for Linux and Windows.  Dynamic tracing allows system administrators
+and software developers to develop short scripts (in the D programming
+language) that instruct OpenDTrace to instrument aspects of system
+operation, gather data, and present it for human interpretation or
+mechanical processing.  While there is excellent documentation
+available for the D programming language, command-line tools, and
+OpenDTrace-based investigation and operation, the internal formats to
+OpenDTrace are generally documented via the source code.  This report
+acts as a de facto specification for those formats, including the
+DTrace Intermediate Format (DIF), which is a bytecode that D scripts
+are compiled into for safe execution within the kernel, and the DTrace
+Object Format (DOF), which bundles together complete scripts along
+with their associated constants and metadata.
 
 %\section{Motivation}
 \section{Background}
@@ -36,7 +32,7 @@ release of the original DTrace system a port was made, by John Birrel,
 to the FreeBSD Operating System.  A port was also made by Apple
 Computer to their Mac OS X at about the same time.  DTrace gained
 popularity as a dynamic tracing system throughout the first decade of
-the 21st Century and its usage is well documented.\cite{}
+the 21st Century and its usage is well documented.
 
 OpenDTrace is made up of several components, including kernel code,
 user space libraries, and command line tools.  The OpenDTrace system
@@ -65,7 +61,7 @@ filesystem (\texttt{vfs}) and process scheduler (\texttt{proc}).
 Arbitrary trace points can be added to the kernel via the
 statically defined trace point (\texttt{sdt}) provider.  User space programs
 are traced either with the \texttt{pid} provider or using the 
-statically defined trace point (\texttt{usdt}) provider.q
+statically defined trace point (\texttt{usdt}) provider.
 
 \section{Version History}
 
@@ -87,6 +83,12 @@ This report specifies a number of aspects of OpenDTrace's operation:
   model, trace-point format and a description of how user space
   programs are traced.
 
+\item[The D Langauge] described in
+  Chaper~\ref{chap:opendtrace-dlang} provides a full description of
+  the D language, which is the domain specific scripting language used
+  to create more complex data queries and to perform data reduction
+  after tracepoint data has been captured.
+
 \item[The Compact Trace Format] described in
   Chapter~\ref{chap:opendtrace-ctf} explains the data extracted from
   compiled object code that is used by OpenDTrace to create trace
@@ -104,12 +106,12 @@ This report specifies a number of aspects of OpenDTrace's operation:
   Chapter~\ref{chap:opendtrace-intermediate-format} describes the instruction
   format and common instruction semantics.
 
-\item[DTrace Instructions] are the individual RISC instructions performing
-  a variety of operations including register access, memory access, arithmetic
-  operations, and calling various built-in subroutines available to scripts in
-  execution.
-  Chapter~\ref{chap:opendtrace-instruction-reference} enumerates the instructions,
-  their arguments, and their semantics.
+\item[DTrace Instructions] are the individual RISC instructions
+  performing a variety of operations including register access, memory
+  access, arithmetic operations, and calling various built-in
+  subroutines available to scripts in execution.
+  Chapter~\ref{chap:opendtrace-instruction-reference} enumerates the
+  instructions, their arguments, and their semantics.
 
 \item[DTrace Variable Records] describe the set of variables (local, global,
   or thread-local) operated on by a OpenDTrace script.
