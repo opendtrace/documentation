@@ -4,78 +4,74 @@ level there are three components to OpenDTrace: tools, such as
 \texttt{ctfconvert} which take compiled object code and generate new
 ELF/DWARF sections that capture type information, the kernel module,
 which is responsible for adding and removing trace points at run time,
-and the libraries, which tie it all together.
-
-\section{DTrace Components}
-
-There are three main components of DTrace: the kernel module, a set of
-providers and the DTrace command line utility (DTrace CLI). The kernel
-module and providers run in kernel mode and are responsible for
-collecting data specified by the instrumentation and transmitting it
-back to userland. The DTrace CLI is the users interface to instrument
-the system providing the mechanisms for specifying instrumentation and
-displaying the results. Each component is discussed in greater detail
-in the following sections.
-
-\subsection{Kernel Module}
+and the libraries, which tie all of the components together.  Users
+interact with OpenDTrace via the \texttt{dtrace} command line tool.
 
 The DTrace kernel model is the heart of the DTrace framework. This
 module is responsible for the coordination of all other components
 used in instrumentation. It keeps track of all registered providers
-and informs them when to enable or disable their probes. When a
-providers probe fires, the DTrace kernel module is responsible for
-executing the necessary instrumentation code and providing the data
-its consumers.
+and informs them when to enable or disable their probes. When a probe
+fires, the OpenDTrace kernel module is responsible for executing the
+necessary instrumentation code and providing the data to any
+consumers.
 
 The kernel module is also the intermediary between the DTrace user
 interface and the providers. When compiling user scripts, the kernel
 module provides the D compiler with probe arguments and types. Once
-compiled, scripts are handed off to the module as Enabling Code Blocks
-(ECBs) to be executed as probes fire. Once executed, the data is
-handed back to the user interface for display to the end user.
+compiled, scripts are pushed into the kernel as Enabling Code Blocks
+(ECBs) to be executed when probes fire. After each ECB is executed,
+the data is handed back to user space where the \texttt{dtrace}
+command line tool, or other programs linked against the OpenDtrace
+libraries can manipulate or display the data to end users.
 
-\subsection{Provider}
+Providers in OpenDTrace encapsulate the probe points that are used to
+instrument code and provide data to the end user. A provider defines
+both a set of probe points as well as the standard by which the system
+interacts with that set of probe points.  For example the Function
+Boundary Tracepoint (fbt) provider defines \texttt{return} trace
+points in which only arguments zero ($0$) and one ($1$) are valid and
+which always contain the return value and return address
+respectively, whereas no other provider has such a definition.
 
-Providers in DTrace provide the probe points that are used to
-instrument code and provide data to the end user. Dtrace includes a
-set of providers within the framework (see Table XXX), but developers
-can developer their own to expose more information from their
-code. These providers are often developed as separate kernel models,
-but there is a mechanism to allow for providers to be written for
-userspace processes called Userspace Defined Static Tracing
-(USDT). USDT is covered in Chapter XXX.
+OpenDTrace has a base set of providers that are shipped as part of the
+system, (see Table XXX), but developers are free to create their own to
+expose more or different information from their code. Providers can be
+developed either for the kernel, in which case they are defined as
+kernel modules, or for user space, as part of the User Defined Static
+Tracing (USDT) system.
 
-A provider is simply a collection of probe points. These probes are
-functions that are run when certain points of the code are
-reached. The probe gathers data of interest and calls back into the
-DTrace kernel module for further processing. Since the overhead of
-probes should be avoided when data is not required, the provider is
-responsible for tracking when probes are enables and implementing a
-mechanism for the kernel module to update their state.
+A provider is simply a collection of probe points. Probe points are
+functions that are run when certain points in the code are
+reached. The probe gathers data of interest and passed data back into
+the OpenDTrace kernel module for further processing. Since the
+overhead of probes should be avoided when data is not required, the
+provider is responsible for tracking when probes are enabled and
+implementing a mechanism for the kernel module to update their state.
 
-\subsection{DTrace CLI}
+The user space interface to DTrace is the DTrace command line utility,
+\texttt{drace(1)}. The \texttt{dtrace} command line utility handles
+all run time interaction with the OpenDTrace system, such as
+submitting scripts for execution as well as configuring options as
+memory usage, and how often the system should flush data from the
+kernel.  The complete syntax and set of options for the
+\texttt{dtrace} command is given in the manual page.
 
-The user interface to DTrace is the DTrace command line utility,
-DTrace(1M). Standard use of the CLI allows the user to configure
-DTrace parameters (such as memory usage), input scripts (either
-through the command line or in files) to be executed by DTrace and
-display the results. Other functions of the CLI are not covered in
-this section.
+The majority of the DTrace CLI functionality is provided through calls
+to the DTrace user-space library, \texttt{libdtrace}, which is
+responsible for setting DTrace options, compiling D scripts, and
+passing compiled D code to the kernel for
+execution. \texttt{libdtrace} provides the mechanism for all
+interactions with DTrace in the kernel.
 
-The majority of the DTrace CLI functionality is actually provided
-through calls to the DTrcae userspace library, libdtrace. This library
-is responsible for setting DTrace options, compiling D scripts, and
-passing compiled code to the kernel for future execution. libdtrace
-provides the mechanism for all interactions with DTrace in the kernel.
+\section{Probe Life Cycle}
+\label{sec:lifecycle}
 
-\section{Typical DTrace Life Cycle}
-
-A diagram of a generic example of instrumentation with DTrace is
-giving in Figure \ref{fig:lifecycle}. For the purposes of this example
-it is assumed that the DTrace kernel module has already been loaded
-(usually at boot). All execution within the providers is ignored and
-only the interactions between components is described. Internal
-functions or interest within the kernel module and CLI are shown.
+An example of instrumentation with OpenDTrace is shown in
+Figure~\ref{fig:lifecycle}. For the purposes of this example it is
+assumed that the DTrace kernel module has already been loaded during
+system boot. We ignore execution of code withing any of the providers
+and only discuss the interactions between components. Internal
+functions of interest within the kernel module and CLI are shown.
 
 \begin{figure}[htpb]
 	\centering
@@ -84,40 +80,43 @@ functions or interest within the kernel module and CLI are shown.
 	\label{fig:lifecycle}
 \end{figure}
 
-When a provider is first loaded it registers itself with the DTrace
-kernel module (1). At this point it does enumerate all of the
-available probes. These probes are also disabled by default.
+When a provider is first loaded it registers itself with the
+OpenDTrace kernel module (1). The registration process causes the
+provider to enumerate all of its available probes and the probes are
+also disabled by default.
 
-The provider and kernel module are then idle until such time that
-instrumentation is requested. This is done via the DTrace CLI, with
-the end user providing a D script, specifying the code to be run when
-a probe fires (2). When the CLI is run it initializes libdtrace, which
-in turn is responsible for having the kernel module initialize
-buffers. These buffers are used by the kernel module to store the
-results of the instrumentation.
+The provider and kernel module remain idle until instrumentation is
+requested. Instrumentation is requested via the \texttt{dtrace}
+command in cooperation with the \texttt{libdtrace} library.  The the
+user provides a D script, specifying the code to be run when a probe
+fires (2). When the \texttt{dtrace} command executes it initializes
+the \texttt{libdtrace} library, which in turn causes the kernel module
+to initialize some tracing state and set up memory buffers to stored
+the trace data.
 
-libdtrace then performs the compilation of the D script (3). As part
+The \texttt{libdtrace} library then compiles the D script (3). As part
 of this process the compiler queries the kernel module to determine
 the arguments for probes of interest via an ioctl (3a). The kernel in
-turn queries the provider for the probe arguments descriptions and
-they are returned to the compiler. In the case where probe argument
-types are given, the compiler can fail when there is a type
-mismatch. If no type information is provided the compilation will
-continue and any mismatch will result in a runtime error.
+turn queries the provider for a description of the probe arguments
+which are returned to the compiler.  If the arguments discovered by
+the kernel module do not match those supplied in the D script the
+compiler will signal an error and abort compilation of the D script.
+If the script did not supply any type information the compilation will
+complete and any mismatch will result in a runtime error.
 
 The result of the D script compilation is an Enabling Code Block
 (ECB). The ECB is provided to the kernel module (3c) which stores it
-with others in a tree like structure. At this point the kernel module
-also tell the provider to enable the probes that have been
-instrumented.
+with others in a tree like structure. Once the ECB is safely stored in
+the kernel, the kernel module tells the provider to enable the probes
+that are to be instrumented.
 
-When a provider reaches a point in execution that has an enabled
-probe, it calls into the kernel module to fire it (5). The kernel
+When a code execution reaches a point that has an enabled probe, the
+probe fires and a call is made into the kernel module (5). The kernel
 module then walks through the tree of ECBs, executing any that match
-the probe that was fired (6). The resulting data is written into the
-buffer created upon the initialization of libdtrace. This data is then
-copied out of the kernel by the library (7). The final result are then
-made available to the end user (8).
+the probe that was fired (6). The captured data is written into the
+buffer created when \texttt{libdtrace} was initialized. At a later
+point the data is copied out of the kernel by the library (7), and
+then the final results are made available to the end user (8).
 
 \section{Privilege Model}
 \label{sec:privilege}
