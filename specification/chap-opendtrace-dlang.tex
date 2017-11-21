@@ -67,34 +67,37 @@ thread-local and clause-local variables are. In a multithreaded
 environment, global variables should be used sparingly. While it is
 evident that a value stored in a global variable may be overwritten by
 another probe at any time, there is more subtle behavior at
-hand. Consider the following example:
+hand. Consider the script in Figure~\ref{fig:global-var-usage}. \newline
 
 \begin{figure}
   \begin{lstlisting}
-    dtrace:::BEGIN
-    {
-      num_syscalls = 0;
-    }
+dtrace:::BEGIN
+{
+    num_syscalls = 0;
+}
+
+syscall:::entry
+{
+    num_syscalls++;
+}
     
-    syscall:::entry
-    {
-      num_syscalls++;
-    }
-    
-    dtrace:::END
-    {
-      printf("Number of syscalls: %d\n", num_syscalls);
-    }
+dtrace:::END
+{
+    printf("Number of syscalls: %d\n", num_syscalls);
+}
   \end{lstlisting}
   \caption{Global Variable Usage}
   \label{fig:global-var-usage}
 \end{figure}
 
 \noindent
-Because DIF performs all of sit operations on a virtual machine's
-registers as opposed to variables in memory, the ++ operator is not
-atomic. When we compile the syscall:::entry clause, we get the
-following DIF output:
+Because DIF performs all of sit operations on a virtual machine's registers as
+opposed to variables in memory, the ++ operator is not atomic. Compiling the
+syscall:::entry clause results in DIF shown in Figure~\ref{fig:dif-asm}.  This
+DIF section is safe, as long as the num\_syscalls variable is not visible from
+any other thread. If it is visible and accessible from another thread, it
+suffers from a race condition which results in wrong information being given to
+the user. The race condition is shown in Figure~\ref{fig:race}. \newline
 
 \begin{figure}
 \begin{lstlisting}
@@ -107,23 +110,17 @@ stgs %r2, num_syscalls /* Store the result back into num_syscalls */
   \label{fig:dif-asm}
 \end{figure}
 
-\noindent
-This DIF section is safe, as long as the num\_syscalls variable is not visible
-from any other thread. If it is visible and accessible from another thread, it
-suffers from a race condition which results in wrong information being given to
-the user. Consider the following:
-
 \begin{figure}
   \begin{lstlisting}
-      Thread 1                     Thread 2
-ldgs %r1, num_syscalls
-                              ldgs %r3, num_syscalls
-                              setx %r4, inttab[0]
-                              add  %r4, %r3, %r4
-setx %r2, inttab[0]
-add  %r2, %r1, %r2
-stgs %r2, num_syscalls
-                              stgs %r4, num_syscalls
+                  Thread 1                     Thread 2
+            ldgs %r1, num_syscalls
+                                          ldgs %r3, num_syscalls
+                                          setx %r4, inttab[0]
+                                          add  %r4, %r3, %r4
+            setx %r2, inttab[0]
+            add  %r2, %r1, %r2
+            stgs %r2, num_syscalls
+                                          stgs %r4, num_syscalls
   \end{lstlisting}
   \caption{Race Condition}
   \label{fig:race}
@@ -136,24 +133,25 @@ worth noting that this behaviour is not observed because the thread was
 preempted, but simply by the fact that DTrace does not guarantee any ordering
 outside of each CPU core. This behaviour applies to all of the operations
 performed on global variables and as a result, they should only be used in
-probes that are guaranteed to fire on a single thread.
+probes that are guaranteed to fire on a single thread. \newline
 
 \noindent
 Often the desired behaviour with global variables can be achieved through
-aggregations. The above script ought to be written in the following way in order
-to be thread-safe:
+aggregations. The script shown in Figure~\ref{fig:global-var-usage} ought to be
+written using an equivalent aggregation function, as shown in
+Figure~\ref{fig:avoiding-the-race}.
 
 \begin{figure}
   \begin{lstlisting}
-    syscall:::entry
-    {
-      @num_syscalls = count();
-    }
+syscall:::entry
+{
+    @num_syscalls = count();
+}
 
-    dtrace:::END
-    {
-      printa(@num_syscalls);
-    }
+dtrace:::END
+{
+    printa(@num_syscalls);
+}
   \end{lstlisting}
   \caption{Avoiding the race condition}
   \label{fig:avoiding-the-race}
