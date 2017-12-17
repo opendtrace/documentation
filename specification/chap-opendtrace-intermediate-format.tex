@@ -1,18 +1,13 @@
-\section{DTrace Instruction Version}
-
-This specification describes the DTrace Intermediate Format version 2, as
-shipped in Illumos 5, FreeBSD 8-12, and Mac OS X 10.5-10.13
-
 \section{The DIF Interpreter}
 
-The DTrace Intermediate Format (DIF) interpreter executes instructions
-on behalf of D scripts that are associated with predicates and
-actions.  DIF is a simple, RISC-like, instruction set where each
-instruction consists of a 32-bit, native-endian integer whose most
-significant 8 bits contain an opcode allowing the remainder of the
-instruction to be decoded.  Interpretation is executed in a loop
-within the \function{dtrace_dif_emulate} function, which has, as its
-first argument, a pointer to a DIF Object or
+The DTrace Intermediate Format (DIF) interpreter is a virtual machine
+that executes instructions on behalf of D scripts that are associated
+with predicates and actions.  DIF is a simple, RISC-like, instruction
+set where each instruction consists of a 32-bit, native-endian integer
+whose most significant 8 bits contain an opcode allowing the remainder
+of the instruction to be decoded.  Interpretation is executed in a
+loop within the \function{dtrace_dif_emulate} function, which has, as
+its first argument, a pointer to a DIF Object or
 \struct{dtrace_difo_t}. Each of the DIF objects gets executed in its
 own separate environment and must return a value using the
 \instruction{ret} instruction. Instructions are executed one at a
@@ -25,12 +20,14 @@ the necessary checks.
 
 The following chapter describes the overall implementation of the DIF
 interpreter as well as how the various instructions are implemented,
-along with various implementation details.  
+along with various implementation details. \footnote{This
+  specification describes the DTrace Intermediate Format version 2, as
+  shipped in Illumos 5, FreeBSD 8-12, and Mac OS X 10.5-10.13}
 
 \subsection{Registers}
 \label{sec:dif-registers}
 
-The DTrace virtual machine is made up of eight (8) integer registers
+The OpenDTrace virtual machine is made up of eight (8) integer registers
 and eight (8) tuple registers.  The 0th integer register always
 contains the value zero (0).  All operations are carried out using
 registers \registerop{r1} and \registerop{r2} as operands and
@@ -89,7 +86,7 @@ Format described in Subsection~\ref{subsec:b-format}.
 \subsection{Subroutine Calls}
 \label{sec:subroutines}
 
-DTrace provides an extensive set of subroutines for use by D programs.
+OpenDTrace provides an extensive set of subroutines for use by D programs.
 The subroutines are implemented within the kernel code via a set of
 functions which are centrally dispatched from the
 \function{dtrace_dif_subr} function.  Within DIF subroutines are
@@ -175,7 +172,7 @@ of scalar variables inside of the \function{dtrace_dif_variable} function.
 Each instruction consists of a 32-bit, native-endian integer whose most
 significant 8 bits contain an opcode allowing the remainder of the instruction
 to be decoded.
-To ease parsing, three major formats (R, B, and W) are used for all DTrace
+To ease parsing, three major formats (R, B, and W) are used for all OpenDTrace
 instructions, capturing different types of operations: register-to-register
 instructions accepting zero or more register operands; branch instructions
 accepting a target label as a single operand; and wide-immediate instructions
@@ -209,10 +206,11 @@ instruction.
 
 
 A modified version of the Register Format is used when loading and
-storing data in array variables in DTrace. The main difference between the
-regular Register Format and the modified one used for arrays, is that the
-\registerop{r1} register location is used as the variable identificator, the
-\registerop{r2} register itself contains the optional index in the array.
+storing data in array variables in OpenDTrace. The main difference
+between the regular Register Format and the modified one used for
+arrays, is that the \registerop{r1} register location is used as the
+variable identificator, the \registerop{r2} register itself contains
+the optional index in the array.
 
 \begin{center}
 \begin{bytefield}[endianness=big,bitformatting=\scriptsize]{32}
