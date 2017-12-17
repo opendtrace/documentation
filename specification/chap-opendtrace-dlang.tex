@@ -1,6 +1,6 @@
 The D language is a language inspired by the AWK programming language
 \cite{Aho:1987:APL:29361} and the C programming language
-\cite{Kernighan:1988}\cite{DTrace2004}. In this chapter, we give a
+\cite{DTrace2004}\cite{Kernighan:1988}. In this chapter, we give a
 formal definition of the D programming language that is a part of
 OpenDTrace, as well as elaborate on its properties in multithreaded
 environments.
@@ -16,11 +16,6 @@ environments.
 
 % TODO: Explain what the safety guarantees of the D language are, so that we can
 % refer to them later on.
-
-\section{Aggregations}
-\label{sec:aggregations}
-
-% TODO: Write the section on aggregations.
 
 \section{Variables}
 \label{sec:d-variables}
@@ -55,7 +50,7 @@ undefined.
 % think about this a bit more.
 
 When tracing, DTrace guarantees that it can not be preempted inside of
-the \function{dtrace_probe} function, but it does not guarantee that
+the \function{dtrace_probe()} function, but it does not guarantee that
 everything in the executing DIF will be thread-safe. DTrace does not
 allow access to locking primitives, because a programming error might
 violate the safety guarantees that OpenDTrace was designed to provide.
@@ -91,13 +86,15 @@ dtrace:::END
 \end{figure}
 
 \noindent
-Because DIF performs all of sit operations on a virtual machine's registers as
-opposed to variables in memory, the ++ operator is not atomic. Compiling the
-syscall:::entry clause results in DIF shown in Figure~\ref{fig:dif-asm}.  This
-DIF section is safe, as long as the num\_syscalls variable is not visible from
-any other thread. If it is visible and accessible from another thread, it
-suffers from a race condition which results in wrong information being given to
-the user. The race condition is shown in Figure~\ref{fig:race}. \newline
+Because DIF performs all of its operations on a virtual machine's
+registers as opposed to variables in memory, the ++ operator is not
+atomic. Compiling the syscall:::entry clause from
+Figure~\ref{fig:global-var-usage} generates the DIF shown in
+Figure~\ref{fig:dif-asm}.  This DIF section is safe, as long as the
+num\_syscalls variable is not visible from any other thread. If it is
+visible and accessible from another thread, it suffers from a race
+condition which results in wrong information being given to the
+user. The race condition is shown in Figure~\ref{fig:race}. \newline
 
 \begin{figure}
 \begin{lstlisting}
@@ -163,3 +160,9 @@ As mentioned in Subsection~\ref{subsec:thread-local-variables}, thread-local
 variables are only visible within a single thread.
 
 \subsection{Clause-local variables}
+
+\section{Aggregations}
+\label{sec:aggregations}
+
+% TODO: Write the section on aggregations.
+
