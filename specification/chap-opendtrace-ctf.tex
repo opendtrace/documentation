@@ -108,13 +108,13 @@ with a name that references the string table.
 \end{figure}
 
 A simple type, one who's size is less than 64 Kbytes, is stored in a
-\verb|ctf_stype|, Figure~\ref{fig:ctf-stype}.  The \verb|name| is a
-reference to a string in the string table.  The \verb|info| field is
-encoded differently for each type, as will be explained fully in the
-rest of this chapter.  The last field is either the size, in bytes, of
-the structure or it is a reference to another type, encoded using the
-referenced type's ID.  The majority of types in a C program will fit
-within a \verb|ctf_stype|.
+\verb|ctf_stype|, shown in Figure~\ref{fig:ctf-stype}.  The
+\verb|name| is a reference to a string in the string table.  The
+\verb|info| field is encoded differently for each type, as will be
+explained fully in the rest of this chapter.  The last field is either
+the size, in bytes, of the structure or it is a reference to another
+type, encoded using the referenced type's ID.  The majority of types
+in a C program will fit within a \verb|ctf_stype|.
 
 \begin{figure}
   \centering
