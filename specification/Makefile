@@ -8,7 +8,7 @@ SOURCE=								\
 	acknowledgments.tex					\
 	chap-intro.tex						\
 	chap-opendtrace-operation.tex				\
-	chap-opendtrace-ctf.tex				\
+	chap-opendtrace-ctf.tex					\
 	chap-opendtrace-instruction-reference.tex		\
 	chap-opendtrace-intermediate-format.tex			\
 	chap-opendtrace-object-format.tex			\
@@ -16,6 +16,7 @@ SOURCE=								\
 	chap-opendtrace-variable-records.tex			\
 	chap-opendtrace-code.tex				\
 	chap-opendtrace-dlang.tex				\
+	chap-opendtrace-providers.tex				\
 	preamble.tex						\
 	instr/add.tex						\
 	instr/allocs.tex					\

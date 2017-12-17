@@ -17,22 +17,62 @@ with their associated constants and metadata.
 %\section{Motivation}
 \section{Background}
 
-\textbf{XXRW: Ideally, there would be a more detailed description of both the
-usage model, and also the architectural elements, of DTrace here.
-That and some citations to DTrace documentation, the FreeBSD/Solaris books,
-etc.}
-
 The original DTrace code was designed and developed by Sun
 Microsystems to solve a particular problem, being able to instrument
 systems that were currently deployed, without requiring the
-recompilation of any code.\cite{DTrace2004}.  The DTrace system was
+recompilation of any code\cite{DTrace2004}.  The DTrace system was
 written in a portable style typical of code from the Sun Microsystems
 Kernel Development group in the early 2000s.  Shortly after the
 release of the original DTrace system a port was made, by John Birrel,
 to the FreeBSD Operating System.  A port was also made by Apple
 Computer to their Mac OS X at about the same time.  DTrace gained
 popularity as a dynamic tracing system throughout the first decade of
-the 21st Century and its usage is well documented.
+the 21st Century and its usage is well
+documented\cite{mckusick2014design}\cite{Microsystems2008a}.
+
+The OpenDTrace system is meant to capture information about systems at
+run time, without the need to stop the program or kernel being
+investigated, and as such can be thought of as a run time debugger.
+While traditional debuggers might be attached to a running process,
+they most often stop the target process immediately so that the
+programmer can beging to investigate a problem in the code.  The
+operational model for OpeDTrace differs from a debugger in several
+ways.
+
+When a user decides to apply OpenDTrace to their system they must
+first think about the piece of information they want, and how that
+information might be represented.  In a traditional debugger, the user
+most often wants to know the value of one or more variables at some
+point in the program flow.  ``Is \emph{a} greater than 10 at line 100
+of module X?'', is a typical query that might be made of a debugger.
+The answer to this question is gathered by setting a break point at
+line 100, where the program will stop, and printing the value of the
+varialbe \emph{A}.  Debuggers are most often used in a \emph{stop and
+  inquire} mode, while a tracing system, such as OpenDTrace, aims to
+keep overheads low enogh that we can capture and analyze information
+at run time with very little perturbation to the overall system.  The
+tracing system \emph{only} captures data at run time and \emph{never}
+stops the running system, which has the side effect of being quite
+useful for critical systems such as the operating system kernel and
+its components, such as device drivers, locking primitves and
+scheduler.
+
+From the perspective of the user the OpenDTrace model is one of
+\emph{Plan}, \emph{Capture} and \emph{Analyze}.  The \emph{Plan} phase
+is where the user writes brief scripts, in the D langauge, that
+describe the probe points from which they wish to capture data.
+Conditions can be placed upon when these probe points are active, so
+that the amount of data captured in the next phase, can be narrowed
+down to only what is absolutely neessary to feed the analysis and
+answer the question we are asking of the system.  The \emph{Capture}
+phase is triggered by the \texttt{dtrace} program pushing the plan,
+in the form of compiled code, into the operating system's kernel which
+activates the required probe points.  The OS kernel captures the data
+into bufers which are eventually fed out to user space, where they can
+be analyzed.  The \emph{Analysis} is undertaken in user space where
+the previously written plan, in the form of D scripts, directs the
+OpenDTrace library to extract, display and or aggregate the captured
+data.
 
 OpenDTrace is made up of several components, including kernel code,
 user space libraries, and command line tools.  The OpenDTrace system
@@ -61,7 +101,8 @@ filesystem (\texttt{vfs}) and process scheduler (\texttt{proc}).
 Arbitrary trace points can be added to the kernel via the
 statically defined trace point (\texttt{sdt}) provider.  User space programs
 are traced either with the \texttt{pid} provider or using the 
-statically defined trace point (\texttt{usdt}) provider.
+statically defined trace point (\texttt{usdt}) provider.  A complete
+list of providers is given in Appendix~\ref{chap:chap:opendtrace-providers}.
 
 \section{Version History}
 
