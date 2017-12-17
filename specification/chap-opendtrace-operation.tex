@@ -121,6 +121,11 @@ then the final results are made available to the end user (8).
 \section{Privilege Model}
 \label{sec:privilege}
 
+The OpenDTrace privilege model is relatively simple, any program that
+wishes to trace another program must be running with \emph{root}
+privileges.  Some operating systems, such as Illumos, provide a more
+nuanced privilege model.
+
 \section{Tracepoint Format}
 \label{sec:tracepoint-format}
 
