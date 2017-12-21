@@ -15,8 +15,31 @@ environments.
 \section{Safety}
 \label{sec:safety}
 
-% TODO: Explain what the safety guarantees of the D language are, so that we can
-% refer to them later on.
+The D language will look familiar to anyone who has programmed in C or
+its close linguistice relatives, but in order to provide certain
+safety guarantees there are features of C like languages that are
+missing from D.  The most obviously missing feature is the lack of any
+sort of looping mechanism.  Once they are compiled into byte code D
+scripts are loaded into the kernel where they run to completion.  A
+script that was allowed to loop might, due to error or intent, loop
+forever, causing the operating system kernel to lock up and require a
+system reset.  D lacks any form of loops to prevent such errors from
+occurring.
+
+% Are limitations of table sizes and the like which are pretty clearly
+% in place for safety to be included here?  Values such as:
+
+% #define	DIF_INTOFF_MAX		0xffff	/* highest integer table offset */
+% #define	DIF_STROFF_MAX		0xffff	/* highest string table offset */
+% #define	DIF_REGISTER_MAX	0xff	/* highest register number */
+% #define	DIF_VARIABLE_MAX	0xffff	/* highest variable identifier */
+% #define	DIF_SUBROUTINE_MAX	0xffff	/* highest subroutine code */
+% #define	DIF_VAR_ARRAY_MAX	0x00ff	/* highest numbered array variable */
+% #define	DIF_VAR_OTHER_MAX	0xffff	/* highest numbered scalar or assc */
+
+% from dtrace.h clearly limit the amount of resources a script can ask
+% for and although generous for a scripting language clearly exist to
+% prevent D scripts from asking for too much.
 
 \section{Variables}
 \label{sec:d-variables}
@@ -32,15 +55,21 @@ per-thread basis and are identified by the prefix
 probe before their use, as the value is otherwise considered
 undefined.
 
-% TODO: We should fill this out with explanations about each type of variables.
-% This is only for *variables*, NOT aggregations. They go in their own section.
-
 \subsection{Global variables}
+\label{subsec:global-variables}
+
+Any variable introduced in a D script that is not declared as part of
+a \verb|this->| or \verb|self->| is considered to be global in scope,
+meaning that it can be accessed from any action associated with a
+probe when a set of probes are simultaneously activated.  Global
+variables are allocated and instantiated when they are first
+referenced.
 
 \subsection{Thread-local variables}
 \label{subsec:thread-local-variables}
 
 \subsection{Clause-local variables}
+\label{subsec:clause-local-variables}
 
 \section{Multithreading}
 
