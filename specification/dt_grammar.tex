@@ -1,0 +1,918 @@
+
+\begingroup\makeatletter%
+\ifx\bnfdef\undefined%
+\gdef\bnfdef{%
+  {{$::=$}}%
+  }%
+\fi%
+\ifx\bnfor\undefined%
+\gdef\bnfor{%
+  {{$\,|\,$}}%
+  }%
+\fi%
+\ifx\bnfopt\undefined%
+\gdef\bnfopt#1{%
+  {{$\lbrack$ #1 $\rbrack$}}%
+  }%
+\fi%
+\ifx\bnflist\undefined%
+\gdef\bnflist#1{%
+  {{$\lbrace$ #1 $\rbrace$}}%
+  }%
+\fi%
+\ifx\bnfgroup\undefined%
+\gdef\bnfgroup#1{%
+  {{$($ #1 $)$}}%
+  }%
+\fi%
+\ifx\bnftoken\undefined%
+\gdef\bnftoken#1{%
+  {{\bfseries\ttfamily #1}}%
+  }%
+\fi%
+\ifx\bnfleftident\undefined%
+\gdef\bnfleftident#1{%
+  {{\itshape #1}}%
+  }%
+\fi%
+\ifx\bnfrightident\undefined%
+\gdef\bnfrightident#1{%
+  {{\itshape #1}}%
+  }%
+\fi%
+\gdef\bnftt{cmtt}%
+\gdef\bnfttselect#1#2{%
+\ifx\f@family\bnftt #1\else #2\fi%
+}%
+\endgroup%
+
+\newcommand{\bnfunderscore}{\bnfttselect{\char`\_}{\_}}
+\newcommand{\bnfbackslash}{\bnfttselect{\char`\\}{\textbackslash}}
+\newcommand{\bnfleftbrace}{\bnfttselect{\char`\{}{\{}}
+\newcommand{\bnfrightbrace}{\bnfttselect{\char`\}}{\}}}
+\newcommand{\bnfgreater}{\bnfttselect{\char`\>}{\textgreater}}
+\newcommand{\bnfless}{\bnfttselect{\char`\<}{\textless}}
+\newlength\rulelhs
+\newlength\rulemid
+\newlength\rulerhs
+\newcommand{\ebnftable}{
+\settowidth\rulelhs{parameter\bnfunderscore{}declaration\bnfunderscore{}specifiers}
+\settowidth\rulemid{::=}
+\setlength\rulerhs{\textwidth}
+\addtolength\rulerhs{-\rulelhs}
+\addtolength\rulerhs{-\rulemid}
+\addtolength\rulerhs{-6\tabcolsep}
+
+\begin{longtable}{lrl}
+\bnfleftident{dtrace\bnfunderscore{}program} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfgroup{\bnfrightident{d\bnfunderscore{}expression} \bnfor{} \bnfrightident{d\bnfunderscore{}program} \bnfor{} \bnfrightident{d\bnfunderscore{}type}} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}EOF}
+  \end{minipage}\\
+
+\bnfleftident{d\bnfunderscore{}expression} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}CTX\bnfunderscore{}DEXPR} \bnfopt{\bnfrightident{expression}}
+  \end{minipage}\\
+
+\bnfleftident{d\bnfunderscore{}program} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}CTX\bnfunderscore{}DPROG} \bnfopt{\bnfrightident{translation\bnfunderscore{}unit}}
+  \end{minipage}\\
+
+\bnfleftident{d\bnfunderscore{}type} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}CTX\bnfunderscore{}DTYPE} \bnfopt{\bnfrightident{type\bnfunderscore{}name}}
+  \end{minipage}\\
+
+\bnfleftident{translation\bnfunderscore{}unit} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{external\bnfunderscore{}declaration} \bnflist{\bnfrightident{external\bnfunderscore{}declaration}}
+  \end{minipage}\\
+
+\bnfleftident{external\bnfunderscore{}declaration} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{inline\bnfunderscore{}definition}
+  \end{minipage}\\
+                     &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{translator\bnfunderscore{}definition}
+  \end{minipage}\\
+                     &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{provider\bnfunderscore{}definition}
+  \end{minipage}\\
+                     &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{probe\bnfunderscore{}definition}
+  \end{minipage}\\
+                     &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{declaration}
+  \end{minipage}\\
+
+\bnfleftident{inline\bnfunderscore{}definition} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}INLINE} \bnfrightident{declaration\bnfunderscore{}specifiers} \bnfrightident{declarator} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}ASGN} \bnfrightident{assignment\bnfunderscore{}expression} \bnftoken{;}
+  \end{minipage}\\
+
+\bnfleftident{translator\bnfunderscore{}definition} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}XLATOR} \bnfrightident{type\bnfunderscore{}name} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}LT} \bnfrightident{type\bnfunderscore{}name} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}IDENT} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}GT} \bnftoken{\bnfleftbrace{}} \bnfopt{\bnfrightident{translator\bnfunderscore{}member\bnfunderscore{}list}} \bnftoken{\bnfrightbrace{}} \bnftoken{;}
+  \end{minipage}\\
+
+\bnfleftident{translator\bnfunderscore{}member\bnfunderscore{}list} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{translator\bnfunderscore{}member} \bnflist{\bnfrightident{translator\bnfunderscore{}member}}
+  \end{minipage}\\
+
+\bnfleftident{translator\bnfunderscore{}member} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}IDENT} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}ASGN} \bnfrightident{assignment\bnfunderscore{}expression} \bnftoken{;}
+  \end{minipage}\\
+
+\bnfleftident{provider\bnfunderscore{}definition} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}PROVIDER} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}IDENT} \bnftoken{\bnfleftbrace{}} \bnfopt{\bnfrightident{provider\bnfunderscore{}probe\bnfunderscore{}list}} \bnftoken{\bnfrightbrace{}} \bnftoken{;}
+  \end{minipage}\\
+
+\bnfleftident{provider\bnfunderscore{}probe\bnfunderscore{}list} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{provider\bnfunderscore{}probe} \bnflist{\bnfrightident{provider\bnfunderscore{}probe}}
+  \end{minipage}\\
+
+\bnfleftident{provider\bnfunderscore{}probe} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}PROBE} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}IDENT} \bnfrightident{function} \bnfopt{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}COLON} \bnfrightident{function}} \bnftoken{;}
+  \end{minipage}\\
+
+\bnfleftident{probe\bnfunderscore{}definition} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{probe\bnfunderscore{}specifiers} \bnfopt{\bnftoken{\bnfleftbrace{}} \bnfrightident{statement\bnfunderscore{}list} \bnftoken{\bnfrightbrace{}} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}DIV} \bnfrightident{expression} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}EPRED} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}DIV} \bnfrightident{expression} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}EPRED} \bnftoken{\bnfleftbrace{}} \bnfrightident{statement\bnfunderscore{}list} \bnftoken{\bnfrightbrace{}}}
+  \end{minipage}\\
+
+\bnfleftident{probe\bnfunderscore{}specifiers} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{probe\bnfunderscore{}specifier\bnfunderscore{}list}
+  \end{minipage}\\
+
+\bnfleftident{probe\bnfunderscore{}specifier\bnfunderscore{}list} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{probe\bnfunderscore{}specifier} \bnflist{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}COMMA} \bnfrightident{probe\bnfunderscore{}specifier}}
+  \end{minipage}\\
+
+\bnfleftident{probe\bnfunderscore{}specifier} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}PSPEC}
+  \end{minipage}\\
+                &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}INT}
+  \end{minipage}\\
+
+\bnfleftident{statement\bnfunderscore{}list\bnfunderscore{}impl} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnflist{\bnfrightident{statement}}
+  \end{minipage}\\
+
+\bnfleftident{statement\bnfunderscore{}list} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{statement\bnfunderscore{}list\bnfunderscore{}impl} \bnfopt{\bnfrightident{expression}}
+  \end{minipage}\\
+
+\bnfleftident{statement\bnfunderscore{}or\bnfunderscore{}block} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{statement}
+  \end{minipage}\\
+                   &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnftoken{\bnfleftbrace{}} \bnfrightident{statement\bnfunderscore{}list} \bnftoken{\bnfrightbrace{}}
+  \end{minipage}\\
+
+\bnfleftident{statement} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnftoken{;}
+  \end{minipage}\\
+          &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{expression} \bnftoken{;}
+  \end{minipage}\\
+          &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}IF} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}LPAR} \bnfrightident{expression} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}RPAR} \bnfrightident{statement\bnfunderscore{}or\bnfunderscore{}block}
+  \end{minipage}\\
+          &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}IF} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}LPAR} \bnfrightident{expression} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}RPAR} \bnfrightident{statement\bnfunderscore{}or\bnfunderscore{}block} \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}ELSE} \bnfrightident{statement\bnfunderscore{}or\bnfunderscore{}block}
+  \end{minipage}\\
+
+\bnfleftident{argument\bnfunderscore{}expression\bnfunderscore{}list} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{assignment\bnfunderscore{}expression} \bnflist{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}COMMA} \bnfrightident{assignment\bnfunderscore{}expression}}
+  \end{minipage}\\
+
+\bnfleftident{primary\bnfunderscore{}expression} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}IDENT}
+  \end{minipage}\\
+                   &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}AGG}
+  \end{minipage}\\
+                   &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}INT}
+  \end{minipage}\\
+                   &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}STRING}
+  \end{minipage}\\
+                   &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}SELF}
+  \end{minipage}\\
+                   &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}THIS}
+  \end{minipage}\\
+                   &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}LPAR} \bnfrightident{expression} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}RPAR}
+  \end{minipage}\\
+
+\bnfleftident{postfix\bnfunderscore{}expression} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfgroup{\bnfrightident{primary\bnfunderscore{}expression} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}OFFSETOF} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}LPAR} \bnfrightident{type\bnfunderscore{}name} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}COMMA} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}IDENT} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}RPAR} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}OFFSETOF} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}LPAR} \bnfrightident{type\bnfunderscore{}name} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}COMMA} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}TNAME} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}RPAR} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}OFFSETOF} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}LPAR} \bnfrightident{type\bnfunderscore{}name} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}COMMA} \bnfrightident{dtrace\bnfunderscore{}keyword\bnfunderscore{}ident} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}RPAR} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}XLATE} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}LT} \bnfrightident{type\bnfunderscore{}name} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}GT} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}LPAR} \bnfrightident{expression} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}RPAR}} \bnflist{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}LBRAC} \bnfrightident{argument\bnfunderscore{}expression\bnfunderscore{}list} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}RBRAC} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}LPAR} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}RPAR} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}LPAR} \bnfrightident{argument\bnfunderscore{}expression\bnfunderscore{}list} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}RPAR} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}DOT} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}IDENT} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}DOT} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}TNAME} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}DOT} \bnfrightident{dtrace\bnfunderscore{}keyword\bnfunderscore{}ident} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}PTR} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}IDENT} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}PTR} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}TNAME} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}PTR} \bnfrightident{dtrace\bnfunderscore{}keyword\bnfunderscore{}ident} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}ADDADD} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}SUBSUB}}
+  \end{minipage}\\
+
+\bnfleftident{unary\bnfunderscore{}expression} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnflist{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}STRINGOF} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}SIZEOF} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}SUBSUB} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}ADDADD}} \bnfgroup{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}RPAR} \bnfrightident{type\bnfunderscore{}name} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}LPAR} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}SIZEOF} \bnfor{} \bnfrightident{cast\bnfunderscore{}expression} \bnfrightident{unary\bnfunderscore{}operator} \bnfor{} \bnfrightident{postfix\bnfunderscore{}expression}}
+  \end{minipage}\\
+
+\bnfleftident{unary\bnfunderscore{}operator} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}BAND}
+  \end{minipage}\\
+               &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}MUL}
+  \end{minipage}\\
+               &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}ADD}
+  \end{minipage}\\
+               &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}SUB}
+  \end{minipage}\\
+               &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}BNEG}
+  \end{minipage}\\
+               &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}LNEG}
+  \end{minipage}\\
+
+\bnfleftident{cast\bnfunderscore{}expression} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnflist{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}RPAR} \bnfrightident{type\bnfunderscore{}name} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}LPAR}} \bnfrightident{unary\bnfunderscore{}expression}
+  \end{minipage}\\
+
+\bnfleftident{multiplicative\bnfunderscore{}expression} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{cast\bnfunderscore{}expression} \bnflist{\bnfgroup{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}MUL} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}DIV} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}MOD}} \bnfrightident{cast\bnfunderscore{}expression}}
+  \end{minipage}\\
+
+\bnfleftident{additive\bnfunderscore{}expression} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{multiplicative\bnfunderscore{}expression} \bnflist{\bnfgroup{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}ADD} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}SUB}} \bnfrightident{multiplicative\bnfunderscore{}expression}}
+  \end{minipage}\\
+
+\bnfleftident{shift\bnfunderscore{}expression} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{additive\bnfunderscore{}expression} \bnflist{\bnfgroup{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}LSH} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}RSH}} \bnfrightident{additive\bnfunderscore{}expression}}
+  \end{minipage}\\
+
+\bnfleftident{relational\bnfunderscore{}expression} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{shift\bnfunderscore{}expression} \bnflist{\bnfgroup{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}LT} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}GT} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}LE} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}GE}} \bnfrightident{shift\bnfunderscore{}expression}}
+  \end{minipage}\\
+
+\bnfleftident{equality\bnfunderscore{}expression} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{relational\bnfunderscore{}expression} \bnflist{\bnfgroup{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}EQU} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}NEQ}} \bnfrightident{relational\bnfunderscore{}expression}}
+  \end{minipage}\\
+
+\bnfleftident{and\bnfunderscore{}expression} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{equality\bnfunderscore{}expression} \bnflist{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}BAND} \bnfrightident{equality\bnfunderscore{}expression}}
+  \end{minipage}\\
+
+\bnfleftident{exclusive\bnfunderscore{}or\bnfunderscore{}expression} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{and\bnfunderscore{}expression} \bnflist{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}XOR} \bnfrightident{and\bnfunderscore{}expression}}
+  \end{minipage}\\
+
+\bnfleftident{inclusive\bnfunderscore{}or\bnfunderscore{}expression} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{exclusive\bnfunderscore{}or\bnfunderscore{}expression} \bnflist{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}BOR} \bnfrightident{exclusive\bnfunderscore{}or\bnfunderscore{}expression}}
+  \end{minipage}\\
+
+\bnfleftident{logical\bnfunderscore{}and\bnfunderscore{}expression} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{inclusive\bnfunderscore{}or\bnfunderscore{}expression} \bnflist{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}LAND} \bnfrightident{inclusive\bnfunderscore{}or\bnfunderscore{}expression}}
+  \end{minipage}\\
+
+\bnfleftident{logical\bnfunderscore{}xor\bnfunderscore{}expression} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{logical\bnfunderscore{}and\bnfunderscore{}expression} \bnflist{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}LXOR} \bnfrightident{logical\bnfunderscore{}and\bnfunderscore{}expression}}
+  \end{minipage}\\
+
+\bnfleftident{logical\bnfunderscore{}or\bnfunderscore{}expression} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{logical\bnfunderscore{}xor\bnfunderscore{}expression} \bnflist{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}LOR} \bnfrightident{logical\bnfunderscore{}xor\bnfunderscore{}expression}}
+  \end{minipage}\\
+
+\bnfleftident{constant\bnfunderscore{}expression} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{conditional\bnfunderscore{}expression}
+  \end{minipage}\\
+
+\bnfleftident{conditional\bnfunderscore{}expression} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnflist{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}COLON} \bnfrightident{expression} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}QUESTION} \bnfrightident{logical\bnfunderscore{}or\bnfunderscore{}expression}} \bnfrightident{logical\bnfunderscore{}or\bnfunderscore{}expression}
+  \end{minipage}\\
+
+\bnfleftident{assignment\bnfunderscore{}expression} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnflist{\bnfrightident{assignment\bnfunderscore{}operator} \bnfrightident{unary\bnfunderscore{}expression}} \bnfrightident{conditional\bnfunderscore{}expression}
+  \end{minipage}\\
+
+\bnfleftident{assignment\bnfunderscore{}operator} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}ASGN}
+  \end{minipage}\\
+                    &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}MUL\bnfunderscore{}EQ}
+  \end{minipage}\\
+                    &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}DIV\bnfunderscore{}EQ}
+  \end{minipage}\\
+                    &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}MOD\bnfunderscore{}EQ}
+  \end{minipage}\\
+                    &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}ADD\bnfunderscore{}EQ}
+  \end{minipage}\\
+                    &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}SUB\bnfunderscore{}EQ}
+  \end{minipage}\\
+                    &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}LSH\bnfunderscore{}EQ}
+  \end{minipage}\\
+                    &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}RSH\bnfunderscore{}EQ}
+  \end{minipage}\\
+                    &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}AND\bnfunderscore{}EQ}
+  \end{minipage}\\
+                    &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}XOR\bnfunderscore{}EQ}
+  \end{minipage}\\
+                    &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}OR\bnfunderscore{}EQ}
+  \end{minipage}\\
+
+\bnfleftident{expression} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{assignment\bnfunderscore{}expression} \bnflist{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}COMMA} \bnfrightident{assignment\bnfunderscore{}expression}}
+  \end{minipage}\\
+
+\bnfleftident{declaration} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{declaration\bnfunderscore{}specifiers} \bnfopt{\bnfrightident{init\bnfunderscore{}declarator\bnfunderscore{}list}} \bnftoken{;}
+  \end{minipage}\\
+
+\bnfleftident{declaration\bnfunderscore{}specifiers} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnflist{\bnfrightident{type\bnfunderscore{}qualifier} \bnfor{} \bnfrightident{type\bnfunderscore{}specifier} \bnfor{} \bnfrightident{d\bnfunderscore{}storage\bnfunderscore{}class\bnfunderscore{}specifier}} \bnfgroup{\bnfrightident{type\bnfunderscore{}qualifier} \bnfor{} \bnfrightident{type\bnfunderscore{}specifier} \bnfor{} \bnfrightident{d\bnfunderscore{}storage\bnfunderscore{}class\bnfunderscore{}specifier}}
+  \end{minipage}\\
+
+\bnfleftident{parameter\bnfunderscore{}declaration\bnfunderscore{}specifiers} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{storage\bnfunderscore{}class\bnfunderscore{}specifier}
+  \end{minipage}\\
+                                 &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{storage\bnfunderscore{}class\bnfunderscore{}specifier} \bnfrightident{declaration\bnfunderscore{}specifiers}
+  \end{minipage}\\
+                                 &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{type\bnfunderscore{}specifier}
+  \end{minipage}\\
+                                 &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{type\bnfunderscore{}specifier} \bnfrightident{declaration\bnfunderscore{}specifiers}
+  \end{minipage}\\
+                                 &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{type\bnfunderscore{}qualifier}
+  \end{minipage}\\
+                                 &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{type\bnfunderscore{}qualifier} \bnfrightident{declaration\bnfunderscore{}specifiers}
+  \end{minipage}\\
+
+\bnfleftident{storage\bnfunderscore{}class\bnfunderscore{}specifier} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}AUTO}
+  \end{minipage}\\
+                        &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}REGISTER}
+  \end{minipage}\\
+                        &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}STATIC}
+  \end{minipage}\\
+                        &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}EXTERN}
+  \end{minipage}\\
+                        &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}TYPEDEF}
+  \end{minipage}\\
+
+\bnfleftident{d\bnfunderscore{}storage\bnfunderscore{}class\bnfunderscore{}specifier} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{storage\bnfunderscore{}class\bnfunderscore{}specifier}
+  \end{minipage}\\
+                          &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}SELF}
+  \end{minipage}\\
+                          &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}THIS}
+  \end{minipage}\\
+
+\bnfleftident{type\bnfunderscore{}specifier} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}VOID}
+  \end{minipage}\\
+               &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}CHAR}
+  \end{minipage}\\
+               &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}SHORT}
+  \end{minipage}\\
+               &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}INT}
+  \end{minipage}\\
+               &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}LONG}
+  \end{minipage}\\
+               &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}FLOAT}
+  \end{minipage}\\
+               &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}DOUBLE}
+  \end{minipage}\\
+               &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}SIGNED}
+  \end{minipage}\\
+               &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}UNSIGNED}
+  \end{minipage}\\
+               &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}USERLAND}
+  \end{minipage}\\
+               &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}STRING}
+  \end{minipage}\\
+               &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}TNAME}
+  \end{minipage}\\
+               &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{struct\bnfunderscore{}or\bnfunderscore{}union\bnfunderscore{}specifier}
+  \end{minipage}\\
+               &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{enum\bnfunderscore{}specifier}
+  \end{minipage}\\
+
+\bnfleftident{type\bnfunderscore{}qualifier} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}CONST}
+  \end{minipage}\\
+               &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}RESTRICT}
+  \end{minipage}\\
+               &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}VOLATILE}
+  \end{minipage}\\
+
+\bnfleftident{struct\bnfunderscore{}or\bnfunderscore{}union\bnfunderscore{}specifier} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{struct\bnfunderscore{}or\bnfunderscore{}union\bnfunderscore{}definition} \bnfrightident{struct\bnfunderscore{}declaration\bnfunderscore{}list} \bnftoken{\bnfrightbrace{}}
+  \end{minipage}\\
+                          &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{struct\bnfunderscore{}or\bnfunderscore{}union} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}IDENT}
+  \end{minipage}\\
+                          &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{struct\bnfunderscore{}or\bnfunderscore{}union} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}TNAME}
+  \end{minipage}\\
+
+\bnfleftident{struct\bnfunderscore{}or\bnfunderscore{}union\bnfunderscore{}definition} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{struct\bnfunderscore{}or\bnfunderscore{}union} \bnfopt{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}IDENT} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}TNAME}} \bnftoken{\bnfleftbrace{}}
+  \end{minipage}\\
+
+\bnfleftident{struct\bnfunderscore{}or\bnfunderscore{}union} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}STRUCT}
+  \end{minipage}\\
+                &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}UNION}
+  \end{minipage}\\
+
+\bnfleftident{struct\bnfunderscore{}declaration\bnfunderscore{}list} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{struct\bnfunderscore{}declaration} \bnflist{\bnfrightident{struct\bnfunderscore{}declaration}}
+  \end{minipage}\\
+
+\bnfleftident{init\bnfunderscore{}declarator\bnfunderscore{}list} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{init\bnfunderscore{}declarator} \bnflist{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}COMMA} \bnfrightident{init\bnfunderscore{}declarator}}
+  \end{minipage}\\
+
+\bnfleftident{init\bnfunderscore{}declarator} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{declarator}
+  \end{minipage}\\
+
+\bnfleftident{struct\bnfunderscore{}declaration} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{specifier\bnfunderscore{}qualifier\bnfunderscore{}list} \bnfrightident{struct\bnfunderscore{}declarator\bnfunderscore{}list} \bnftoken{;}
+  \end{minipage}\\
+
+\bnfleftident{specifier\bnfunderscore{}qualifier\bnfunderscore{}list} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnflist{\bnfrightident{type\bnfunderscore{}qualifier} \bnfor{} \bnfrightident{type\bnfunderscore{}specifier}} \bnfgroup{\bnfrightident{type\bnfunderscore{}qualifier} \bnfor{} \bnfrightident{type\bnfunderscore{}specifier}}
+  \end{minipage}\\
+
+\bnfleftident{struct\bnfunderscore{}declarator\bnfunderscore{}list} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{struct\bnfunderscore{}declarator} \bnflist{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}COMMA} \bnfrightident{struct\bnfunderscore{}declarator}}
+  \end{minipage}\\
+
+\bnfleftident{struct\bnfunderscore{}declarator} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{declarator}
+  \end{minipage}\\
+                  &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}COLON} \bnfrightident{constant\bnfunderscore{}expression}
+  \end{minipage}\\
+                  &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{declarator} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}COLON} \bnfrightident{constant\bnfunderscore{}expression}
+  \end{minipage}\\
+
+\bnfleftident{enum\bnfunderscore{}specifier} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{enum\bnfunderscore{}definition} \bnfrightident{enumerator\bnfunderscore{}list} \bnftoken{\bnfrightbrace{}}
+  \end{minipage}\\
+               &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}ENUM} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}IDENT}
+  \end{minipage}\\
+               &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}ENUM} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}TNAME}
+  \end{minipage}\\
+
+\bnfleftident{enum\bnfunderscore{}definition} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}ENUM} \bnfopt{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}IDENT} \bnfor{} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}TNAME}} \bnftoken{\bnfleftbrace{}}
+  \end{minipage}\\
+
+\bnfleftident{enumerator\bnfunderscore{}list} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{enumerator} \bnflist{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}COMMA} \bnfrightident{enumerator}}
+  \end{minipage}\\
+
+\bnfleftident{enumerator} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}IDENT} \bnfopt{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}ASGN} \bnfrightident{expression}}
+  \end{minipage}\\
+
+\bnfleftident{declarator} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfopt{\bnfrightident{pointer}} \bnfrightident{direct\bnfunderscore{}declarator}
+  \end{minipage}\\
+
+\bnfleftident{direct\bnfunderscore{}declarator} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfgroup{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}IDENT} \bnfor{} \bnfrightident{lparen} \bnfrightident{declarator} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}RPAR}} \bnflist{\bnfrightident{array} \bnfor{} \bnfrightident{function}}
+  \end{minipage}\\
+
+\bnfleftident{lparen} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}LPAR}
+  \end{minipage}\\
+
+\bnfleftident{pointer} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnflist{\bnfopt{\bnfrightident{type\bnfunderscore{}qualifier\bnfunderscore{}list}} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}MUL}} \bnfopt{\bnfrightident{type\bnfunderscore{}qualifier\bnfunderscore{}list}} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}MUL}
+  \end{minipage}\\
+
+\bnfleftident{type\bnfunderscore{}qualifier\bnfunderscore{}list} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{type\bnfunderscore{}qualifier} \bnflist{\bnfrightident{type\bnfunderscore{}qualifier}}
+  \end{minipage}\\
+
+\bnfleftident{parameter\bnfunderscore{}type\bnfunderscore{}list} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{parameter\bnfunderscore{}list}
+  \end{minipage}\\
+                    &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}ELLIPSIS}
+  \end{minipage}\\
+                    &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{parameter\bnfunderscore{}list} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}COMMA} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}ELLIPSIS}
+  \end{minipage}\\
+
+\bnfleftident{parameter\bnfunderscore{}list} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{parameter\bnfunderscore{}declaration} \bnflist{\bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}COMMA} \bnfrightident{parameter\bnfunderscore{}declaration}}
+  \end{minipage}\\
+
+\bnfleftident{parameter\bnfunderscore{}declaration} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{parameter\bnfunderscore{}declaration\bnfunderscore{}specifiers} \bnfopt{\bnfrightident{declarator} \bnfor{} \bnfrightident{abstract\bnfunderscore{}declarator}}
+  \end{minipage}\\
+
+\bnfleftident{type\bnfunderscore{}name} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{specifier\bnfunderscore{}qualifier\bnfunderscore{}list} \bnfopt{\bnfrightident{abstract\bnfunderscore{}declarator}}
+  \end{minipage}\\
+
+\bnfleftident{abstract\bnfunderscore{}declarator} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{pointer}
+  \end{minipage}\\
+                    &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{direct\bnfunderscore{}abstract\bnfunderscore{}declarator}
+  \end{minipage}\\
+                    &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{pointer} \bnfrightident{direct\bnfunderscore{}abstract\bnfunderscore{}declarator}
+  \end{minipage}\\
+
+\bnfleftident{direct\bnfunderscore{}abstract\bnfunderscore{}declarator} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfgroup{\bnfrightident{lparen} \bnfrightident{abstract\bnfunderscore{}declarator} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}RPAR} \bnfor{} \bnfrightident{array} \bnfor{} \bnfrightident{function}} \bnflist{\bnfrightident{array} \bnfor{} \bnfrightident{function}}
+  \end{minipage}\\
+
+\bnfleftident{array} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}LBRAC} \bnfrightident{array\bnfunderscore{}parameters} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}RBRAC}
+  \end{minipage}\\
+
+\bnfleftident{array\bnfunderscore{}parameters} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfopt{\bnfrightident{constant\bnfunderscore{}expression} \bnfor{} \bnfrightident{parameter\bnfunderscore{}type\bnfunderscore{}list}}
+  \end{minipage}\\
+
+\bnfleftident{function} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}LPAR} \bnfrightident{function\bnfunderscore{}parameters} \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}RPAR}
+  \end{minipage}\\
+
+\bnfleftident{function\bnfunderscore{}parameters} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfopt{\bnfrightident{parameter\bnfunderscore{}type\bnfunderscore{}list}}
+  \end{minipage}\\
+
+\bnfleftident{dtrace\bnfunderscore{}keyword\bnfunderscore{}ident} & \bnfdef &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}PROBE}
+  \end{minipage}\\
+                     &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}PROVIDER}
+  \end{minipage}\\
+                     &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}SELF}
+  \end{minipage}\\
+                     &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}STRING}
+  \end{minipage}\\
+                     &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}STRINGOF}
+  \end{minipage}\\
+                     &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}USERLAND}
+  \end{minipage}\\
+                     &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}TOK\bnfunderscore{}XLATE}
+  \end{minipage}\\
+                     &  \bnfor{}  &
+  \begin{minipage}[t]{\rulerhs}
+  \raggedright
+  \bnfrightident{DT\bnfunderscore{}KEY\bnfunderscore{}XLATOR}
+  \end{minipage}\\
+
+\end{longtable}
+}
