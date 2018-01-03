@@ -5,12 +5,122 @@ formal definition of the D programming language that is a part of
 OpenDTrace, as well as elaborate on its properties in multithreaded
 environments.
 
-\section{Grammar definition}
+\section{Language grammar}
 \label{sec:grammar}
 
-\input{dt_grammar.tex}
+\setlength{\grammarparsep}{5pt plus 1pt minus 1pt} % increase separation between rules
+\setlength{\grammarindent}{12em} % increase separation between LHS/RHS
 
-\ebnftable
+%\input{dt_grammar.tex}
+
+%\ebnftable
+
+%TODO: Define all the auxiliary things we may need, such as integers, ...
+
+In this section, we will define the grammar of the D language and explain
+how each part fits together when interacting with DTrace. We first define
+a number of auxiliary constructs to define the rest of the grammar.
+
+\begin{grammar}
+<letter> ::= `A' ... `Z'
+          \alt `a' ... `z'
+	  \alt `\_' ;
+
+<sep> ::= ` ' | `\\t' ;
+
+<Word> ::= <letter> \{ <letter> \} ;
+\end{grammar}
+
+\noindent
+In D, `\_' is considered a letter, which can be used at either the start of a
+name. As in C, separators can either be tabs or whitespace characters.
+Additionally, we define number constants that are supported in D:
+
+\begin{grammar}
+<dec\_digit> ::= `1' | `2' | `3' | `4' | `5' | `6' | `7' | `8' | `9' ;
+
+<DecDigitWithZero> ::= `0' | <dec\_digit> ;
+
+<bin\_digit> ::= `0' | `1' ;
+
+<oct\_digit> ::= `0' | `1' | `2' | `3' | `4' | `5' | `6' | `7' ;
+
+<HexDigit> ::= <DecDigitWithZero>
+            \alt `A' ... `F'
+	    \alt `a' ... `f' ;
+
+<Integer> ::= <dec\_digit> <DecDigitWithZero>
+           \alt `0b' <bin\_digit>
+	   \alt `0' <oct\_digit>
+	   \alt `0x' <HexDigit>
+\end{grammar}
+
+\begin{grammar}
+<Identifier> ::= <Word> <Integer> ;
+
+<VarList> ::= <Identifier> \{ `,' <Identifier> \} ;
+\end{grammar}
+
+\noindent
+In D, there are many ways to access types. However, there are a number of
+builtin types, as well as mechanisms to define these types. Similarly to C, D
+supports a number of primitive integer types and floating point types, as well
+as a specialized \texttt{string} and \texttt{userland} type.
+
+\begin{grammar}
+<Type> ::= `char'
+	\alt `short'
+	\alt `int'
+	\alt `signed'
+	\alt `unsigned'
+	\alt `long'
+	\alt `long long'
+	\alt `userland'
+	\alt `string'
+	\alt `void'
+	\alt `float'
+	\alt `double'
+	\alt <TypedefName>
+	\alt <StructOrUnionSpec>
+	\alt <EnumSpecifier> ;
+\end{grammar}
+
+\noindent
+In the above type specification, we introduce three new non-terminals that we
+further have to specify: \texttt{TypedefName}, \texttt{StructOrUnionSpec} and
+\texttt{EnumSpecifier}.  \texttt{TypedefName} represents a type that is defined
+to be an alias to another type, much like in C:
+
+\begin{grammar}
+<TypedefName> ::= <Identifier> ;
+\end{grammar}
+
+\noindent
+Similarly, \texttt{StructOrUnionSpec} represents a way to specify a D
+\texttt{struct} or \texttt{union} type. These language primitives are compatible
+with their C counterparts and ensure ABI compatibility. This is important when
+tracing the kernel, but also allows trivial translation to other ABIs.  We
+specify \texttt{StructOrUnionSpec} as follows:
+
+% FIXME: SturctOrUnionSpec should include things like typedef and so on
+\begin{grammar}
+<StructOrUnionSpec> ::= ( `struct' | `union' ) [ <Identifier> ] \newline
+		     `{' <StructDeclList> `}' [ <VarList> ] `;'
+		     \alt ( `struct' | `union' ) <Identifier> [ <VarList> ] `;' ;
+
+<StructDeclList> ::= <Type> <VarList> `;' \{ <Type> <VarList> `;' \} ;
+\end{grammar}
+
+TODO
+
+% FIXME: Enum should allow for typedefs/... as well.
+\begin{grammar}
+<EnumSpecifier> ::= `enum' [ <Identifier> ] \newline
+	         `{' <EnumDeclList> `}' [ <VarList> ] `;'
+		 \alt `enum' <Identifier> [ <VarList> ] `;' ;
+
+<EnumDeclList> ::= <Identifier> [ `=' <Identifier> ] [ `,' ] ;
+\end{grammar}
 
 \section{Safety}
 \label{sec:safety}
