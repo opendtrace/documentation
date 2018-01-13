@@ -40,19 +40,19 @@ FreeBSD tree has three, separate, \pathname{dtrace.h} files:
   \label{fig:freebsd-dtrace-h}
 \end{figure}
 
-\section{Mac OS}
+\section{macOS}
 \label{sec:macos-code}
 
 Open source code from Apple is supplied in discrete pacakges.  The
-DTrace code on Mac OS is split between the \pathname{xnu} kernel and
+DTrace code on macOS is split between the \pathname{xnu} kernel and
 the rest of the code which is contained in a \pathname{dtrace} code
 drop.  The kernel includes a very small number of files that are
 absolutely necessary to build the kernel itself, including the driver
 code.  All of the kernle code is collected into the
-\pathname{xnu/bsd/dev/dtrace/} directory with the Mac OS translators,
+\pathname{xnu/bsd/dev/dtrace/} directory with the macOS translators,
 the D files that know about the internals of kernel data structures,
 are contained in the \pathname{scripts} sub-directory.  In the
-\pathname{OpenDTrace} repositories there Mac OS kernel code resides in
+\pathname{OpenDTrace} repositories there macOS kernel code resides in
 \url{https://github.com/opendtrace/xnu} while the rest of the code
 resides in \url{https://github.com/opendtrace/macos-dtrace}.  These
 repositories are updated as soon as Apple drops their tarballs onto
