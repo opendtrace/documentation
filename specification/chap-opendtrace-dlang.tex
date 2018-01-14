@@ -26,6 +26,13 @@ forever, causing the operating system kernel to lock up and require a
 system reset.  D lacks any form of loops to prevent such errors from
 occurring.
 
+By default, OpenDTrace runs in a mode where memory can be read but not
+written by D language scripts.  A command line option to the dtrace(1)
+program, -w, puts OpenDTrace into destructive mode, where both reads
+and writes are possible.  Although destructive mode is not a feaure of
+the D language itself, it is an important part of the system's overall
+commitment to safety.
+
 % Are limitations of table sizes and the like which are pretty clearly
 % in place for safety to be included here?  Values such as:
 

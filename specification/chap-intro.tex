@@ -72,7 +72,9 @@ into bufers which are eventually fed out to user space, where they can
 be analyzed.  The \emph{Analysis} is undertaken in user space where
 the previously written plan, in the form of D scripts, directs the
 OpenDTrace library to extract, display and or aggregate the captured
-data.
+data.  Many workflows currently require some form of post-processing
+of the data captured for analysis, and this post-processing is
+currently carried out on unstructured text.
 
 OpenDTrace is made up of several components, including kernel code,
 user space libraries, and command line tools.  The OpenDTrace system

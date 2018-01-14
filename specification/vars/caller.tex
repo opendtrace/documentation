@@ -1,0 +1,16 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{caller}
+\label{vars:caller}
+\subsection*{caller: kernel address of the instruction that called
+  this probe}
+
+\subsubsection*{Description}
+
+The \verb|caller| variable contains the kernel address of the
+instruction that caused the currently executing probe to fire.
+
+\subsubsection*{Failure modes}
+
+No known failure modes, \verb|caller| always contains a valid address,
+even when probes fire in user space.

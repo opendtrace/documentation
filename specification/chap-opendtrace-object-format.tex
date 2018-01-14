@@ -30,7 +30,9 @@ and then the data for all loadable sections and sections which cannot
 be loaded, also called unloadable sections.  This data layout permits
 consumer code to easily download the headers and all loadable data
 into the DTrace driver in one contiguous chunk, omitting other
-extraneous sections.
+extraneous sections.  DOF sections are used both for stable storage
+and to pass data between user and kernel space, e.g. D programs are
+sent into the kernel as a \verb|dof_prog_rt| section.
 
 The section headers describe the size, offset, alignment, and section
 type for each section.  Sections are described using a set of \verb|#defines|
@@ -60,6 +62,13 @@ Finally, strings are always stored in ELF-style string tables along
 with a string table section index and string table offset.  Therefore
 strings in DOF are always arbitrary-length and not bound to the
 current implementation.
+
+% Note from Samuel Lepetit
+% A graph of which sections depend on which would be more useful I
+% think here compared to just a list of sections (the dof.py lldb
+% macros I wrote that you can find in the userspace Darwin repo are a
+% bit easier to read than the code). Which sections are currently
+% unused as well would be useful.
 
 \begin{table}
   \centering

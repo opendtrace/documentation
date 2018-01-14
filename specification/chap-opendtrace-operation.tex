@@ -104,9 +104,11 @@ compiler will signal an error and abort compilation of the D script.
 If the script did not supply any type information, the compilation
 will complete and any mismatch will result in a runtime error.
 
-The result of the D script compilation is an Enabling Code Block
-(ECB). The ECB is provided to the kernel module (3c) which stores it
-with others in a tree like structure. Once the ECB is safely stored in
+The result of the D script compilation is a set of Enabling Code Blocks
+(ECB)s.  An ECB is created for each enabling, or probe point, as well
+as for each action statement in a D language clause.
+The ECBs are provided to the kernel module (3c) which stores them,
+with others, in a tree like structure. Once an ECB is safely stored in
 the kernel, the kernel module tells the provider to enable the probes
 that are to be instrumented.
 

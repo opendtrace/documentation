@@ -1,0 +1,15 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{cuthread}
+\label{vars:curthread}
+\subsection*{curthread: pointer to the thread structure for the
+  current probe}
+
+\subsubsection*{Description}
+
+The \verb|curthread| variable points to the kernel's structure that
+describes the thread which triggered the currently running probe.
+
+\subsubsection*{Failure modes}
+
+The \verb|curthread| variable is always valid.

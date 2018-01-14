@@ -1,0 +1,18 @@
+\clearpage
+\phantomsection
+\addcontentsline{toc}{subsection}{args}
+\label{vars:args}
+\subsection*{args[]: array of arguments to the current probe}
+
+\subsubsection*{Description}
+
+The \verb|args[]| array contains typed versions of all the arguments
+to the currently executing probe.  When a probe has a pointer to a
+stucture as an argument it must be accessed via the \verb|args[]|
+array.
+
+\subsubsection*{Failure modes}
+
+Incorrectly dereferencing the probe arguments will result in a run
+time error in a D program. The program will not exit, but an error
+will be output on the user's terminal
