@@ -18,7 +18,7 @@ providing the data to any consumers.
 The kernel module is also the intermediary between the DTrace user
 interface and the providers. When compiling user scripts, the kernel
 module provides the D compiler with probe arguments and types. Once
-compiled, scripts are pushed into the kernel as Enabling Code Blocks
+compiled, scripts are pushed into the kernel as Enabling Control Blocks
 (ECBs) to be executed when probes fire. After each ECB is executed,
 the data is handed back to user space where the \texttt{dtrace}
 command line tool, or other programs linked against the OpenDtrace
