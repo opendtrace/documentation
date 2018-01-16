@@ -5,11 +5,11 @@ just for C type information is to provide a compact representation of
 the information that usually appears in the debugging sections of
 object files and executables.  CTF only contains data types it
 does not contain other debugging infromation, which allows it to be
-far more compact.  The debugging sections on a debug build of FreeBSD
-in 2017 take up 78 megabytes of space, while the CTF section in the
+far more compact.  The debugging sections on a debug build of the FreeBSD
+kernel in 2017 take up 78 megabytes of space, while the CTF section in the
 same kernel take up only 800 kilobytes. 
 
-\section{On Disk Format}
+\section{On-Disk Format}
 \label{sec:ctf-on-disk-format}
 
 CTF data is stored in its own ELF section within an object file or
@@ -151,7 +151,7 @@ bits for the size, and that size is expressed in bytes.
   \label{fig:ctf-info-field}  
 \end{figure}
 
-The \verb|info| field, shown in Figure\ref{fig:ctf-info-field}, is
+The \verb|info| field, shown in Figure~\ref{fig:ctf-info-field}, is
 further broken down into a number of sub-fields which encoded the
 \verb|kind|, \verb|vlen| (variable length) and whether or not this is
 a root type \verb|isroot|.
