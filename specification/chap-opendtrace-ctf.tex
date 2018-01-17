@@ -15,7 +15,7 @@ same kernel take up only 800 kilobytes.
 CTF data is stored in its own ELF section within an object file or
 executable.  It is meant to be stored in a format that is both compact
 and which is properly aligned so that it can be accessed using the
-mmap(2) system call.
+\texttt{mmap} (2) system call.
 
 \begin{figure}[h]
   \centering
@@ -71,7 +71,7 @@ what they represent, referred to as their \emph{kind}.
     \verb|CTF_K_UNKNOWN|    & unknown type (used for padding) \\
     \verb|CTF_K_INTEGER|    & variant data is \verb|CTF_INT_DATA()| (see below)\\
     \verb|CTF_K_FLOAT|      & variant data is \verb|CTF_FP_DATA()| (see below)\\
-    \verb|CTF_K_POINTER|    & \verb|ctt_type| is referenced type\\
+    \verb|CTF_K_POINTER|    & \verb|ctf_type| is referenced type\\
     \verb|CTF_K_ARRAY|      & variant data is single \verb|ctf_array_t|\\
     \verb|CTF_K_FUNCTION| & \verb|ctt_type| is return type\\
                             &  variant data is list of argument types\\
@@ -80,17 +80,17 @@ what they represent, referred to as their \emph{kind}.
     \verb|CTF_K_UNION|      & variant data is list of \verb|ctf_member_t|'s\\
     \verb|CTF_K_ENUM|       & variant data is list of \verb|ctf_enum_t|'s\\
     \verb|CTF_K_FORWARD|    & no additional data; \verb|ctt_name| is tag\\
-    \verb|CTF_K_TYPEDEF|    & \verb|ctt_type| is referenced type\\
-    \verb|CTF_K_VOLATILE|   & \verb|ctt_type| is base type\\
-    \verb|CTF_K_CONST|      & \verb|ctt_type| is base type\\
-    \verb|CTF_K_RESTRICT|   & \verb|ctt_type| is base type\\
+    \verb|CTF_K_TYPEDEF|    & \verb|ctf_type| is referenced type\\
+    \verb|CTF_K_VOLATILE|   & \verb|ctf_type| is base type\\
+    \verb|CTF_K_CONST|      & \verb|ctf_type| is base type\\
+    \verb|CTF_K_RESTRICT|   & \verb|ctf_type| is base type\\
     \hline
   \end{tabular}
   \caption{Kinds of CTF Base Types}
   \label{tbl:ctf-kinds}
 \end{table}
 
-Table\ref{tbl:ctf-kinds} lists the kinds of base data types that are
+Table~\ref{tbl:ctf-kinds} lists the kinds of base data types that are
 encoded by CTF.  Complex data types, such as structures, are also
 contained in the \verb|types| section, and are encoded as a structure
 with a name that references the string table.
@@ -151,7 +151,7 @@ bits for the size, and that size is expressed in bytes.
   \label{fig:ctf-info-field}  
 \end{figure}
 
-The \verb|info| field, shown in Figure\ref{fig:ctf-info-field}, is
+The \verb|info| field, shown in Figure~\ref{fig:ctf-info-field}, is
 further broken down into a number of sub-fields which encoded the
 \verb|kind|, \verb|vlen| (variable length) and whether or not this is
 a root type \verb|isroot|.
@@ -175,7 +175,7 @@ seen in Figure~\ref{fig:ctf-integral}.
 
 The \verb|flags| field indicates whether the integer is signed,
 contains character data, is a boolean or is to be displayed
-with a varags style of formatting.
+with a vargs style of formatting.
 
 Floating point numbers have the exact same fields to describe them
 but a larger number of possible flags, to match the larger
