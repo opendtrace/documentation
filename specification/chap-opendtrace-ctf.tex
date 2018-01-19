@@ -5,11 +5,11 @@ just for C type information is to provide a compact representation of
 the information that usually appears in the debugging sections of
 object files and executables.  CTF only contains data types it
 does not contain other debugging infromation, which allows it to be
-far more compact.  The debugging sections on a debug build of FreeBSD
-in 2017 take up 78 megabytes of space, while the CTF section in the
+far more compact.  The debugging sections on a debug build of the FreeBSD
+kernel in 2017 take up 78 megabytes of space, while the CTF section in the
 same kernel take up only 800 kilobytes. 
 
-\section{On Disk Format}
+\section{On-Disk Format}
 \label{sec:ctf-on-disk-format}
 
 CTF data is stored in its own ELF section within an object file or
