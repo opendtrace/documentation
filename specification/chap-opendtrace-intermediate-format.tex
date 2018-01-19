@@ -67,9 +67,9 @@ division by zero error.
 DIF has three instructions, \instruction{cmp}, \instruction{scmp} and
 \instruction{tst} which can set various result flags, shown in
 Table~\ref{tbl:cmp-vars}.  The result flags are are later used by the
-branch instructions to determine how to .  The result flags are never
-returned directly to the calling DIF program but are only used
-internally by the interpretation routine.
+branch instructions to determine whether or not the branch is taken.
+The result flags are never returned directly to the calling DIF program but are
+only used internally by the interpretation routine.
 
 \textbf{XXXRW: Something about instructions}
 
@@ -95,9 +95,9 @@ these subroutines are passed through the \verb|tupregs| variable
 through use of the \instruction{PUSHTR} and \instruction{PUSHTV}
 instructions. The return values of the subroutines are provided
 through the \registerop{rd} register. The subroutine identifier is
-placed in the \registerop{idx} field of the W-Format described in
-Subsection~\ref{subsec:w-format}. Any subroutine that is provided to
-DTrace \emph{must} go via these mechanisms.
+placed in the \registerop{idx} field of the wide-immediate format (W-Format)
+described in Subsection~\ref{subsec:w-format}. Any subroutine that is provided
+to DTrace \emph{must} go via these mechanisms.
 
 \begin{quote}
   Notice that we don't bother validating the proper number of
@@ -155,8 +155,8 @@ Global variables are global to all the clauses in a D script and are references
 to simple names within the D script.  Space for global variables is statically
 allocated on each invocation of a script. Additionally, global variables are
 identified using the modified register format as described in
-Subsection~\ref{subsec:r-format} the case of arrays and the wide-immediate
-format which is described in Subsection~\ref{subsec:w-format} in the case
+Subsection~\ref{subsec:r-format} the case of arrays and the W-Format
+which is described in Subsection~\ref{subsec:w-format} in the case
 of scalar variables inside of the \function{dtrace_dif_variable} function.
 
 \subsubsection{Dynamic Variables}

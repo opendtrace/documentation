@@ -16,7 +16,7 @@ environments.
 \label{sec:safety}
 
 The D language will look familiar to anyone who has programmed in C or
-its close linguistice relatives, but in order to provide certain
+its close linguistic relatives, but in order to provide certain
 safety guarantees there are features of C like languages that are
 missing from D.  The most obviously missing feature is the lack of any
 sort of looping mechanism.  Once they are compiled into byte code D
@@ -27,8 +27,8 @@ system reset.  D lacks any form of loops to prevent such errors from
 occurring.
 
 By default, OpenDTrace runs in a mode where memory can be read but not
-written by D language scripts.  A command line option to the dtrace(1)
-program, -w, puts OpenDTrace into destructive mode, where both reads
+written by D language scripts.  A command line option to the \texttt{dtrace} (1)
+program, \texttt{-w}, puts OpenDTrace into destructive mode, where both reads
 and writes are possible.  Although destructive mode is not a feaure of
 the D language itself, it is an important part of the system's overall
 commitment to safety.
@@ -125,10 +125,10 @@ dtrace:::END
 \noindent
 Because DIF performs all of its operations on a virtual machine's
 registers as opposed to variables in memory, the ++ operator is not
-atomic. Compiling the syscall:::entry clause from
+atomic. Compiling the \texttt{syscall:::entry} clause from
 Figure~\ref{fig:global-var-usage} generates the DIF shown in
 Figure~\ref{fig:dif-asm}.  This DIF section is safe, as long as the
-num\_syscalls variable is not visible from any other thread. If it is
+\texttt{num\_syscalls} variable is not visible from any other thread. If it is
 visible and accessible from another thread, it suffers from a race
 condition which results in wrong information being given to the
 user. The race condition is shown in Figure~\ref{fig:race}. \newline
@@ -203,7 +203,7 @@ variables are only visible within a single thread.
 
 The ability to aggregate data during data collection, and to then
 process the data via several types of statistical analysis, is one of
-the key features of OpenDTrace.  The data for an aggretation is
+the key features of OpenDTrace.  The data for an aggregation is
 collected, like all other trace data, by the kernel, while the data
 processing is carried out in user space by the \emph{libdtrace}
 library functions.
@@ -228,7 +228,7 @@ library functions.
 \end{table}
 
 There are nine (9) aggregation functions, which are listed in
-Table~\ref{}.
+Table~\ref{tab:agg-func}.
 
 \section{Subroutines}
 \label{sec:subroutines}

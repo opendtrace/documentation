@@ -1,5 +1,5 @@
 OpenDTrace is a dynamic tracing facility integrated into the Solaris,
-FreeBSD, and macOS operating systems -- with ports also available for
+FreeBSD, and macOS operating systems\textemdash with ports also available for
 Linux and Windows.  Dynamic tracing allows system administrators and
 software developers to develop short scripts (in the D programming
 language) that instruct OpenDTrace to instrument aspects of system
@@ -8,7 +8,7 @@ mechanical processing.  While there is excellent documentation
 available for the D programming language, command-line tools, and
 OpenDTrace-based investigation and operation, the internal formats to
 OpenDTrace are generally documented via the source code.  This report
-acts as a de facto specification for those formats, including the
+acts as a \textit{de facto} specification for those formats, including the
 DTrace Intermediate Format (DIF), which is a bytecode that D scripts
 are compiled into for safe execution within the kernel, and the DTrace
 Object Format (DOF), which bundles together complete scripts along
@@ -20,7 +20,7 @@ with their associated constants and metadata.
 The original DTrace code was designed and developed by Sun
 Microsystems to solve a particular problem, being able to instrument
 systems that were currently deployed, without requiring the
-recompilation of any code\cite{DTrace2004}.  The DTrace system was
+recompilation of any code \cite{DTrace2004}.  The DTrace system was
 written in a portable style typical of code from the Sun Microsystems
 Kernel Development group in the early 2000s.  Shortly after the
 release of the original DTrace system a port was made, by John Birrel,
@@ -28,7 +28,7 @@ to the FreeBSD Operating System.  A port was also made by Apple to
 their macOS at about the same time.  DTrace gained popularity as a
 dynamic tracing system throughout the first decade of the 21st Century
 and its usage is well
-documented\cite{mckusick2014design}\cite{Microsystems2008a}\cite{Gregg:2011:DDT:1971960}.
+documented \cite{mckusick2014design}\cite{Microsystems2008a}\cite{Gregg:2011:DDT:1971960}.
 
 The OpenDTrace system is meant to capture information about systems at
 run time, without the need to stop the program or kernel being
@@ -47,14 +47,14 @@ point in the program flow.  ``Is \emph{a} greater than 10 at line 100
 of module X?'', is a typical query that might be made of a debugger.
 The answer to this question is gathered by setting a break point at
 line 100, where the program will stop, and printing the value of the
-varialbe \emph{A}.  Debuggers are most often used in a \emph{stop and
+variable \emph{A}.  Debuggers are most often used in a \emph{stop and
   inquire} mode, while a tracing system, such as OpenDTrace, aims to
-keep overheads low enogh that we can capture and analyze information
+keep overheads low enough that we can capture and analyze information
 at run time with very little perturbation to the overall system.  The
 tracing system \emph{only} captures data at run time and \emph{never}
 stops the running system, which has the side effect of being quite
 useful for critical systems such as the operating system kernel and
-its components, such as device drivers, locking primitves and
+its components, such as device drivers, locking primitives and
 scheduler.
 
 From the perspective of the user the OpenDTrace model is one of

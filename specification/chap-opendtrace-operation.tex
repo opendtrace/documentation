@@ -18,28 +18,27 @@ providing the data to any consumers.
 The kernel module is also the intermediary between the DTrace user
 interface and the providers. When compiling user scripts, the kernel
 module provides the D compiler with probe arguments and types. Once
-compiled, scripts are pushed into the kernel as Enabling Code Blocks
+compiled, scripts are pushed into the kernel as Enabling Control Blocks
 (ECBs) to be executed when probes fire. After each ECB is executed,
 the data is handed back to user space where the \texttt{dtrace}
-command line tool, or other programs linked against the OpenDtrace
+command line tool, or other programs linked against the OpenDTrace
 libraries can manipulate or display the data to end users.
 
 Providers in OpenDTrace encapsulate the probe points that are used to
 instrument code and provide data to the end user. A provider defines
 both a set of probe points as well as the standard by which the system
 interacts with that set of probe points.  For example the Function
-Boundary Tracepoint (fbt) provider defines \texttt{return} trace
+Boundary Tracepoint (\texttt{fbt}) provider defines \texttt{return} trace
 points in which only arguments zero ($0$) and one ($1$) are valid and
 which always contain the return value and return address
 respectively, whereas no other provider has such a definition.
 
 OpenDTrace has a base set of providers that are shipped as part of the
-system, see Appendix~\ref{chap:opendtrace-providers}, but developers are free
-to
+system, see Appendix~\ref{chap:opendtrace-providers}, but developers are free to
 create their own, to expose more or different information from their
 code. Providers can be developed either for the kernel, in which case
 they are defined as kernel modules, or for user space, as part of the
-User Defined Static Tracing (USDT) system.
+Userland Statically Defined Tracing (USDT) system.
 
 A provider is simply a collection of probe points. Probe points are
 functions that are run when certain points in the code are
@@ -105,7 +104,7 @@ compiler will signal an error and abort compilation of the D script.
 If the script did not supply any type information, the compilation
 will complete and any mismatch will result in a runtime error.
 
-The result of the D script compilation is a set of Enabling Code Blocks
+The result of the D script compilation is a set of Enabling Control Blocks
 (ECB)s.  An ECB is created for each enabling, or probe point, as well
 as for each action statement in a D language clause.
 The ECBs are provided to the kernel module (3c) which stores them,
