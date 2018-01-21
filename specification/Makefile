@@ -9,7 +9,7 @@ SOURCE=								\
 	chap-intro.tex						\
 	chap-opendtrace-operation.tex				\
 	chap-opendtrace-ctf.tex					\
-	chap-opendtrace-trace-buffers.tex					\
+	chap-opendtrace-trace-buffer.tex					\
 	chap-opendtrace-instruction-reference.tex		\
 	chap-opendtrace-intermediate-format.tex			\
 	chap-opendtrace-object-format.tex			\
