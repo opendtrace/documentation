@@ -1,0 +1,873 @@
+This document provides an overview of how \texttt{libdtrace} processes the
+DTrace trace buffer in order to produce textual output (specifically when
+processing a ``printlike'' action such as
+\texttt{printf("$\backslash$"event$\backslash$": \%s", probefunc);} or
+printing an aggregation such as \texttt{printa(@a)}). 
+
+\section{Probes}
+\label{sec:probes}
+
+\subsection{DTrace trace buffer}
+\label{subsec:trace_buffer}
+
+\begin{figure}[!ht]
+	\centering
+    \begin{tikzpicture}
+		\coordinate[] (origin) at (0,0);
+		\node[
+			rectangle split,
+			rectangle split horizontal=true,
+			minimum height=1cm,
+			align=center,
+			rectangle split parts=7,
+			rectangle split part fill={red!20,blue!20,green!20,none,red!20,blue!20,green!20},
+			draw
+		] (barr1) [above=5pt of origin]
+		{	\nodepart[nn]{one}\texttt{EPID}%
+			\nodepart[nn]{two}\texttt{timestamp}%
+			\nodepart[nn, text width=3cm]{three}\texttt{data}%
+			\nodepart[nn]{four}...%
+			\nodepart[nn]{five}\texttt{EPID}%
+			\nodepart[nn]{six}\texttt{timestamp}%
+			\nodepart[nn,text width=3cm]{seven}\texttt{data}%
+		};
+	\draw [db] (barr1.south west) -- (barr1.three split south) node[midway,below=10pt]{$Record_0$};
+	\draw [db] (barr1.four split south) -- node[below=10pt]{$Record_n$} (barr1.south east);
+    \end{tikzpicture}
+	\caption{DTrace trace buffer.}
+	\label{fig:trace_buffer}
+\end{figure}
+
+\begin{itemize}
+	\item{\texttt{EPID}}: identifies the enabled probe that produced the
+trace record; the identifier type is \texttt{dtrace\_epid\_t} which corresponds
+to a unsigned 32 bit integer.
+
+	\item{\texttt{timestamp}:} the timestamp (ns) of the trace record; the
+timestamp type is an unsigned 64 bit integer.
+
+	\item{\texttt{data}:} the data for trace record.
+\end{itemize}
+
+Note that the length of the data for the trace record is not specified by the
+DTrace trace buffer (trace records are specified as TV (\textit{Type-Value})
+rather than TLV (\textit{Type-Length-Value}). Instead, a separate stream of
+metadata is used to interpret the trace buffer. The data structures describing
+the metadata stream are described in Section~\ref{subsec:probe_data_structures}.
+
+\subsubsection{Userspace copy}
+\label{subsubsec:bufsnap}
+
+The DTrace trace buffer is copied from the kernel to the userspace consumer by
+invoking the \texttt{BUFSNAP} ioctl. Within \texttt{libdtrace} the
+\texttt{BUFSNAP} ioctl is invoked by the function \texttt{dt\_get\_buf()} found
+in the file \texttt{dt\_consume.c}; this function flattens the buffer (if
+\texttt{dtrace} is configured to use a ring buffer) before passing it on the
+function \texttt{dt\_consume\_cpu()} for processing.
+
+\subsection{Data structures}
+\label{subsec:probe_data_structures}
+
+\tikzset{
+    %every node/.style={draw, text height=1.5ex},
+    split/.style={rectangle split, rectangle split parts=#1,draw,
+        rectangle split horizontal=false,rectangle split part align=base},
+}
+
+Figure~\ref{fig:overview} provides an overview of the data structures (and
+their relationships) used by \texttt{libdtrace} when interpreting the contents
+of a DTrace trace buffer.
+
+\begin{figure}[!htp]
+	\centering
+	\begin{tikzpicture}[->, -{Latex}]
+
+		\node[split=9,label=north:\texttt{struct~\textit{dtrace\_probedata}}] (a1) at (0,-9) {
+		\nodepart{one}\textit{dtpda\_handle: dtrace\_hdl\_t~*}
+		\nodepart{two}\textit{pdtpda\_edesc}
+		\nodepart{three}\textit{dtpda\_pdesc}
+		\nodepart{four}\textit{dtpda\_cpu: processorid\_t}
+		\nodepart{five}\textit{dtpda\_data: caddr\_t}
+		\nodepart{six}\textit{dtpda\_flow: dtraace\_flowkind\_t}
+		\nodepart{seven}\textit{dtpda\_prefix: const~char~*}
+		\nodepart{eight}\textit{dtpda\_indent: int}
+		\nodepart{nine}\textit{dtpda\_timestamp: uint64\_t}};
+
+		\node[split=6,label=north:\texttt{struct~\textit{dtrace\_eprobedesc}}] (a2) at (6,-7) {
+		\nodepart{one}\textit{dtepd\_epid: dtrace\_epid\_t}
+		\nodepart{two}\textit{dtepd\_probeid: dtrace\_id\_t}
+		\nodepart{three}\textit{dtepd\_uarg: uint64\_t}
+		\nodepart{four}\textit{dtepd\_size: uint32\_t}
+		\nodepart{five}\textit{dtepd\_nrec: int}
+		\nodepart{six}\textit{dtepd\_rec}};
+
+		\node[split=5,label=south:\texttt{struct~\textit{dtrace\_probedesc}}] (a3) at (6,-12) {
+		\nodepart{one}\textit{dtpd\_id: dtrace\_id\_t}
+		\nodepart{two}\textit{dtpd\_provider: char []}
+		\nodepart{three}\textit{dtpd\_mod: char []}
+		\nodepart{four}\textit{dtpd\_func: char []}
+		\nodepart{five}\textit{dtpd\_name: char []}};
+
+		\node[split=6,label=north:\texttt{struct~\textit{dtrace\_recdesc\_t}}] (recdesc) at (12,-6) {
+		\nodepart{one}\textit{dtrd\_action: dtrace\_actkind\_t}
+		\nodepart{two}\textit{dtrd\_size: uint32\_t}
+		\nodepart{three}\textit{dtrd\_offset: uint32\_t}
+		\nodepart{four}\textit{dtrd\_alignment: uint16\_t}
+		\nodepart{five}\textit{dtrd\_format: uint16\_t}
+		\nodepart{six}\textit{dtrd\_arg: uint64\_t}
+		\nodepart{seven}\textit{dtrd\_uarg: uint64\_t}};
+
+		\draw (a1.two east) -- (a2.one west);
+		\draw (a1.three east) -- (a3.one west);
+		\draw (a2.six east) -- (recdesc.one west);
+
+		\node[split=5,label=north:\texttt{struct~\textit{dt\_pfarvg}}] (pfargv) at (0,0) {
+		\textit{pfv\_dtp: dtrace\_hdl\_t *}
+		\nodepart{two}\textit{pfv\_format: char *}
+		\nodepart{three}\textit{pfv\_argv}
+		\nodepart{four}\textit{pfv\_argc: uint\_t}
+		\nodepart{five}\textit{pfv\_flags: uint\_t}};
+
+		\node[split=10,label=north:\texttt{struct~\textit{dt\_pfarvgd}}] (pfargd) at (6,0) {
+		\textit{pfd\_prefix: const~char~*}
+		\nodepart{two}\textit{pfd\_preflen: char~*}
+		\nodepart{three}\textit{pfd\_fmt: char[8]}
+		\nodepart{four}\textit{pfd\_flags: uint\_t}
+		\nodepart{five}\textit{pfd\_width: int}
+		\nodepart{six}\textit{pfd\_dynwidth: int}
+		\nodepart{seven}\textit{pfd\_prec: int}
+		\nodepart{eight}\textit{pfd\_conv}
+		\nodepart{nine}\textit{pfd\_rec}
+		\nodepart{ten}\textit{pfd\_next: struct dt\_pfargd~*}};
+
+		\node[split=10,label=north:\texttt{struct~\textit{dt\_pfconv}}] (pfconv) at (12,0) {
+		\textit{pfc\_name : const~char~*}
+		\nodepart{two}\textit{pfc\_ofmt: const~char~*}
+		\nodepart{three}\textit{pfc\_tstr: const~char~*}
+		\nodepart{four}\textit{pfc\_check: dt\_pfcheck\_f}
+		\nodepart{five}\textit{pfc\_print: dt\_pfprint\_f}
+		\nodepart{six}\textit{pfc\_cctfp: ctf\_file\_t~*}
+		\nodepart{seven}\textit{pfc\_ctype: ctf\_id\_t}
+		\nodepart{eight}\textit{pfc\_dctfp: ctf\_file\_t~*}
+		\nodepart{nine}\textit{pfc\_dtype: ctf\_id\_t}
+		\nodepart{ten}\textit{pfc\_next: struct dt\_conv~*}};
+
+		\draw (pfargv.three east) -- (pfargd.one west);
+		\draw (pfargd.eight east) -- (pfconv.one west);
+		\draw (pfargd.nine east) -- (recdesc.one west);
+
+	\end{tikzpicture}
+	\caption{Overview of the data structures used to interpret the DTrace trace buffer}
+	\label{fig:overview}
+\end{figure}
+
+\subsubsection{\texttt{struct \textit{dtrace\_probedata}}}
+\label{subsubsec:dtpda}
+
+The \texttt{struct~\textit{dtrace\_probedata}} (Figure~\ref{fig:dtpda}) is used
+solely by \texttt{libdtrace}. This data structure aggregates the information
+required to process the DTrace trace buffer including metadata describing the
+enabling, a pointer to the copy of the trace buffer and formatting information
+(such as the flow prefix and indent---used when the DTrace is invoked with the
+\texttt{flowindent} option enabled).
+
+\begin{figure}[!ht]
+	\centering
+    \begin{tikzpicture}[->, -{Latex}]
+		\node[split=9,label=north:\texttt{struct \textit{dtrace\_probedata}}] (a1) at (0,-9) {
+		\textit{dtpda\_handle: dtrace\_hdl\_t~*}
+		\nodepart{two}\textit{pdtpda\_edesc}
+		\nodepart{three}\textit{dtpda\_pdesc}
+		\nodepart{four}\textit{dtpda\_cpu: processorid\_t}
+		\nodepart{five}\textit{dtpda\_data: caddr\_t}
+		\nodepart{six}\textit{dtpda\_flow: dtraace\_flowkind\_t}
+		\nodepart{seven}\textit{dtpda\_prefix: const~char~*}
+		\nodepart{eight}\textit{dtpda\_indent: int}
+		\nodepart{nine}\textit{dtpda\_timestamp: uint64\_t}};
+    \end{tikzpicture}
+	\caption{Data structure used to aggregate the details of the trace buffer and the metadata required to interpret it.}
+	\label{fig:dtpda}
+\end{figure}
+
+\begin{itemize}
+
+	\item The \texttt{dtpda\_handle} field contains a pointer to the handle
+returned to DTrace consumer on invoking \texttt{dtrace\_open()}.
+
+	\item The \texttt{dtpda\_edesc} and \texttt{dtpda\_pdesc} fields are
+described in Sections~\ref{subsubsec:dtepd} and~\ref{subsubsec:dtpd}
+respectively.
+
+	\item The \texttt{dtpda\_cpu} field identifies the CPU on which the
+probe fired.
+
+	\item The \texttt{dtpda\_data} field contains a pointer to the DTrace
+trace buffer (see Section~\ref{subsec:trace_buffer}).
+
+	\item The \texttt{dtpda\_flow} field specifies the flow type (either
+DTRACEFLOW\_ENTRY, DTRACEFLOW\_RETURN or DTRACEFLOW\_NONE). The \texttt{flow}
+field is set when the DTrace option \texttt{flowindent} is true; the value of
+\texttt{dtpda\_flow} depends on whether a return (\texttt{::return}) or entry
+(\texttt{::entry}) probe is being traced.
+
+	\item The \texttt{dtpda\_prefix} field contains a pointer to a C String
+containing the flow prefix (nominally ``-$\rangle$'' for entry probes and
+``$\langle$-'' for return probes).
+
+	\item The \texttt{dtpda\_indent} field specifies the value of the flow
+indent (that is the number of characters currently indented).
+
+	\item The \texttt{dtpda\_timestamp} field contains the timestamp of the
+trace record extracted from the DTrace trace buffer (see
+Section~\ref{subsec:trace_buffer}).
+
+\end{itemize}
+
+\subsubsection{\texttt{struct \textit{dtrace\_eprobedesc}}}
+\label{subsubsec:dtepd}
+
+The \texttt{struct~\textit{dtrace\_eprobedesc}} (Figure~\ref{fig:dtepd})
+specifies an enabled probe. Specifically, \texttt{struct~\textit{eprobedesc}}
+contains metadata required to process the DTrace trace buffer. The
+\texttt{struct~\textit{dtrace\_eprobedesc}} is returned from the kernel to
+userspace through invoking the \texttt{EPROBE} ioctl.
+
+\begin{figure}[!ht]
+	\centering
+	\begin{tikzpicture}[->, -{Latex}]
+
+		\node[split=6,label=north:\texttt{struct~\textit{dtrace\_eprobedesc}}] (a2) at (6,-7) {
+		\nodepart{one}\textit{dtepd\_epid: dtrace\_epid\_t}
+		\nodepart{two}\textit{dtepd\_probeid: dtrace\_id\_t}
+		\nodepart{three}\textit{dtepd\_uarg: uint64\_t}
+		\nodepart{four}\textit{dtepd\_size: uint32\_t}
+		\nodepart{five}\textit{dtepd\_nrec: int}
+		\nodepart{six}\textit{dtepd\_rec}};
+	\end{tikzpicture}
+	\caption{Data structure used to describe an enabled probe.}
+	\label{fig:dtepd}
+\end{figure}
+
+\begin{itemize}
+
+	\item The \texttt{dtepd\_epid} field contains the enabled probe's
+identifier; the identifier type is \texttt{dtrace\_epid\_t} which corresponds 
+to a unsigned 32 bit integer.
+
+	\item The \texttt{dtpd\_id} field contains the probe's identifier; the
+identifier type is \texttt{dtrace\_id\_t} which corresponds to a unsigned 32 bit
+integer.
+
+	\item The \texttt{dtepd\_uarg} field is a library argument\footnote{I'm
+uncertain when this is used, and whether it is relevant when in printing
+trace records}. 
+
+	\item The \texttt{dtepd\_size} field specifies the size of the DTrace trace
+buffer (a pointer to the trace buffer is held in the
+\texttt{struct~\textit{dtrace\_probedata}} structure.
+
+	\item The \texttt{dtepd\_nrec} field specifies the number of records in
+the \texttt{dtepd\_rec} field.
+
+	\item The \texttt{dtepd\_rec} field is a variable sized array (of
+\texttt{dtepd\_nrecs} entries); this data structure is described in
+Section~\ref{subsubsec:dtrd}.
+
+\end{itemize}
+
+\subsubsection{\texttt{struct \textit{dtrace\_probedesc}}}
+\label{subsubsec:dtpd}
+
+The \texttt{struct~\textit{dtrace\_probedesc}} (Figure~\ref{fig:dtpd})
+specifies a given probe. The \texttt{\textit{dtrace\_probedesc}} structure is
+constructed within the kernel from the corresponding
+\texttt{struct~\textit{dof\_probedesc}}. The
+\texttt{struct~\textit{dtrace\_probedesc}} is returned from the kernel to user
+space by invoking the \texttt{PROBES} ioctl.
+
+\begin{figure}[!ht]
+	\centering
+	\begin{tikzpicture}[->, -{Latex}]
+
+		\node[split=5,label=north:\texttt{struct~\textit{dtrace\_probedesc}}] (a3) at (6,-12) {
+		\textit{dtpd\_id: dtrace\_id\_t}
+		\nodepart{two}\textit{dtpd\_provider: char[]}
+		\nodepart{three}\textit{dtpd\_mod: char[]}
+		\nodepart{four}\textit{dtpd\_func: char[]}
+		\nodepart{five}\textit{dtpd\_name: char[]}};
+	\end{tikzpicture}
+	\caption{Data structure used to describe a probe.}
+	\label{fig:dtpd}
+\end{figure}
+
+\begin{itemize}
+
+	\item The \texttt{dtpd\_id} field contains the probe's identifier; the
+identifier type is \texttt{dtrace\_id\_t} which corresponds to a unsigned 32 bit
+integer.
+
+	\item The \texttt{dtpda\_provider} field contains a C string specifying
+the probe's provider name; the provider type is an \texttt{char} array or size
+DTRACE\_PROVNAMELEN (nominally 64 characters).
+
+	\item The \texttt{dtpda\_mod} field contains a C string specifying
+the probe's module name; the provider type is an \texttt{char} array or size
+DTRACE\_MODNAMELEN (nominally 64 characters).
+
+	\item The \texttt{dtpda\_func} field contains a C string specifying
+the probe's function name; the provider type is an \texttt{char} array or size
+DTRACE\_FUNCNAMELEN (nominally 192 characters).
+
+	\item The \texttt{dtpda\_name} field contains a C string specifying
+the probe's name; the provider type is an \texttt{char} array or size
+DTRACE\_NAMELEN (nominally 64 characters).
+
+\end{itemize}
+
+\subsubsection{\texttt{struct~\textit{dtrace\_recdesc}}}
+\label{subsubsec:dtrd}
+
+The \texttt{struct~\textit{dtrace\_recdesc}} (Figure~\ref{fig:dtrd}) specifies
+an individual trace record within the trace buffer. Each DTrace action produces
+a separate trace record. And actions have a \textit{one-to-one} correspondence
+with a DIFO (DTrace Intermediate Format Object). For example,
+\texttt{printf("\%s", probefunc)} produce a single DIFO and therefore a single
+action and record. Whereas, \texttt{prinf("\%s \%s", probefunc, arg0);} will
+produce two DIFOs and therefore two actions and records.
+
+\begin{figure}[!ht]
+	\centering
+	\begin{tikzpicture}[->, -{Latex}]
+
+		\node[split=7,label=north:\texttt{struct~\textit{dtrace\_recdesc\_t}}] (recdesc) at (12,-6) {
+		\nodepart{one}\textit{dtrd\_action: dtrace\_actkind\_t}
+		\nodepart{two}\textit{dtrd\_size: uint32\_t}
+		\nodepart{three}\textit{dtrd\_offset: uint32\_t}
+		\nodepart{four}\textit{dtrd\_alignment: uint16\_t}
+		\nodepart{five}\textit{dtrd\_format: uint16\_t}
+		\nodepart{six}\textit{dtrd\_arg: uint64\_t}
+		\nodepart{seven}\textit{dtrd\_uarg: uint64\_t}};
+
+	\end{tikzpicture}
+	\caption{Data structure used to describe a individual record in the trace buffer.}
+	\label{fig:dtrd}
+\end{figure}
+
+\begin{itemize}
+
+	\item The \texttt{dtrd\_action} field specifies the ``action'' of the
+trace record; for \texttt{printf} the action is DTRACEACT\_PRINTF. The value of
+\texttt{dtrd\_action} is used by \texttt{libdtrace} to determine how the trace
+record is processed.
+
+	\item The \texttt{dtrd\_size} field contains the size (in bytes) of the
+trace record; this is computed within the kernel based on the CTF (Compact Type
+Formet) type of the value being written to the trace buffer.
+
+	\item The \texttt{dtrd\_offset} field contains the offset (in bytes)
+into the DTrace trace buffer at which the trace record is located; the offset
+is computed within the kernel and is based on the size and alignment of the
+preceeeding records.
+
+	\item The \texttt{dtrd\_alignment} field contains the specified
+alignment (in bytes) of the trace record; the alignment is based on the trace
+record's CTF type.
+
+	\item The \texttt{dtrd\_format} field contains an identifier used to lookup
+format information by invoking the function \texttt{dt\_format\_lookup()}.
+Format data is copied from the kernel to the userspace consumer by invoking the
+\texttt{FORMAT} ioctl. In the case of a \texttt{printf} action the format data
+is stored as a \texttt{struct~\textit{dt\_pfargv} (see
+Section~\ref{subsubsec:pfv})}. 
+
+	\item The \texttt{dtrd\_arg} field is unused when printing.
+
+	\item The \texttt{dtrd\_uarg} field is unused when printing.
+
+\end{itemize}
+
+\subsubsection{\texttt{struct~\textit{dt\_pfargv}}}
+\label{subsubsec:pfv}
+
+The \texttt{struct~\textit{dt\_pfargv}} (Figure~\ref{fig:pfv}) is used solely
+by \texttt{libdtrace}. This data structure acts as a container for data
+structures that define a set of format codes (such as \texttt{\%s} or
+\texttt{\%2d}) used by the \texttt{printf} action.
+
+\begin{figure}[!ht]
+	\centering
+	\begin{tikzpicture}[->, -{Latex}]
+
+		\node[split=5,label=north:\texttt{struct~\textit{dt\_pfarvg}}] (pfargv) at (0,0) {
+		\textit{pfv\_dtp: dtrace\_hdl\_t~*}
+		\nodepart{two}\textit{pfv\_format: char~*}
+		\nodepart{three}\textit{pfv\_argv}
+		\nodepart{four}\textit{pfv\_argc: uint\_t}
+		\nodepart{five}\textit{pfv\_flags: uint\_t}};
+
+	\end{tikzpicture}
+	\caption{Data structure used to describe the formating of a \texttt{printf} action.}
+	\label{fig:pfv}
+\end{figure}
+
+\begin{itemize}
+
+	\item The \texttt{pfv\_handle} field contains a pointer to the handle
+returned to DTrace consumer on invoking \texttt{dtrace\_open()}.
+
+	\item The \texttt{pfv\_format} field points to a C String containing the
+format string. For example, if the action is
+\texttt{printf("$\backslash$"event$\backslash$": \%s", probefunc);}, the format
+string contains \texttt{"$\backslash$"event$\backslash$": \%s"}. 
+
+	\item The \texttt{pfv\_argv} field is described in
+Section~\ref{subsubsec:pfd}.
+
+	\item The \texttt{pfv\_argc} field contains the number of entries in the
+list pointed to by the \texttt{pfv\_argv} field.
+
+	\item The \texttt{pfv\_flags} field contains flags used for validating
+the the format arguments.
+
+\end{itemize}
+
+\subsubsection{\texttt{struct~\textit{dt\_pfargd}}}
+\label{subsubsec:pfd}
+
+The \texttt{struct~\textit{dt\_pfargd}} (Figure~\ref{fig:pfd}) is used
+solely by \texttt{libdtrace}. This data structure defines an individual
+\texttt{printf} format code (such as \texttt{\%s}).
+
+\begin{figure}[!h]
+	\centering
+	\begin{tikzpicture}[->, -{Latex}]
+
+		\node[split=10,label=north:\texttt{struct~\textit{dt\_pfarvgd}}] (pfargd) at (6,0) {
+		\textit{pfd\_prefix: const~char~*}
+		\nodepart{two}\textit{pfd\_preflen: char~*}
+		\nodepart{three}\textit{pfd\_fmt: char[8]}
+		\nodepart{four}\textit{pfd\_flags: uint\_t}
+		\nodepart{five}\textit{pfd\_width: int}
+		\nodepart{six}\textit{pfd\_dynwidth: int}
+		\nodepart{seven}\textit{pfd\_prec: int}
+		\nodepart{eight}\textit{pfd\_conv}
+		\nodepart{nine}\textit{pfd\_rec}
+		\nodepart{ten}\textit{pfd\_next: struct dt\_pfargd~*}};
+
+	\end{tikzpicture}
+	\caption{Data structure used to describe a format code used by the \texttt{printf} action.}
+	\label{fig:pfd}
+\end{figure}
+
+\begin{itemize}
+
+	\item The \texttt{pfd\_prefix} field points to C string that contains
+the format string passed to \texttt{printf{}}.
+
+	\item The \texttt{pfd\_preflen} field contains the length in bytes of the
+prefix (\texttt{pfd\_prefix}). For example, for the prefix
+"$\backslash$"event$\backslash$": \%s" the \texttt{pfd\_preflen} will be 9 (the
+number of characters preceeding the format code \texttt{\%s}). 
+
+	\item The \texttt{pfd\_fmt} field contains the format code (for
+\texttt{\%s} this field will contain the value \texttt{s}).
+
+	\item The \texttt{pfd\_flags} field contains a set of flags. As with
+\texttt{printf} in the C language, formatting flags can be used to control
+whether, for example, the printed values are left aligned or preceeded by
+zeroes.
+
+	\item The \texttt{pfd\_width} field contains the width, for example
+when printing \texttt{printf("\%3d", value);} the \texttt{pfd\_width} field
+contains three (3). 
+
+	\item The \texttt{pfd\_dynwidth} field contains the dynamic width;
+for example, when printing \texttt{printf("\%*d", width, value);} the dynwidth
+is the value of \texttt{width}. 
+
+	\item The \texttt{pfrdv\_prec} field contains the precision.
+
+	\item The \texttt{pfd\_conv} field points to a data structure used to
+handle a specifc format code (such as \texttt{\%s}). The \texttt{printf} format
+conversion dictionary (\texttt{\_dtrace\_conversions}) can be found in the
+file \texttt{dt\_prinf.c}.
+
+	\item The \texttt{pfd\_rec} field contains a pointer to the record that
+the format code (modifiers and flags) applies to.
+
+	\item The \texttt{pfd\_next} field contains a pointer to the next
+\texttt{struct~\textit{pfargd}} in the list or \texttt{NULL} if there are no
+further entries.
+
+\end{itemize}
+
+\section{Aggregations}
+\label{sec:aggregations}
+
+\subsection{DTrace aggregation trace buffer}
+\label{subsec:agg_trace_buffer}
+
+Figure~\ref{fig:agg_trace_buffer} presents an overview of a DTrace aggregation
+trace buffer:
+
+\begin{figure}[!h]
+	\centering
+	\begin{tikzpicture}
+		\matrix [matrix of nodes] {
+			\node[
+				below,
+				rectangle split,
+				rectangle split horizontal=true,
+				minimum height=1cm,
+				align=center,
+				rectangle split,
+				rectangle split parts=7,
+				rectangle split part fill={red!20,blue!20,green!20,none,red!20,blue!20,green!20},
+				draw
+			] (barr1) 
+			{	\nodepart[nn]{one}\texttt{AGGID}
+				\nodepart[nn]{two}\texttt{key}
+				\nodepart[nn, text width=3cm]{three}\texttt{value}
+				\nodepart[nn]{four}\texttt{...}
+				\nodepart[nn]{five}\texttt{AGGID}
+				\nodepart[nn]{six}\texttt{key}
+				\nodepart[nn,text width=3cm]{seven}\texttt{value}
+			}; \\
+			% Next row
+			\node[
+				fit=(barr1),
+				inner xsep=0pt,
+				minimum height=3cm,
+				align=center,
+				fit={(barr1)},
+				draw] {\texttt{...}}; \\
+			% Next row
+			\node[
+				fit=(barr1),
+				inner xsep=0pt,
+				minimum height=1cm,
+				align=center,
+				fill=blue!20,
+				draw] (free) {\texttt{Aggregation keys}}; \\
+			% Next row
+			\node[
+				fit=(barr1),
+				inner xsep=0pt,
+				minimum height=1cm,
+				align=center,
+				fill=red!20,
+				draw] {\texttt{Aggregation metadata}}; \\
+		};
+
+	\draw [->,transform canvas={xshift=-25pt}] (free.north west) -- ([yshift=25pt] free.north west) node[midway,above=10pt]{\texttt{keys}};
+
+	\draw [->,transform canvas={xshift=-25pt}] (barr1.south west) -- ([yshift=-25pt] barr1.south west) node[midway,below=10pt]{\texttt{records}};
+
+	\draw [decorate,decoration={brace,raise=5pt}] (barr1.north west) -- (barr1.three split north) node[midway,above=10pt]{$Record_0$};
+
+	\draw [decorate,decoration={brace,raise=5pt}] (barr1.four split north) -- node[above=10pt]{$Record_n$} (barr1.north east);
+	
+	\end{tikzpicture}
+	\caption{DTrace aggregation trace buffer.}
+	\label{fig:agg_trace_buffer}
+\end{figure}
+
+\begin{itemize}
+
+	\item{\texttt{AGGID}}: identifies the aggregation corresponding to the
+trace record; the identifier type is \texttt{dtrace\_aggid\_t} which corresponds
+to a unsigned 32 bit integer.
+
+	\item{\texttt{key}:} the key of the aggregation entry. (Note that
+DTrace supports compound keys such as \texttt{@a[probefunc, arg0] = count();}.)
+
+	\item{\texttt{value}:} the value corresponding to the key. In the case of
+an aggregation such as \texttt{count()} or \texttt{min()} the value contains
+the current count or minimum value respectively. In other case, such as
+computing the average, the value may consist of a tuple. For example, as
+computing an average does not distribute over addition, when computing
+\texttt{avg(timestamp - self->ts)} the aggregating function stores both the
+running sum of \texttt{timestamp - self->ts} and the number of times the
+\texttt{avg()} function was called. These values are then used to compute the
+average at the point when the aggregation is printed.
+
+\end{itemize}
+
+Note that neither the length of the key (or keys) or the length of the trace
+record is specified by the DTrace trace aggregation buffer.
+Instead, a separate stream of metadata is used to interpret the trace buffer.
+The data structures describing the metadata stream are described in
+Section~\ref{subsec:agg_data_structures}.
+
+\subsubsection{Userspace copy}
+\label{subsubsec:bufsnap}
+
+The DTrace aggregation trace buffer is copied from the kernel to the userspace
+consumer by invoking the \texttt{AGGSNAP} ioctl.  Within \texttt{libdtrace} the
+\texttt{AGGSNAP} ioctl is invoked by the function
+\texttt{dt\_aggregate\_snap\_cpu()} found in the file \texttt{dt\_aggregate.c}.
+
+\subsection{Data structures}
+\label{subsec:agg_data_structures}
+
+\subsubsection{\texttt{struct~\textit{dtrace\_aggdesc}}}
+\label{subsubsec:dtagd}
+
+The \texttt{struct~\textit{dtrace\_aggdesc}} (Figure~\ref{fig:dtagd}) contains
+metadata required to intepret trace records from a given aggregation.  The
+\texttt{struct~\textit{dtrace\_aggdeesc}} is returned from the kernel to user
+space by invoking the \texttt{AGGDESC} ioctl.
+
+\begin{figure}[!h]
+	\centering
+	\begin{tikzpicture}[->, -{Latex}]
+
+		\node[split=9,label=north:\texttt{struct~\textit{dtrace\_aggdesc}}] (aggdesc) at (6,0) {
+		\textit{dtagd\_name: char *}
+		\nodepart{two}\textit{dtagd\_varid: dtrace\_aggvarid\_t}
+		\nodepart{three}\textit{dtagd\_flags: int}
+		\nodepart{four}\textit{dtagd\_id: dtrace\_aggid\_t}
+		\nodepart{five}\textit{dtagd\_epid: dtrace\_epid\_t}
+		\nodepart{six}\textit{dtagd\_size: uint32\_t}
+		\nodepart{seven}\textit{dtagd\_nrecs: int}
+		\nodepart{eight}\textit{dtagd\_pad: uint32\_t}
+		\nodepart{nine}\textit{dtagd\_rec[1]: dtrace\_recdesc\_t}};
+
+	\end{tikzpicture}
+	\caption{Data structure used to describe an aggregationn.}
+	\label{fig:dtagd}
+\end{figure}
+
+\begin{itemize}
+
+	\item The \texttt{dtagd\_name} field is used to store the name of the
+aggregation (that is, the identifier used in the DTrace script, for example,
+\texttt{@a}). It should be noted that this is not known within the kernel and
+is therefore not returned by the \texttt{AGGDESC} ioctlcall.  Correlating the
+\texttt{AGGID} (stored in the \texttt{dtagd\_id} field) with the userspace
+identifier and name is surprisingly convoluted, this is described in further
+detail below.
+
+	\item The \texttt{dtagd\_varid} field contains id assigned to the
+aggregation during the compilation. This value is not know within the kernel
+and is therefore not returned by the \texttt{AGGDESC ioctl}.
+
+	\item The \texttt{dtagd\_flags} field contains a set of flags that apply to
+the aggregation; in the current implementation a single flag 
+\texttt{DTRACE\_AGD\_PRINTED} is present. When set,
+\texttt{DTRACE\_AGD\_PRINTED} idnicates that the aggregation has been printed.
+
+	\item The \texttt{dtagd\_id} field contains the identifier assigned to the
+aggregation. Currently DTrace identifies both aggregations and enablings with
+simple numerical identifiers (32-bit unsigned integers). The value of these
+identifiers on the current kernel state. For example aggregation identifiers
+are assigned by a kernel unit allocator (\texttt{vmem\_alloc()} on Illumos and
+\texttt{alloc\_unr()} of FreeBSD). The value returned by the allocator is
+clearly dependent on previous allocated/freed values, which in turn depends on
+the current DTrace enablings.
+
+	\item The \texttt{dtagd\_epid} field contains the identifer of the enabling
+(that is, the enabled probe identifier).
+
+	\item The \texttt{dtagd\_size} field contains the size of the aggregation;
+thta is, the total size of the aggregation trace record (see
+Figure~\ref{fig:agg_trace_buffer}).
+
+	\item The \texttt{dtagd\_nrecs} field contains the number of records in
+the \texttt{dtagd\_rec} field.
+
+	\item The \texttt{dtagd\_pad} field points to a data structure used to
+handle a specifc format code (such as \texttt{\%s}). The printf format
+conversion dictionary (\texttt{\_dtrace\_conversions}) can be found in the
+file \texttt{dt\_prinf.c}.
+
+	\item The \texttt{dtagd\_rec} field is a variable sized array (of
+\texttt{dtagd\_nrecs} entries); this data structure is described in
+Section~\ref{subsubsec:dtrd}.  As with probes, the
+\texttt{struct~\textit{dtrace\_recdesc}} data structures contain metadata
+necessary to parse trace records in the aggregation trace buffer (see
+Figure~\ref{fig:agg_trace_buffer}). In the case of aggregations, these data
+structures define the location of the key (or sets of keys) and the value; note
+that the value is always defined by the last record description.
+
+\end{itemize}
+
+Both the kernel and userspace independently name aggregations. In kernel,
+aggregations are named with a kernel unit allocator (such as
+\texttt{alloc\_unr} in FreeBSD). In contrast, userspace assigns an identifer to
+the aggregation at compilation time. The \texttt{dtagd\_varid} field is used to
+contain the compile time indetifier for the aggregation. This is determined by
+inspecting the \texttt{dtag\_rec[0].dtrd\_uarg} field; that is, the first
+record description's \texttt{dtrd\_uarg} field. The value of
+\texttt{dtrd\_uarg} is cast as a \texttt{dtrace\_stmdesc\_t} allowing the
+compiler assigned identifier and user assigned name of the aggregation to be
+determined.
+
+Whith anonymous enablings the connection between the aggregation identifiers
+created at compilation and execution time is broken. And instead all
+aggregations are assigned \texttt{DTRACE\_AGGVARIDNONE}\footnote{Note as the
+aggregation name can't be determined it cannot be included in the printed
+output.}
+
+\subsubsection{\texttt{struct~\textit{dtrace\_aggkey}}}
+\label{subsubsec:dtagd}
+
+The \texttt{struct~\textit{dtrace\_aggkey}} (Figure~\ref{fig:dtagd}) is used to
+represent a key within a given aggregation. This data structure is used solely
+within the kernel.
+
+\begin{figure}[!h]
+	\centering
+	\begin{tikzpicture}[->, -{Latex}]
+
+		\node[split=5,label=north:\texttt{struct~\textit{dtrace\_aggkey}}] (aggdesc) at (6,0) {
+		\nodepart{one}\textit{dtak\_hashval: uint32\_t} 
+		\nodepart{two}\textit{dtak\_action: uint32\_t}
+		\nodepart{three}\textit{dtak\_size: uint32\_t}
+		\nodepart{four}\textit{dtak\_data: caddr\_t}
+		\nodepart{five}\textit{dtak\_next: struct~dtrace\_aggkey~*}};
+
+	\end{tikzpicture}
+	\caption{Data structure respresenting a key within the aggregation hash table.}
+	\label{fig:dtagd}
+\end{figure}
+
+\begin{itemize}
+
+	\item The \texttt{dtak\_hashval} field contains the hash value of the key;
+the hash value is computed using the Jenkins's ``one-at-a-time'' hash function.
+
+	\item The \texttt{dtak\_action} field identifies the aggregating function
+that applies to this aggregation. The \texttt{dtak\_action} fiels is 4-bits in
+length allowing 16 aggregation functions, of which 9 are currently defined:
+
+	\begin{enumerate}
+
+		\item \texttt{count()},  
+		\item \texttt{min()},
+		\item \texttt{max()},
+		\item \texttt{avg()},
+		\item \texttt{sum()},
+		\item \texttt{stddev()},
+		\item \texttt{quantize()} power of 2 quantization,
+		\item \texttt{lquantize()} linear quantization and
+		\item \texttt{llquantize()} log-linear quantization.
+
+	\end{enumerate}
+
+	\item The \texttt{dtak\_size} field contains an offset from the start of
+the aggregation record to the value, thus it is the combined size of the
+aggregation and the key (or set of keys).
+
+	\item The \texttt{dtak\_data} field contains a pointer to the data
+corresponding to this key; that is, the key's corresponding record in trace
+buffer (see FIgure~\ref{fig:agg_trace_buffer}).
+
+	\item The \texttt{dtak\_next} field contains a pointer to the next
+aggregation key in this list (the hash table is implemented with separate
+chaining using a linked list).
+
+\end{itemize}
+
+\subsubsection{\texttt{struct~\textit{dtrace\_aggbuffer}}}
+\label{subsubsec:dtagb}
+
+The \texttt{struct \textit{dtrace\_aggbuffer}} (Figure~\ref{fig:dtagd})
+specifies the metadata for an aggregation. The data structure is used solely
+within the kernel\footnote{The comments within the code suggest that the
+userspace copy of the aggregation buffer doesn't contain the hash map and
+associated metadata. However, as the \texttt{AGGSNAP} ioctl is practical
+identical to the \texttt{BUFSNAP} ioctl, it appears that the data is in the
+buffer but unsused by \texttt{libdtrace}}.
+
+\begin{figure}[!h]
+	\centering
+	\begin{tikzpicture}[->, -{Latex}]
+
+		\node[split=3,label=north:\texttt{struct~\textit{dtrace\_aggbuffer}}] (aggdesc) at (6,0) {
+		\textit{dtagb\_hashsize: uintptr\_t}  
+		\nodepart{two}\textit{dtagb\_free: uintptr\_t}
+		\nodepart{three}\textit{dtagb\_hash: dtrace\_aggkey\_t~**}};
+
+	\end{tikzpicture}
+	\caption{Data structure used to describe an aggregationn.}
+	\label{fig:dtagd}
+\end{figure}
+
+\begin{itemize}
+
+	\item The \texttt{dtagb\_hashsize} field is used to store the number of
+buckets in the hashtable used to stored aggregations; in the current
+implementation the hash table accounts for approximately 1/8 of the
+total buffer size\footnote{Despite the comment suggesting this value may be 
+changed as a result of performance analysis, there is no evidence that this
+heuristic has ever been evaluated.}.
+
+	\item The \texttt{dtagb\_free} field contains a pointer to the location
+in the DTrace aggregation buffer where new aggregation keys are allocated;
+as show in Figure~\ref{fig:agg_trace_buffer} allocation of keys occurs from the 
+start of the hash table upwards towards the aggregation records.
+
+	\item The \texttt{dtagb\_hash} field contains a pointer to the hash table
+used to store aggregations.
+
+\end{itemize}
+
+The relationships between the \texttt{dtagb\_free} and \texttt{dtagb\_hash}
+fields and the DTrace aggregation buffer are shown in
+Figure~\ref{fig:dtagb_detail}.
+
+\begin{figure}[!h]
+	\centering
+	\begin{tikzpicture}
+		\matrix [matrix of nodes,nodes={align=center,draw}] {
+			% Next row
+			\node[
+				minimum width=11cm,
+				fill=green!20] (records) {\texttt{Aggregation records}}; \\
+			% Next row
+			\node[
+				fit=(records),
+				inner xsep=0pt,
+				minimum height=3cm] {\texttt{...}}; \\
+			% Next row
+			\node[
+				fit=(records),
+				inner xsep=0pt,
+				fill=blue!20] (free) {\texttt{Aggregation keys}}; \\
+			% Next row
+			\node[
+				fit=(records),
+				inner xsep=0pt,
+				fill=red!20,
+				minimum height=0.5cm] (hashtable1) {\texttt{struct~\textit{dtrace\_aggkey}~*}}; \\
+			% Next row
+			\node[
+				fit=(records),
+				inner xsep=0pt,
+				fill=red!20,
+				minimum height=0.5cm] {\texttt{...}}; \\
+			% Next row
+			\node[
+				fit=(records),
+				inner xsep=0pt,
+				fill=red!20,
+				minimum height=0.5cm] (hashtablen) {\texttt{struct~\textit{dtrace\_aggkey}~*}}; \\
+			% Next row
+			\node[
+				fit=(records),
+				inner xsep=0pt,
+				fill=red!20,
+				minimum height=0.5cm] (dtagb) {\texttt{struct~\textit{dtrace\_aggbuffer}}}; \\
+		};
+
+	\draw [->,transform canvas={xshift=-5pt}] ([xshift=-25pt] free.north west) -- (free.north west) node[midway,left=15pt]{\texttt{dtagb\_free}};
+
+	\draw [->,transform canvas={xshift=-5pt}] ([xshift=-25pt] hashtable1.north west) -- (hashtable1.north west) node[midway,left=15pt]{\texttt{dtagb\_hash}};
+
+	\draw [db] (hashtable1.north west) -- (hashtablen.south west) node[midway,left=10pt]{\texttt{dtagb\_hashsize}};
+
+	\end{tikzpicture}
+	\caption{DTrace aggregation trace buffer.}
+	\label{fig:dtagb_detail}
+\end{figure}
