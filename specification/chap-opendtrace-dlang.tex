@@ -105,23 +105,40 @@ specify \texttt{StructOrUnionSpec} as follows:
 
 % FIXME: SturctOrUnionSpec should include things like typedef and so on
 \begin{grammar}
-<StructOrUnionSpec> ::= ( `struct' | `union' ) [ <Identifier> ] \newline
+<StructOrUnionSpec> ::= <Modifier> ( `struct' | `union' ) [ <Identifier> ] \newline
 	`{' <StructDeclList> `}' [ <VarList> ] `;'
 	\alt ( `struct' | `union' ) <Identifier> [ <VarList> ] `;' ;
 
 <StructDeclList> ::= <Type> <VarList> `;' \{ <Type> <VarList> `;' \} ;
-\end{grammar}
 
-TODO
-
-% FIXME: Enum should allow for typedefs/... as well.
-\begin{grammar}
-<EnumSpecifier> ::= `enum' [ <Identifier> ] \newline
+<EnumSpecifier> ::= <Modifier> `enum' [ <Identifier> ] \newline
 	`{' <EnumDeclList> `}' [ <VarList> ] `;'
 	\alt `enum' <Identifier> [ <VarList> ] `;' ;
 
 <EnumDeclList> ::= <Identifier> [ `=' <Identifier> ] [ `,' ] ;
 \end{grammar}
+
+\noindent
+Here we introduce a new non-terminal, \texttt{Modifier} which encapsulates the
+modifiers that may occur before a \texttt{struct} or \texttt{enum} definition.
+It is defined as follows:
+
+\begin{grammar}
+<Modifier> ::= `const'
+	\alt `volatile'
+	\alt `typedef'
+	\alt `register'
+	\alt `restrict'
+	\alt `static'
+	\alt `extern' ;
+\end{grammar}
+
+Eventhough \texttt{Modifier} is permissive in terms of what keywords are
+allowed, the definitions of these keywords are equivalent to those in C and may
+only be used when appropriate. The compiler may choose to emit a warning and
+ignore modifiers that are not applicable or it may choose to be more strict and
+treat misuse of a modifier as an error. Using these modifiers when not
+applicable is considered undefined behaviour. \newline
 
 \section{Safety}
 \label{sec:safety}
