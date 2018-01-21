@@ -55,6 +55,7 @@ Additionally, we define number constants that are supported in D:
 	\alt `0x' <HexDigit>
 \end{grammar}
 
+% XXX: Is this sufficient for a <Identifier>
 \begin{grammar}
 <Identifier> ::= <Word> \{ ( <DecDigitWithZero> | <Word> ) \} ;
 
@@ -102,7 +103,6 @@ with their C counterparts and ensure ABI compatibility. This is important when
 tracing the kernel, but also allows trivial translation to other ABIs.  We
 specify \texttt{StructOrUnionSpec} as follows:
 
-% FIXME: SturctOrUnionSpec should include things like typedef and so on
 \begin{grammar}
 <StructOrUnionSpec> ::= <Modifier> ( `struct' | `union' ) [ <Identifier> ] \newline
 	`{' <StructDeclList> `}' [ <VarList> ] `;'
@@ -122,6 +122,7 @@ Here we introduce a new non-terminal, \texttt{Modifier} which encapsulates the
 modifiers that may occur before a \texttt{struct} or \texttt{enum} definition.
 It is defined as follows:
 
+% XXX: Verify that this is correct
 \begin{grammar}
 <Modifier> ::= `const'
 	\alt `volatile'
@@ -139,6 +140,32 @@ only be used when appropriate. The compiler may choose to emit a warning and
 ignore modifiers that are not applicable or it may choose to be more strict and
 treat misuse of a modifier as an error. Using these modifiers when not
 applicable is considered undefined behaviour. \newline
+
+\noindent
+Since D is a domain-specific language for tracing and provides probes in the
+kenrel, we define the following way of specifying probes:
+
+% TODO: Make this render a bit nicer.
+% XXX: Is this correct?
+\begin{grammar}
+<ProbeSpecifier> ::= <Identifier>
+	\alt [ <Identifier> ] `:' [ <Identifier> ]
+	\alt [ <Identifier> ] `:' [ <Identifier> ] `:' [ <Identifier> ]
+	\alt [ <Identifier> ] `:' [ <Identifier> ] `:'
+	[ <Identifier> ] `:' [ <Identifier> ]
+\end{grammar}
+
+\noindent
+This provides us with a way to specify the \texttt{provider}, \texttt{module},
+\texttt{function} and \texttt{name} of a DTrace probe in D.
+
+% TODO: Define <Predicate> and <Statements>
+\begin{grammar}
+<ProbeDefinition> ::= <ProbeSpecifier> [ <Predicate> ] `{'  { <Statement> } `}'
+\end{grammar}
+
+% TODO: Define all different types of expressions that we can have, assignment
+% operators, conditionals, ...
 
 \section{Safety}
 \label{sec:safety}
