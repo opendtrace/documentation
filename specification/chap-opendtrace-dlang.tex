@@ -19,15 +19,14 @@ environments.
 
 In this section, we will define the grammar of the D language and explain how
 each part fits together when interacting with DTrace. Terminals are represented
-using lower\_case, while non-terminals are written as CamelCase. We first define
-a number of auxiliary constructs to define the rest of the grammar.
+using lower\_case, while non-terminals are written as CamelCase. Furthermore, we
+define the tab character, `\textbackslash t' and space, ` ' as separators. We first
+define a number of auxiliary constructs to define the rest of the grammar.
 
 \begin{grammar}
 <letter> ::= `A' ... `Z'
 	\alt `a' ... `z'
 	\alt `\_' ;
-
-<sep> ::= ` ' | `\\t' ;
 
 <Word> ::= <letter> \{ <letter> \} ;
 \end{grammar}
@@ -57,7 +56,7 @@ Additionally, we define number constants that are supported in D:
 \end{grammar}
 
 \begin{grammar}
-<Identifier> ::= <Word> <Integer> ;
+<Identifier> ::= <Word> \{ ( <DecDigitWithZero> | <Word> ) \} ;
 
 <VarList> ::= <Identifier> \{ `,' <Identifier> \} ;
 \end{grammar}
@@ -133,6 +132,7 @@ It is defined as follows:
 	\alt `extern' ;
 \end{grammar}
 
+\noindent
 Eventhough \texttt{Modifier} is permissive in terms of what keywords are
 allowed, the definitions of these keywords are equivalent to those in C and may
 only be used when appropriate. The compiler may choose to emit a warning and
