@@ -17,14 +17,15 @@ environments.
 
 %TODO: Define all the auxiliary things we may need, such as integers, ...
 
-In this section, we will define the grammar of the D language and explain
-how each part fits together when interacting with DTrace. We first define
+In this section, we will define the grammar of the D language and explain how
+each part fits together when interacting with DTrace. Terminals are represented
+using lower\_case, while non-terminals are written as CamelCase. We first define
 a number of auxiliary constructs to define the rest of the grammar.
 
 \begin{grammar}
 <letter> ::= `A' ... `Z'
-          \alt `a' ... `z'
-	  \alt `\_' ;
+	\alt `a' ... `z'
+	\alt `\_' ;
 
 <sep> ::= ` ' | `\\t' ;
 
@@ -46,13 +47,13 @@ Additionally, we define number constants that are supported in D:
 <oct\_digit> ::= `0' | `1' | `2' | `3' | `4' | `5' | `6' | `7' ;
 
 <HexDigit> ::= <DecDigitWithZero>
-            \alt `A' ... `F'
-	    \alt `a' ... `f' ;
+	\alt `A' ... `F'
+	\alt `a' ... `f' ;
 
 <Integer> ::= <dec\_digit> <DecDigitWithZero>
-           \alt `0b' <bin\_digit>
-	   \alt `0' <oct\_digit>
-	   \alt `0x' <HexDigit>
+	\alt `0b' <bin\_digit>
+	\alt `0' <oct\_digit>
+	\alt `0x' <HexDigit>
 \end{grammar}
 
 \begin{grammar}
@@ -105,8 +106,8 @@ specify \texttt{StructOrUnionSpec} as follows:
 % FIXME: SturctOrUnionSpec should include things like typedef and so on
 \begin{grammar}
 <StructOrUnionSpec> ::= ( `struct' | `union' ) [ <Identifier> ] \newline
-		     `{' <StructDeclList> `}' [ <VarList> ] `;'
-		     \alt ( `struct' | `union' ) <Identifier> [ <VarList> ] `;' ;
+	`{' <StructDeclList> `}' [ <VarList> ] `;'
+	\alt ( `struct' | `union' ) <Identifier> [ <VarList> ] `;' ;
 
 <StructDeclList> ::= <Type> <VarList> `;' \{ <Type> <VarList> `;' \} ;
 \end{grammar}
@@ -116,8 +117,8 @@ TODO
 % FIXME: Enum should allow for typedefs/... as well.
 \begin{grammar}
 <EnumSpecifier> ::= `enum' [ <Identifier> ] \newline
-	         `{' <EnumDeclList> `}' [ <VarList> ] `;'
-		 \alt `enum' <Identifier> [ <VarList> ] `;' ;
+	`{' <EnumDeclList> `}' [ <VarList> ] `;'
+	\alt `enum' <Identifier> [ <VarList> ] `;' ;
 
 <EnumDeclList> ::= <Identifier> [ `=' <Identifier> ] [ `,' ] ;
 \end{grammar}
