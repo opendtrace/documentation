@@ -1,13 +1,16 @@
 The Compact C Type Format (CTF) encapsulates all of the information
 needed by OpenDTrace to understand C language types such as integers,
-strings, floats and structures.  The goal of having another section
-just for C type information is to provide a compact representation of
-the information that usually appears in the debugging sections of
-object files and executables.  CTF only contains data types it
-does not contain other debugging infromation, which allows it to be
-far more compact.  The debugging sections on a debug build of the FreeBSD
-kernel in 2017 take up 78 megabytes of space, while the CTF section in the
-same kernel take up only 800 kilobytes. 
+strings, floats and structures, as they are represented in the program
+that is being traced.  The goal of having another section just for C
+type information is to provide a compact representation of the
+information that usually appears in the debugging sections of object
+files and executables. The CTF section gives D scripts programmatic
+access to the names of types making it easier to implement features
+such as pretty printing of data.  CTF only contains data types it does
+not contain other debugging infromation, which allows it to be far
+more compact.  The debugging sections on a debug build of the FreeBSD
+kernel in 2017 take up 78 megabytes of space, while the CTF section in
+the same kernel take up only 800 kilobytes.
 
 \section{On-Disk Format}
 \label{sec:ctf-on-disk-format}
