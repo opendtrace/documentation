@@ -45,7 +45,19 @@ which program made the call to \texttt{write} and so we also print the
 of the program that caused the probe to fire.
 
 Coming back to the middle of Figure~\ref{fig:d-one-liner} we see text
-marked in green, which is a predicate.
+marked in green, which is a predicate.  Predicates are used to filter
+when probes fire allowing the script writer to reduce the amount of
+data collected during tracing.  A system call such as \texttt{write}
+is called frequently on a busy system and without a predicate the
+script will collect quite a bit of data, much of which may not be
+relevant to the issue that we are trying to investigate.  The
+predicate in Figure~\ref{fig:d-one-liner} allows the probe to fire if,
+and only if, the call to \texttt{write} is not equal to zero (0).
+More complex boolean expressions are possible within predicates but we
+want to have a simple example.
+
+With this example in mind we now turn to the formal grammar for the D
+language.
 
 \section{Language grammar}
 \label{sec:grammar}
