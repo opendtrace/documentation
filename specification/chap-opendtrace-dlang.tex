@@ -5,6 +5,48 @@ formal definition of the D programming language that is a part of
 OpenDTrace, as well as elaborate on its properties in multithreaded
 environments.
 
+\section{Example Script}
+\label{sec:example-script}
+
+Before describing the full grammar in detail we present a brief,
+example, D script, called a \emph{one liner}.  D one liners are the
+most frequently used D scripts because they are an easy way to start
+tracing a system without writing a file full of D code.  
+
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.8\linewidth]{oneliner.pdf}
+  \caption{D One Liner}
+  \label{fig:d-one-liner}
+\end{figure}
+
+D scripts are a collection of one or more probe points with optional
+actions and filtering predicates.  Figure~\ref{fig:d-one-liner} shows
+a simple, but descriptive, D script.  The script prints out the size
+of the data that a program attempts to write using the
+\texttt{write(2)} system call as well as name of the program that made
+the write call.  Starting from the left hand side of
+Figure~\ref{fig:d-one-liner} we see the probe point in red.  The probe
+point includes the provider name, \texttt{syscall} as well as the
+function, \texttt{write}, and the fact that we want to look at the
+\texttt{entry} into the system call.  Moving to the far right of
+Figure~\ref{fig:d-one-liner} we see the action that will be taken
+whenever the probe point fires.  Actions are written in the D language
+which is an interpreted subset of the C language and so this script
+should be familiar to most C or C++ programmers.  D has a large set of
+built-in subroutines, described in Chapter~\ref{chap:subroutines},
+which includes familiar functions such as \texttt{printf()}.  Each
+probe point can have up to six (6) arguments, numbered from arg0 to
+arg5, and in this example we are interested in arg2, which is the
+\texttt{nbytes} argument to the write system call.  We want to know
+which program made the call to \texttt{write} and so we also print the
+\texttt{execname} which a D built in variable that contains the name
+of the program that caused the probe to fire.
+
+Coming back to the middle of Figure~\ref{fig:d-one-liner} we see text
+marked in green, which is a predicate.
+
 \section{Language grammar}
 \label{sec:grammar}
 
