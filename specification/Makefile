@@ -154,7 +154,35 @@ SOURCE=								\
 	subr/sx_shared_held.tex					\
 	subr/tolower.tex					\
 	subr/toupper.tex					\
-	subr/uuidstr.tex
+	subr/uuidstr.tex					\
+	vars/arg09.tex						\
+	vars/args.tex						\
+	vars/caller.tex						\
+	vars/cpu.tex						\
+	vars/cpucycles.tex					\
+	vars/cpuinstrs.tex					\
+	vars/curthread.tex					\
+	vars/dispatchaddr.tex					\
+	vars/epid.tex						\
+	vars/errno.tex						\
+	vars/execname.tex					\
+	vars/gid.tex						\
+	vars/id.tex						\
+	vars/ipl.tex						\
+	vars/machtimestamp.tex					\
+	vars/pid.tex						\
+	vars/ppid.tex						\
+	vars/probe.tex						\
+	vars/stackdepth.tex					\
+	vars/tid.tex						\
+	vars/ucaller.tex					\
+	vars/uid.tex						\
+	vars/uregs.tex						\
+	vars/ustackdepth.tex					\
+	vars/vcycles.tex					\
+	vars/vinstrs.tex					\
+	vars/vtimestamp.tex					\
+	vars/walltimestamp.tex
 
 ${TARGET}: ${SOURCE}
 	latexmk -pdf -bibtex ${MAIN_TEX}
