@@ -7,7 +7,9 @@
 \subsubsection*{Description}
 
 The \verb|errno| variable contains the numeric value of the error
-number returned by the most recent system call.
+number returned by the most recent system call in the program that is
+executing when the probe fires.  The program may be the kernel or a
+user space program.
 
 \subsubsection*{Failure modes}
 
