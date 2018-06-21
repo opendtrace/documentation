@@ -6,6 +6,38 @@ called from probe context without risking system safety.
 
 \section{Subroutine calling mechanism}
 
+Every D subroutine exists simultaneously as a part of the D scripting
+language as well as code in the operating system kernel.  D subroutines
+must be coded in such a way that they do not depend on kernel
+services, such as memory allocation, or mutual exclusion primitives,
+which might be inspected as part of a tracing session.
+
+When a subroutine appears in a D script it is the responsibility of
+the D code generator to turn the subroutine and its arguments into DIF
+to be passed into the kernel for execution.  All subroutines and their
+arguments are described in a single structure, \verb|_dtrace_globals|
+in the \verb|libdtrace| library.  Each subroutine has a string name,
+an identifier type, a set of flags, a numeric ID, a small set of
+functions, and an argument list.  The argument list defined in the
+\verb|_dtrace_globals| structure is a string which is processed via
+the \verb|dt_open| function into a relevant set of argument types.
+
+The \verb|DT_INSTR_CALL| instruction is used by the D code generator
+to generate a subroutine call.  Each call instruction has an
+identifier, which is the name of the subroutine, and a set of
+registers which contain the arguments to the call.  The arguments in
+the registers are placed into D's tuple stack for use in kernel
+context.
+
+Once in the kernel all subroutines are executed from a central
+function, \verb|dtrace_dif_subr| which dispatches calls to various,
+OpenDTrace private versions of the functions required.  All of the
+subroutines are implemented using the register state passed into the
+kernel and represented on the tuple stack, or local variables, in
+order to avoid using any of the kernel's memory allocation subsystem.
+All subroutines are executed from probe context (\verb|dtrace_probe|)
+via the \verb|dt_dif_emulate| routine.
+
 \section{Subroutine list}
 
 \begin{table}
