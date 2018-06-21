@@ -34,7 +34,7 @@ FreeBSD tree has three, separate, \pathname{dtrace.h} files:
 \item [sys/cddl/contrib/opensolaris/uts/common/sys/dtrace.h] The one
   you care about.
 \item [cddl/contrib/opensolaris/lib/libdtrace/common/dtrace.h] Library APIs
-\item [cddl/compat/opensolaris/include/dtrace.h] Compatability include
+\item [cddl/compat/opensolaris/include/dtrace.h] Compatibility include
 \end{description}
   \caption{The various versions of dtrace.h}
   \label{fig:freebsd-dtrace-h}
@@ -43,12 +43,12 @@ FreeBSD tree has three, separate, \pathname{dtrace.h} files:
 \section{macOS}
 \label{sec:macos-code}
 
-Open source code from Apple is supplied in discrete pacakges.  The
+Open source code from Apple is supplied in discrete packages.  The
 DTrace code on macOS is split between the \pathname{xnu} kernel and
 the rest of the code which is contained in a \pathname{dtrace} code
 drop.  The kernel includes a very small number of files that are
 absolutely necessary to build the kernel itself, including the driver
-code.  All of the kernle code is collected into the
+code.  All of the kernel code is collected into the
 \pathname{xnu/bsd/dev/dtrace/} directory with the macOS translators,
 the D files that know about the internals of kernel data structures,
 are contained in the \pathname{scripts} sub-directory.  In the
