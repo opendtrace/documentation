@@ -1,18 +1,24 @@
-DTrace was originally developed on \pathname{OpenSolaris} which had a
-unique way of organizing code.  One key thing to note is that there
-are \emph{two different} \pathname{dtrace.h} include files, one for the
+\section{Open Solaris}
+\label{sec:open-solaris-code}
+
+DTrace was originally developed on \pathname{OpenSolaris}.  As this
+was the original place that the code resided there was no reason to
+split things along OS or license boundaries, concerns which cropped up
+in subsequent ports of the system.  The main DTrace command resides in
+\pathname{cmd}, the supporting libraries are in
+\pathname{lib/libdtrace} and the kernel code is in the
+\pathname{uts/common}, \pathname{uts/intel}, \pathname{uts/sparc}, and
+related directories.  One key thing to note is that there are
+\emph{two different} \pathname{dtrace.h} include files, one for the
 kernel and one for the user space code.
 
 \section{Illumos}
 \label{sec:illumos-code}
 
 The original source of DTrace came from OpenSolaris which has morphed
-into Illumos.  As this was the original place that the code resided
-there was no reason to split things along OS or license boundaries.
-The main DTrace command resides in \pathname{cmd}, the supporting
-libraries are in \pathname{lib/libdtrace} and the kernel code is in
-the \pathname{uts/common}, \pathname{uts/intel}, \pathname{uts/sparc},
-and related directories.
+into \pathname{Illumos}.  The \pathname{Illumos} tree continues to use
+the same directory and file layout as was used in
+\pathname{OpenSolaris}
 
 \section{FreeBSD}
 \label{sec:freebsd-code}
