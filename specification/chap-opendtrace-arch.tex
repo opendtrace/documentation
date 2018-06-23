@@ -118,6 +118,26 @@ with others, in a tree like structure. Once an ECB is safely stored in
 the kernel, the kernel module tells the provider to enable the probes
 that are to be instrumented.
 
+Enabling a probe means telling the provider that at the right point
+the \verb|dtrace_probe| kernel function must be called.  All tracing
+ultimately goes through the \verb|dtrace_probe| function in the
+kernel, which is responsible for all of the work related to any part
+of tracing.  How \verb|dtrace_probe| is ultimately called depends on
+both the program and the provider.
+
+The function boundary tracepoint (\verb|fbt|) and \verb|fasttrap|
+providers which allow tracing of kernel code and user space code,
+respectively, both operate under the same model.  They both find the
+instruction in the program at which the tracepoint is to be placed and
+swap the regular instruction with a an architecture dependent
+break-point instruction when tracing is enabled.
+
+The profile provider is completely different from the FBT or fasttrap
+providers as it is meant to call \verb|dtrace_probe| on a periodic
+basis using in-kernel timers.  Enabling a profile provider does not
+change any instruction stream in any program, but instead adds calls
+to \verb|dtrace_probe| to the kernel's timing machinery.
+
 When code execution reaches a point that has an enabled probe, the
 probe fires and a call is made into the kernel module (5). The kernel
 module then walks through the tree of ECBs, executing any that match
@@ -126,19 +146,19 @@ buffer created when \texttt{libdtrace} was initialized. At a later
 point the data is copied out of the kernel by the library (7), and
 then the final results are made available to the end user (8).
 
-\section{Privilege Model}
-\label{sec:privilege}
-
-The OpenDTrace privilege model is relatively simple, any program that
-wishes to trace another program must be running with \emph{root}
-privileges.  Some operating systems, such as Illumos, provide a more
-nuanced privilege model.
-
 \section{Tracepoint Format}
 \label{sec:tracepoint-format}
 
 \section{User Space Tracing}
 \label{sec:user-space}
+
+\section{Privilege Model}
+\label{sec:privilege}
+
+The OpenDTrace privilege model is relatively simple, any program that
+wishes to trace another program, or the operating system kernel, must
+be running with \emph{root} privileges.  Some operating systems, such
+as Illumos, provide a more nuanced privilege model.
 
 %%% Local Variables:
 %%% mode: latex
