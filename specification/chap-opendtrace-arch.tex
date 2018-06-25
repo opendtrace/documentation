@@ -146,11 +146,23 @@ buffer created when \texttt{libdtrace} was initialized. At a later
 point the data is copied out of the kernel by the library (7), and
 then the final results are made available to the end user (8).
 
-\section{Tracepoint Format}
-\label{sec:tracepoint-format}
+\section{Trace Records}
+\label{sec:trace-records}
 
-\section{User Space Tracing}
-\label{sec:user-space}
+When tracing is enabled the OpenDTrace modules in the kernel produce a
+stream of records which are consumed by the \verb|dtrace(1)| command
+and turned into various types of output.  Records are communicated in
+a buffer structure, \verb|dtrace_bufdata| which is shared between the
+kernel and user space.  Buffers contain one of two types of data.
+Either the data is a plain record, or it is an aggregation.  All data
+is arranged as a stream of bytes where the current header gives the
+extent of the data, indicating where the next record can be found.
+
+Plain records contain the data requested by the D script along with
+optional formatting information and arguments.  Aggregations are
+treated specially because they are not simply raw data buffers, but
+instead, contain information that descibes deltas, normalized data,
+and information on data binning.
 
 \section{Privilege Model}
 \label{sec:privilege}
