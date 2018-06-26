@@ -202,16 +202,30 @@ kenrel, we define the following way of specifying probes:
 % TODO: Make this render a bit nicer.
 % XXX: Is this correct?
 \begin{grammar}
-<ProbeSpecifier> ::= <Identifier>
-	\alt [ <Identifier> ] `:' [ <Identifier> ]
-	\alt [ <Identifier> ] `:' [ <Identifier> ] `:' [ <Identifier> ]
-	\alt [ <Identifier> ] `:' [ <Identifier> ] `:'
-	[ <Identifier> ] `:' [ <Identifier> ]
+<ProbeSymbol> ::= <letter>
+	\alt <DecDigitWithZero>
+	\alt `*'
+	\alt `+'
+	\alt `\\'
+	\alt `?'
+	\alt `!'
+	\alt `['
+	\alt `]' ;
+
+<ProbeIdent> ::= <ProbeSymbol> \{ <ProbeSymbol> \} ;
+
+<ProbeSpecifier> ::= <ProbeIdent>
+	\alt [ <ProbeIdent> ] `:' [ <ProbeIdent> ]
+	\alt [ <ProbeIdent> ] `:' [ <ProbeIdent> ] `:' [ <ProbeIdent> ]
+	\alt [ <ProbeIdent> ] `:' [ <ProbeIdent> ] `:' \newline
+	[ <ProbeIdent> ] `:' [ <ProbeIdent> ] ;
 \end{grammar}
 
 \noindent
 This provides us with a way to specify the \texttt{provider}, \texttt{module},
-\texttt{function} and \texttt{name} of a DTrace probe in D.
+\texttt{function} and \texttt{name} of a DTrace probe in D. The reason symbols
+such as `*' are allowed is because D allows the user to write glob expressions
+much like a Unix shell does.
 
 % TODO: Define <Predicate> and <Statements>
 \begin{grammar}
@@ -259,30 +273,71 @@ commitment to safety.
 
 \section{Variables}
 \label{sec:d-variables}
-DTrace implements three different scopes of variables: global,
-thread-local and clause-local. Global variables are visible to every
-probe and across all threads, allowing the user to write scripts that
-carry state across multiple threads should it be
-necessary. Thread-local variables are only visible within a single
-software thread, they are represented in source code as prefixed with
-\texttt{self->}. Clause-local variables are implemented on a
-per-thread basis and are identified by the prefix
-\texttt{this->}. Clause-local variables should be initialised in each
-probe before their use, as the value is otherwise considered
-undefined.
+DTrace implements three different scopes of variables: global, thread-local and
+clause-local. Global variables are visible to every probe and across all
+threads, allowing the user to write scripts that carry state across multiple
+threads should it be necessary and are identified with the variable name. 
+
+Similar to global variables are D built-in variables such as \verb|execname|,
+\verb|curthread|, etc. We make a distinction between the two due to the
+difference between failures that they expose. A list of built-in variables can
+be found in Section~\ref{sec:builtin-variables-ref}.
+
+Thread-local variables are only visible within a single software thread, they
+are represented in source code as prefixed with \texttt{self->}.  A thread-local
+variable is identified with its name and a thread ID.
+
+% XXX: Clause-local variables are ill-defined in DTrace and we need to figure
+%      out a way to talk about them in a more precise manner.
+Clause-local variables are prefixed with \texttt{this->} and are visible only
+within a single \texttt{dtrace\_probe()} call. This means that a clause-local
+variable will be visible across multiple clauses of the same probe, allowing the
+programmer to carry state associated with a clause-local variable across them.
 
 \subsection{Global variables}
 \label{subsec:global-variables}
 
-Any variable introduced in a D script that is not declared as part of
-a \verb|this->| or \verb|self->| is considered to be global in scope,
-meaning that it can be accessed from any action associated with a
-probe when a set of probes are simultaneously activated.  Global
-variables are allocated and instantiated when they are first
-referenced.
+Any variable introduced in a D script that is not declared as part of a
+\verb|this->| or \verb|self->| is considered to be global in scope, meaning that
+it can be accessed from any action associated with a probe when a set of probes
+are simultaneously activated.  Global variables are allocated and instantiated
+when they are first assigned to.  Global variables, however, are subject to the
+semantics of the underlying architecture's cache coherence mechanism.
+
+Global variables exhibit two failure modes:
+\begin{itemize}
+\item The variable could not be allocated.
+\item The use of a global variable has caused a fault.
+\end{itemize}
+The former eventually manifests through the latter failure mode at every program
+point where the variable is used, but we have included it as a separate failure
+mode because DTrace currently increments an according counter to indicate that a
+variable could not be allocated and because it has different implications on the
+rest of the D script.
+
+\subsection{Built-in variables}
+\label{subsec:builtin-variables}
+
+Similarly to global variables, built-in variables are accessible to the
+programmer at any point in the script. The main difference between built-in
+variables and global variables are their semantics. D built-in variables are not
+mutable and are thus not subject to the concurrency semantics of the underlying
+architecture. Furthermore, unlike global variables, built-in variables are
+guaranteed to never cause a page fault and thus can be accessed safely. It is up
+to the DTrace implementation has to ensure that access to these variables is
+race-free and reliable.
 
 \subsection{Thread-local variables}
 \label{subsec:thread-local-variables}
+
+As previously mentioned, thread-local variables are identified with their name
+and a thread ID. The motivation behind them is to have a pragmatic way to carry
+state around probes in a race-free way, as a thread can only be scheduled on a
+single CPU. The failure modes exposed by thread-local variables are the those of
+global variables -- however, thread-local variables do not suffer the problem of
+relying on the underlying architecture's cache coherence semantics under the
+assumption that each software thread can only be scheduled on one CPU and runs
+with interrupts off in the DTrace probe context.
 
 \subsection{Clause-local variables}
 \label{subsec:clause-local-variables}
