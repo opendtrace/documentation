@@ -202,16 +202,30 @@ kenrel, we define the following way of specifying probes:
 % TODO: Make this render a bit nicer.
 % XXX: Is this correct?
 \begin{grammar}
-<ProbeSpecifier> ::= <Identifier>
-	\alt [ <Identifier> ] `:' [ <Identifier> ]
-	\alt [ <Identifier> ] `:' [ <Identifier> ] `:' [ <Identifier> ]
-	\alt [ <Identifier> ] `:' [ <Identifier> ] `:'
-	[ <Identifier> ] `:' [ <Identifier> ]
+<ProbeSymbol> ::= <letter>
+	\alt <DecDigitWithZero>
+	\alt `*'
+	\alt `+'
+	\alt `\\'
+	\alt `?'
+	\alt `!'
+	\alt `['
+	\alt `]' ;
+
+<ProbeIdent> ::= <ProbeSymbol> \{ <ProbeSymbol> \} ;
+
+<ProbeSpecifier> ::= <ProbeIdent>
+	\alt [ <ProbeIdent> ] `:' [ <ProbeIdent> ]
+	\alt [ <ProbeIdent> ] `:' [ <ProbeIdent> ] `:' [ <ProbeIdent> ]
+	\alt [ <ProbeIdent> ] `:' [ <ProbeIdent> ] `:' \newline
+	[ <ProbeIdent> ] `:' [ <ProbeIdent> ] ;
 \end{grammar}
 
 \noindent
 This provides us with a way to specify the \texttt{provider}, \texttt{module},
-\texttt{function} and \texttt{name} of a DTrace probe in D.
+\texttt{function} and \texttt{name} of a DTrace probe in D. The reason symbols
+such as `*' are allowed is because D allows the user to write glob expressions
+much like a Unix shell does.
 
 % TODO: Define <Predicate> and <Statements>
 \begin{grammar}
