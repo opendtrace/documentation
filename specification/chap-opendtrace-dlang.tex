@@ -318,6 +318,15 @@ rest of the D script.
 \subsection{Built-in variables}
 \label{subsec:builtin-variables}
 
+Similarly to global variables, built-in variables are accessible to the
+programmer at any point in the script. The main difference between built-in
+variables and global variables are their semantics. D built-in variables are not
+mutable and are thus not subject to the concurrency semantics of the underlying
+architecture. Furthermore, unlike global variables, built-in variables are
+guaranteed to never cause a page fault and thus can be accessed safely. It is up
+to the DTrace implementation has to ensure that access to these variables is
+race-free and reliable.
+
 \subsection{Thread-local variables}
 \label{subsec:thread-local-variables}
 
