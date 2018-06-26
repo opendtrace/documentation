@@ -330,6 +330,15 @@ race-free and reliable.
 \subsection{Thread-local variables}
 \label{subsec:thread-local-variables}
 
+As previously mentioned, thread-local variables are identified with their name
+and a thread ID. The motivation behind them is to have a pragmatic way to carry
+state around probes in a race-free way, as a thread can only be scheduled on a
+single CPU. The failure modes exposed by thread-local variables are the those of
+global variables -- however, thread-local variables do not suffer the problem of
+relying on the underlying architecture's cache coherence semantics under the
+assumption that each software thread can only be scheduled on one CPU and runs
+with interrupts off in the DTrace probe context.
+
 \subsection{Clause-local variables}
 \label{subsec:clause-local-variables}
 
