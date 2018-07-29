@@ -497,8 +497,8 @@ collected, like all other trace data, by the kernel, while the data
 processing is carried out in user space by the \emph{libdtrace}
 library functions.
 
-Aggregating functions are a set of functions that can operate on partial
-data and achieve the same result as if they operated on all of the data
+Informally, aggregating functions are a set of functions that can operate on
+partial data and achieve the same result as if they operated on all of the data
 at once.
 
 \begin{table}
@@ -526,4 +526,10 @@ Table~\ref{tab:agg-func}.
 \section{Subroutines}
 \label{sec:subroutines}
 
-% XXX explain how subroutines are different from actions.
+DTrace subroutines are built-in into the D language and run inside the
+operating system kernel. The programmer can not create their own subroutines
+inside the D language itself, but new ones can be added as a part of the D
+language runtime. All of the parameters are type-checked during every call,
+however the safety of using these subroutines depends on the safety of DTrace
+action and the DIF emulator. The subroutines currently supported are enumerated
+in Table~\ref{tab:subroutines}.
