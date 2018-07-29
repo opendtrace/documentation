@@ -497,20 +497,24 @@ collected, like all other trace data, by the kernel, while the data
 processing is carried out in user space by the \emph{libdtrace}
 library functions.
 
+Aggregating functions are a set of functions that can operate on partial
+data and achieve the same result as if they operated on all of the data
+at once.
+
 \begin{table}
   \centering
-  \begin{tabular}{l|l}
-    Function & Explanation\\
+  \begin{tabular}{l|l|l}
+    Function & Pseudo-code & Explanation \\
     \hline
-    count(arg) & x = x + arg (arg == 1 by default)\\
-    min() & x = minimum of all values seen\\
-    max() & x = maximum o all values seen\\
-    avg() & x = sum(all values seen)/len(value list)\\
-    sum() & x = x + val\\
-    stddev() & \\
-    quantize() & \\
-    lquantize() & \\
-    llquantize() &
+    count & x = x + 1 & Counts the number of occurrences of some argument \\
+    min & x = x > arg ? arg : x & Computes the minimum of all values seen \\
+    max & x = x > arg ? x : arg & Computes the maximum of all values seen \\
+    avg & x = sum/len & Averages out the values seen \\
+    sum & x = x + arg & Sums up all of the values that are seen \\
+    stddev & & \\
+    quantize & & \\
+    lquantize & & \\
+    llquantize & &
   \end{tabular}
   \caption{Aggregation Functions}
   \label{tab:agg-func}
