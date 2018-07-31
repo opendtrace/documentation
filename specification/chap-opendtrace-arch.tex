@@ -7,7 +7,7 @@
 
 The components that make up OpenDTrace interact with each other to
 implement an operational model for dynamic tracing.  At the highest
-level there are three components to OpenDTrace: tools, such as
+level there are several components to OpenDTrace: tools, such as
 \texttt{ctfconvert} which take compiled object code and generate new
 ELF/DWARF sections that capture type information, the kernel module,
 which is responsible for adding and removing trace points at run time,
@@ -72,9 +72,9 @@ page.
 The majority of the DTrace CLI functionality is provided through calls
 to the DTrace user-space library, \texttt{libdtrace}, which is
 responsible for setting DTrace options, compiling D scripts, and
-passing compiled D code to the kernel for
-execution. \texttt{libdtrace} provides the mechanism for all
-interactions with DTrace in the kernel.
+passing compiled D code to the kernel for execution. The
+\texttt{libdtrace} library provides the mechanism for all interactions
+with DTrace in the kernel.
 
 \section{Probe Life Cycle}
 \label{sec:lifecycle}
@@ -157,13 +157,15 @@ then the final results are made available to the end user (8).
 \label{sec:trace-records}
 
 When tracing is enabled the OpenDTrace modules in the kernel produce a
-stream of records which are consumed by the \verb|dtrace(1)| command
-and turned into various types of output.  Records are communicated in
-a buffer structure, \verb|dtrace_bufdata| which is shared between the
-kernel and user space.  Buffers contain one of two types of data.
-Either the data is a plain record, or it is an aggregation.  All data
-is arranged as a stream of bytes where the current header gives the
-extent of the data, indicating where the next record can be found.
+stream of records which are consumed by user level processes, such as
+the \verb|dtrace(1)| command, and turned into various types of output.
+
+Records are communicated in a buffer structure, \verb|dtrace_bufdata|
+which is shared between the kernel and user space.  Buffers contain
+one of two types of data.  Either the data is a plain record, or it is
+an aggregation.  All data is arranged as a stream of bytes where the
+current header gives the extent of the data, indicating where the next
+record can be found.
 
 Plain records contain the data requested by the D script along with
 optional formatting information and arguments.  Aggregations are
