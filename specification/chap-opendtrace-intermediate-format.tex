@@ -24,18 +24,36 @@ along with various implementation details. \footnote{This
   specification describes the DTrace Intermediate Format version 2, as
   shipped in Illumos 5, FreeBSD 8-12, and macOS 10.5-10.13}
 
+A comprehensive description of OpenDTrace's instructions are given in
+Chapter~\ref{chap:opendtrace-instruction-reference} and a full list
+and description of the built-in subroutines are given in
+Chapter~\ref{chap:opendtrace-subroutines}.
+
 \subsection{Registers}
 \label{sec:dif-registers}
 
 The OpenDTrace virtual machine is made up of eight (8) integer registers
 and eight (8) tuple registers.  The 0th integer register always
-contains the value zero (0).  All operations are carried out using
-registers \registerop{r1} and \registerop{r2} as operands and
-\registerop{rd} as the destination for all results. A comprehensive
-description of OpenDTrace's instructions are given in
-Chapter~\ref{chap:opendtrace-instruction-reference} and a full list
-and description of the built-in subroutines are given in
-Chapter~\ref{chap:opendtrace-subroutines}.
+contains the value zero (0).  The tuple registers are used for
+handling any data type beyond a simple integer, such as strings, and
+pointers to memory.  Each of the tuple registers is made up of a size
+and value, where the value is a pointer to memory and the size
+indicates how much memory OpenDTrace will attempt to address.  It is
+the tuple registers that allow D scripts to work with data by reference.
+
+All operations are carried out using registers \registerop{r1} and
+\registerop{r2} as operands and \registerop{rd} as the destination for
+all results.
+
+\subsection{Tables}
+\label{sec:dif-tables}
+
+Each DIF Object contains pointers to an integer, string and variable
+table which are optionally filled in as they are needed.  The integer
+table acts as integer constants that will be operated on during the
+execution of a D program.  The string table contains any string data
+allocated or used in a D program.  Any variables that are used in the
+program are contained in the variable table.
 
 \subsection{Math Instructions}
 \label{sec:dif-math}
@@ -64,14 +82,12 @@ division by zero error.
 \caption{Mathematical Operation Result Bits}
 \end{table}
 
-DIF has three instructions, \instruction{cmp}, \instruction{scmp} and
+DIF has three comparison instructions, \instruction{cmp}, \instruction{scmp} and
 \instruction{tst} which can set various result flags, shown in
 Table~\ref{tbl:cmp-vars}.  The result flags are are later used by the
 branch instructions to determine whether or not the branch is taken.
 The result flags are never returned directly to the calling DIF program but are
 only used internally by the interpretation routine.
-
-\textbf{XXXRW: Something about instructions}
 
 \subsection{Branching Instructions}
 
@@ -117,23 +133,15 @@ overall?}
 
 \textbf{XXXRW: Something about DIF registers, \nregs{}}
 
-\textbf{XXXRW: Something about the zero register}
-
 \textbf{XXXRW: Something about implied status bits}
 
 \textbf{XXXRW: Something about scratch memory (alloca, user copyin)}
 
-\textbf{XXXRW: Something about the tuple stack}
+%% \textbf{XXXRW: Something about the tuple stack}
 
 \textbf{XXXRW: Something about kernel memory access}
 
 \textbf{XXXRW: Something about user memory access}
-
-\textbf{XXXRW: Something about ``by reference''}
-
-\textbf{XXXRW: Something about the integer table}
-
-\textbf{XXXRW: Something about the string table}
 
 \subsection{Local Variables}
 \label{sec:local-vars}
