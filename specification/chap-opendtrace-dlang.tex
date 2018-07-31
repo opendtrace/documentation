@@ -225,9 +225,26 @@ kenrel, we define the following way of specifying probes:
 This provides us with a way to specify the \texttt{provider}, \texttt{module},
 \texttt{function} and \texttt{name} of a DTrace probe in D. The reason symbols
 such as `*' are allowed is because D allows the user to write glob expressions
-much like a Unix shell does.
+much like a Unix shell does. \newline
 
-% TODO: Define <Predicate> and <Statements>
+\noindent
+Furthermore, a probe clause in a D script consists of an optional predicate. A
+predicate contains a logical expression in propositional logic:
+
+\begin{grammar}
+<Predicate> ::= `/' <LogicExpression> `/'
+\end{grammar}
+
+% TODO: This needs to be expanded. We need to define:
+%  * <LogicExpression>
+%  * <Statement>
+%
+% <LogicExpression> needs to capture anything that can be written inside a probe
+% predicate. This seems to be propositional logic...?
+%
+% <Statement> needs to capture all of the possible D expressions that can appear
+% inside probe clauses.
+
 \begin{grammar}
 <ProbeDefinition> ::= <ProbeSpecifier> [ <Predicate> ] `{'  { <Statement> } `}'
 \end{grammar}
@@ -271,6 +288,9 @@ commitment to safety.
 % for and although generous for a scripting language clearly exist to
 % prevent D scripts from asking for too much.
 
+% XXXDS: I don't think this belongs in a language description, this is
+% an implementation detail. We mostly care about the semantics.
+
 \section{Variables}
 \label{sec:d-variables}
 DTrace implements three different scopes of variables: global, thread-local and
@@ -287,8 +307,6 @@ Thread-local variables are only visible within a single software thread, they
 are represented in source code as prefixed with \texttt{self->}.  A thread-local
 variable is identified with its name and a thread ID.
 
-% XXX: Clause-local variables are ill-defined in DTrace and we need to figure
-%      out a way to talk about them in a more precise manner.
 Clause-local variables are prefixed with \texttt{this->} and are visible only
 within a single \texttt{dtrace\_probe()} call. This means that a clause-local
 variable will be visible across multiple clauses of the same probe, allowing the
@@ -341,6 +359,13 @@ with interrupts off in the DTrace probe context.
 
 \subsection{Clause-local variables}
 \label{subsec:clause-local-variables}
+
+Clause-local variables in DTrace are defined across a single probe. Note that
+this does not mean that they are only usable within a single probe clause, but
+instead for all of the clauses of a given probe. If a clause-local variable is
+used before it is defined in a given probe firing, its value is undefined and
+depends on the implementation. A good compiler will warn the programmer about
+such misuse of a clause-local variable.
 
 \section{Multithreading}
 
@@ -472,20 +497,24 @@ collected, like all other trace data, by the kernel, while the data
 processing is carried out in user space by the \emph{libdtrace}
 library functions.
 
+Informally, aggregating functions are a set of functions that can operate on
+partial data and achieve the same result as if they operated on all of the data
+at once.
+
 \begin{table}
   \centering
-  \begin{tabular}{l|l}
-    Function & Explanation\\
+  \begin{tabular}{l|l|l}
+    Function & Pseudo-code & Explanation \\
     \hline
-    count(arg) & x = x + arg (arg == 1 by default)\\
-    min() & x = minimum of all values seen\\
-    max() & x = maximum o all values seen\\
-    avg() & x = sum(all values seen)/len(value list)\\
-    sum() & x = x + val\\
-    stddev() & \\
-    quantize() & \\
-    lquantize() & \\
-    llquantize() &
+    count & x = x + 1 & Counts the number of occurrences of some argument \\
+    min & x = x > arg ? arg : x & Computes the minimum of all values seen \\
+    max & x = x > arg ? x : arg & Computes the maximum of all values seen \\
+    avg & x = sum/len & Averages out the values seen \\
+    sum & x = x + arg & Sums up all of the values that are seen \\
+    stddev & & \\
+    quantize & & \\
+    lquantize & & \\
+    llquantize & &
   \end{tabular}
   \caption{Aggregation Functions}
   \label{tab:agg-func}
@@ -497,4 +526,10 @@ Table~\ref{tab:agg-func}.
 \section{Subroutines}
 \label{sec:subroutines}
 
-% XXX explain how subroutines are different from actions.
+DTrace subroutines are built-in into the D language and run inside the
+operating system kernel. The programmer can not create their own subroutines
+inside the D language itself, but new ones can be added as a part of the D
+language runtime. All of the parameters are type-checked during every call,
+however the safety of using these subroutines depends on the safety of DTrace
+action and the DIF emulator. The subroutines currently supported are enumerated
+in Table~\ref{tab:subroutines}.
