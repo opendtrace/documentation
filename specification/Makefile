@@ -14,7 +14,6 @@ SOURCE=								\
 	chap-opendtrace-object-format.tex			\
 	chap-opendtrace-subroutines.tex				\
 	chap-opendtrace-global-vars.tex				\
-	chap-opendtrace-variable-records.tex			\
 	chap-opendtrace-code.tex				\
 	chap-opendtrace-dlang.tex				\
 	chap-opendtrace-providers.tex				\
