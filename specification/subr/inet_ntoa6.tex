@@ -15,14 +15,6 @@
 The \subroutine{inet_ntoa6} subroutine takes a 128 bit, IPv6, address
 and converts it to a string suitable for humans.
 
-\subsubsection*{Pseudocode}
-
-\begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
-\end{verbatim}
-
-\subsubsection*{Constraints}
-
 \subsubsection*{Failure modes}
 
 This subroutine has no run-time failure modes beyond its constraints.
