@@ -178,7 +178,7 @@ as follows:
 
 <TranslatorIdent> ::=  <IdentifierOrString>
                   \alt <IdentifierPtrFollow>
-                  \alt <Subroutine> `(' <SubroutineArgs> `)
+                  \alt <Subroutine> `(' <SubroutineArgs> `)'
                   \alt <TranslatorIdent> [ `?' <TranslatorIdent> `:' <TranslatorIdent> ] ;
 
 <TranslatorSpec> ::= `translator' <Identifier> `<' <Type> `>' `{' \newline
@@ -193,7 +193,8 @@ as follows:
 \noindent
 Here we introduce a new non-terminal, \texttt{Modifier} which encapsulates the
 modifiers that may occur before a \texttt{struct} or \texttt{enum} definition.
-It is defined as follows:
+Moreover, we introduce \texttt{Subroutine} and \texttt{SubroutineArgs} which
+will be defined later on. \texttt{Modifier} is defined as follows:
 
 % XXX: Verify that this is correct
 \begin{grammar}
@@ -355,7 +356,13 @@ up to the compiler writer. We define the D script as follows:
 <DScript> ::=  <DScript> <PreprocessorStatement> <DScript>
           \alt <DScript> <TypeSpecifier> <DScript>
           \alt <DScript> <ProbeDefinition> <DScript>
+          \alt <DScript> <XLate>  <DScript>
           \alt `' ;
+
+<XLateMethod> ::=  <Subroutine> `(' <SubroutineArgs> `)'
+              \alt <IdentifierOrString> ;
+
+<XLate> ::= <Modifier> <Type> <Identifier> [ `[' <Type> <Identifier> `]' ] = `xlate <' <Type> `>' `(' <XLateMethod> `)' `;' ;
 \end{grammar}
 
 \section{Safety}
