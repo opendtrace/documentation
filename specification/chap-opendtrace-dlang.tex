@@ -169,6 +169,9 @@ specify \texttt{StructOrUnionSpec} as follows:
 	\alt `enum' <Identifier> [ <VarList> ] `;' ;
 
 <EnumDeclList> ::= <Identifier> [ `=' <Identifier> ] [ `,' ] ;
+
+<TypeSpecifier> ::=  <StructOrUnionSpec>
+                \alt <EnumSpecifier> ;
 \end{grammar}
 
 \noindent
@@ -228,29 +231,101 @@ such as `*' are allowed is because D allows the user to write glob expressions
 much like a Unix shell does. \newline
 
 \noindent
+Next, we define all of the operators that the D language provides to the
+programmer to use. We split the operators in three different parts -- binary
+operators, prefix unary operators and postfix unary operators. We intentionally
+avoid the use of a ternary `?' operator here, as it will be specified as a part
+of allowed expressions.
+\begin{grammar}
+<pre\_un\_operator> ::=  `++'
+                    \alt `--'
+                    \alt `!'
+                    \alt `~' ;
+
+<post\_un\_operator> ::=  `++'
+                     \alt `--' ;
+
+<bin\_operator> ::=  `+'
+                \alt `-'
+                \alt `*'
+                \alt `='
+                \alt `/'
+                \alt `\%'
+                \alt `=='
+                \alt `&&'
+                \alt `||'
+                \alt `|'
+                \alt `&'
+                \alt `^'
+                \alt `='
+                \alt `&='
+                \alt `|='
+                \alt `^='
+                \alt `~='
+                \alt `+='
+                \alt `-='
+                \alt `*='
+                \alt `/='
+                \alt `\%=' ;
+\end{grammar}
+
+\noindent
 Furthermore, a probe clause in a D script consists of an optional predicate. A
 predicate contains a logical expression in propositional logic:
 
 \begin{grammar}
-<Predicate> ::= `/' <LogicExpression> `/'
+<Predicate> ::= `/' <LogicExpression> `/' ;
+
+<LogicExpression> ::= <Expression> ;
 \end{grammar}
 
-% TODO: This needs to be expanded. We need to define:
-%  * <LogicExpression>
-%  * <Statement>
-%
-% <LogicExpression> needs to capture anything that can be written inside a probe
-% predicate. This seems to be propositional logic...?
-%
-% <Statement> needs to capture all of the possible D expressions that can appear
-% inside probe clauses.
-
+Moreover, we define \texttt{Expression}, which encapsulated scalar and array
+expressions and \texttt{AggExpression} which works with aggregations as:
 \begin{grammar}
-<ProbeDefinition> ::= <ProbeSpecifier> [ <Predicate> ] `{'  { <Statement> } `}'
+<Expression> ::=  <Expression> <bin\_operator> <Expression>
+             \alt <pre\_un\_operator> <Expression>
+             \alt <Expression> <post\_un\_operator>
+             \alt <Expression> `?' <Expression> `:' <Expression>
+             \alt <Subroutine> `(' <SubroutineArgs> `)'
+             \alt [ ( `this->' | `self->' ) ] <Identifier> [ `[' ( <Integer> | <Identifier> ) \{ ( <Integer> | <Identifier> ) \} `]' ] ;
+
+<AggExpression> ::=  `@' [ <Identifier> ] [ `[' ( <Integer> | <Identifier> ) [ `,' \{ ( <Integer> | <Identifier> ) \} ] ] `=' <AggFunc> ;
+                \alt <AggSubroutine> `(' <AggSubroutineArgs> `)' ;
+\end{grammar}
+In order to provide a full definition, we need to define \texttt{Subroutine},
+\texttt{AggFunc} and \texttt{AggSubroutine}. Because this is variable depending on
+what subroutines, aggregating functions and subroutines taking aggregations as parameters
+are actually available as a part of the D runtime, this depends on currently available
+DTrace implementation. Similarly, \texttt{SubroutineArgs} and \texttt{AggSubroutineArgs}
+depend on \texttt{Subroutine} and \texttt{AggSubroutine}, so we are unable to specify them
+as a part of this specification without significantly limiting what aggregations and subroutines
+can be implemented.
+
+Furthermore, D allows for explicit declarations of variables. We specify this as:
+\begin{grammar}
+<Declaration> ::= [ (`this' | `self') ] <Type> <Identifier> ;
 \end{grammar}
 
-% TODO: Define all different types of expressions that we can have, assignment
-% operators, conditionals, ...
+
+Finally, we are able to define what a definition of a probe looks like:
+\begin{grammar}
+<ProbeDefinition> ::= <ProbeSpecifier> [ <Predicate> ] `{'  \{ <Statement> \} `}' ;
+
+<Statement> ::= ( <Expression> | <AggExpression> | <Declaration> ) `;' ;
+\end{grammar}
+
+Note that this only defines a single probe clause, not the full syntax of the D script.
+D scripts can have additional preprocessor statements in them and definitions of variables
+user-defined types outside of probe clauses. In the specification, we will avoid talking about
+compiler-specific preprocessor statements and the C preprocessor that can be run on the D
+script, as how this will be implemented and what parts of it will be supported is entirely
+up to the compiler writer. We define the D script as follows:
+\begin{grammar}
+<DScript> ::=  <DScript> <PreprocessorStatement> <DScript>
+          \alt <DScript> <TypeSpecifier> <DScript>
+          \alt <DScript> <ProbeDefinition> <DScript>
+          \alt `' ;
+\end{grammar}
 
 \section{Safety}
 \label{sec:safety}
@@ -296,7 +371,7 @@ commitment to safety.
 DTrace implements three different scopes of variables: global, thread-local and
 clause-local. Global variables are visible to every probe and across all
 threads, allowing the user to write scripts that carry state across multiple
-threads should it be necessary and are identified with the variable name. 
+threads should it be necessary and are identified with the variable name.
 
 Similar to global variables are D built-in variables such as \verb|execname|,
 \verb|curthread|, etc. We make a distinction between the two due to the
@@ -425,12 +500,6 @@ in Table~\ref{tab:subroutines}.
 
 \section{Multithreading}
 
-% XXX: This is very vague because saying that DTrace guarantees
-% something is a very bold statement. For example, saying that it
-% guarantees thread safety when creating dynamic variables would be a
-% little over the top, as this has not been verified at all. We should
-% think about this a bit more.
-
 When tracing, OpenDTrace guarantees that it can not be preempted
 inside of the \function{dtrace_probe()} function, but it does not
 guarantee that everything in the executing DIF will be thread-safe.
@@ -458,7 +527,7 @@ syscall:::entry
 {
     num_syscalls++;
 }
-    
+
 dtrace:::END
 {
     printf("Number of syscalls: %d\n", num_syscalls);
@@ -536,11 +605,3 @@ dtrace:::END
   \caption{Avoiding the race condition}
   \label{fig:avoiding-the-race}
 \end{figure}
-
-% \subsection{Thread-local variables}
-
-% As mentioned in Subsection~\ref{subsec:thread-local-variables}, thread-local
-% variables are only visible within a single thread.
-
-% \subsection{Clause-local variables}
-
