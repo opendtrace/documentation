@@ -36,6 +36,11 @@ cc_z = cc_r == 0;
 cc_v = cc_c = 0;
 \end{verbatim}
 
+\subsubsection*{Load-time constraints}
+The registers \registerop{r1} and \registerop{r2} must be valid registers,
+\registerop{rd} must be \registerop{r0}.
+
 \subsubsection*{Failure modes}
 
-This instruction has no run-time failure modes beyond its constraints.
+The memory locations in \registerop{r1} or \registerop{r2} may be paged out,
+which causes a page fault.
