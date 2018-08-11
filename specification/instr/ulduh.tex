@@ -39,4 +39,5 @@ The registers \registerop{r1} and \registerop{rd} must be valid registers,
 
 \subsubsection*{Failure modes}
 
-This instruction has no run-time failure modes beyond its constraints.
+This instruction can cause a page-fault if the memory it is trying to access
+is not paged in.
