@@ -154,8 +154,10 @@ to be an alias to another type, much like in C:
 Similarly, \texttt{StructOrUnionSpec} represents a way to specify a D
 \texttt{struct} or \texttt{union} type. These language primitives are compatible
 with their C counterparts and ensure ABI compatibility. This is important when
-tracing the kernel, but also allows trivial translation to other ABIs.  We
-specify \texttt{StructOrUnionSpec} as follows:
+tracing the kernel, but also allows trivial translation to other ABIs. Moreover,
+\texttt{enum} definitions exist in D with the same syntax as they have in C. Finally,
+D has a notion of translators -- we specify all of these as a part of a type specifier
+as follows:
 
 \begin{grammar}
 <StructOrUnionSpec> ::= <Modifier> ( `struct' | `union' ) [ <Identifier> ] \newline
@@ -170,8 +172,13 @@ specify \texttt{StructOrUnionSpec} as follows:
 
 <EnumDeclList> ::= <Identifier> [ `=' <Identifier> ] [ `,' ] ;
 
+<TranslatorSpec> ::= `translator' <Identifier> `<' <Type> `>' `{' \newline
+	<Identifier> `=' <Identifier> \{ `->' <Identifier> \} `;' \newline
+        \{ <Identifier> `=' <Identifier> \{ `->' <Identifier> \} `;' \} `}' `;' ;
+
 <TypeSpecifier> ::=  <StructOrUnionSpec>
-                \alt <EnumSpecifier> ;
+                \alt <EnumSpecifier>
+                \alt <TranslatorSpec> ;
 \end{grammar}
 
 \noindent
@@ -505,6 +512,18 @@ language runtime. All of the parameters are type-checked during every call,
 however the safety of using these subroutines depends on the safety of DTrace
 action and the DIF emulator. The subroutines currently supported are given
 in Table~\ref{tab:subroutines}.
+
+\section{Translators}
+\label{sec:translators}
+
+OpenDTrace translators serve the purpose of providing a stable API for D scripts
+when working with data types that often change in the operating system itself.
+This results in all of the scripts that use those types needing to change every
+time such a change occurs, and translators are designed to mitigate that. Translators
+define a two way map\footnote{A translator creates an isomorphism between types.}
+between the stable data type defined as a part of the translator and a data type that
+the translator is being defined from. This enables the compiler to translate between
+these two data types either as a part of the runtime or statically at compile-time.
 
 \section{Multithreading}
 
