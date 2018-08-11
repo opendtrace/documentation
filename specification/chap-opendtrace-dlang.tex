@@ -176,8 +176,10 @@ as follows:
 
 <IdentPtrFollow> ::= <Identifier> \{ `->' <Identifier> \} ;
 
-<TranslatorIdent> ::= <IdentPtrFollow> [ `?' [ `"' ] <IdentPtrFollow> [ `"' ] `:' [ `"' ] <IdentPtrFollow> [ `"' ] ] `;'
-                  \alt <IdentifierOrString> `;' ;
+<TranslatorIdent> ::=  <IdentifierOrString>
+                  \alt <IdentifierPtrFollow>
+                  \alt <Subroutine> `(' <SubroutineArgs> `)
+                  \alt <TranslatorIdent> [ `?' <TranslatorIdent> `:' <TranslatorIdent> ] ;
 
 <TranslatorSpec> ::= `translator' <Identifier> `<' <Type> `>' `{' \newline
 	<Identifier> `=' <TranslatorIdent> `;' \newline
