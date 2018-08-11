@@ -367,6 +367,62 @@ used before it is defined in a given probe firing, its value is undefined and
 depends on the implementation. A good compiler will warn the programmer about
 such misuse of a clause-local variable.
 
+\section{Aggregations}
+\label{sec:aggregations}
+
+The ability to aggregate data during data collection, and to then
+process the data via several types of statistical analysis, is one of
+the key features of OpenDTrace.  The data for an aggregation is
+collected, like all other trace data, by the kernel, while the data
+processing is carried out in user space by the \emph{libdtrace}
+library functions.
+
+Aggregating functions are a set of functions that can operate on
+partial data and achieve the same result as if they had operated
+on all of the data at once.
+
+\begin{table}
+  \centering
+  \begin{tabular}{l|l|l}
+    Function & Pseudo-code & Description \\
+    \hline
+    count & x = x + 1 & Counts the number of occurrences of some argument \\
+    min & x = x > arg ? arg : x & Computes the minimum of all values seen \\
+    max & x = x > arg ? x : arg & Computes the maximum of all values seen \\
+    avg & x = sum/len & Averages out the values seen \\
+    sum & x = x + arg & Sums up all of the values that are seen \\
+    stddev & N/A & The standard deviation over a set of values\\
+    quantize & N/A & Power-of-two frequency distribution over a set of values\\
+    lquantize & N/A & Linear frequency distribution over a specified range.\\
+    llquantize & N/A & Linear frequency distribution within a logarithmic distribution
+  \end{tabular}
+  \caption{Aggregation Functions}
+  \label{tab:agg-func}
+\end{table}
+
+There are nine (9) aggregating functions, which are listed in
+Table~\ref{tab:agg-func}.  The first five aggreggating functions:
+count(), min(), max(), avg(), and sum(), are simple enought that
+pseudo-code can be supplied within Table~\ref{tab:agg-func} while the
+next three functions: stddev(), quantize() and lquantize(), should be
+understood in their mathematical expression.
+
+The llquantize() function is specific to OpenDTrace, and was written
+by Bryan Cantrill while at Joyent.  The purpose of llquantize() is to
+aggregate data logarithmically over a specified range of magnitudes,
+but use a frequency distribution within each of the magnitude.
+
+\section{Subroutines}
+\label{sec:subroutines}
+
+OpenDTrace subroutines are built into the D language and run inside the
+operating system kernel. The programmer cannot create their own subroutines
+inside the D language itself, but new ones can be added as a part of the D
+language runtime. All of the parameters are type-checked during every call,
+however the safety of using these subroutines depends on the safety of DTrace
+action and the DIF emulator. The subroutines currently supported are given
+in Table~\ref{tab:subroutines}.
+
 \section{Multithreading}
 
 % XXX: This is very vague because saying that DTrace guarantees
@@ -375,11 +431,12 @@ such misuse of a clause-local variable.
 % little over the top, as this has not been verified at all. We should
 % think about this a bit more.
 
-When tracing, DTrace guarantees that it can not be preempted inside of
-the \function{dtrace_probe()} function, but it does not guarantee that
-everything in the executing DIF will be thread-safe. DTrace does not
-allow access to locking primitives, because a programming error might
-violate the safety guarantees that OpenDTrace was designed to provide.
+When tracing, OpenDTrace guarantees that it can not be preempted
+inside of the \function{dtrace_probe()} function, but it does not
+guarantee that everything in the executing DIF will be thread-safe.
+OpenDTrace does not allow access to locking primitives, because a
+programming error might violate the safety guarantees that OpenDTrace
+was designed to provide.
 
 \subsection{Global variables}
 
@@ -480,56 +537,10 @@ dtrace:::END
   \label{fig:avoiding-the-race}
 \end{figure}
 
-\subsection{Thread-local variables}
+% \subsection{Thread-local variables}
 
-As mentioned in Subsection~\ref{subsec:thread-local-variables}, thread-local
-variables are only visible within a single thread.
+% As mentioned in Subsection~\ref{subsec:thread-local-variables}, thread-local
+% variables are only visible within a single thread.
 
-\subsection{Clause-local variables}
+% \subsection{Clause-local variables}
 
-\section{Aggregations}
-\label{sec:aggregations}
-
-The ability to aggregate data during data collection, and to then
-process the data via several types of statistical analysis, is one of
-the key features of OpenDTrace.  The data for an aggregation is
-collected, like all other trace data, by the kernel, while the data
-processing is carried out in user space by the \emph{libdtrace}
-library functions.
-
-Aggregating functions are a set of functions that can operate on
-partial data and achieve the same result as if they had operated
-on all of the data at once.
-
-\begin{table}
-  \centering
-  \begin{tabular}{l|l|l}
-    Function & Pseudo-code & Explanation \\
-    \hline
-    count & x = x + 1 & Counts the number of occurrences of some argument \\
-    min & x = x > arg ? arg : x & Computes the minimum of all values seen \\
-    max & x = x > arg ? x : arg & Computes the maximum of all values seen \\
-    avg & x = sum/len & Averages out the values seen \\
-    sum & x = x + arg & Sums up all of the values that are seen \\
-    stddev & & \\
-    quantize & & \\
-    lquantize & & \\
-    llquantize & &
-  \end{tabular}
-  \caption{Aggregation Functions}
-  \label{tab:agg-func}
-\end{table}
-
-There are nine (9) aggregation functions, which are listed in
-Table~\ref{tab:agg-func}.
-
-\section{Subroutines}
-\label{sec:subroutines}
-
-DTrace subroutines are built into the D language and run inside the
-operating system kernel. The programmer cannot create their own subroutines
-inside the D language itself, but new ones can be added as a part of the D
-language runtime. All of the parameters are type-checked during every call,
-however the safety of using these subroutines depends on the safety of DTrace
-action and the DIF emulator. The subroutines currently supported are given
-in Table~\ref{tab:subroutines}.
