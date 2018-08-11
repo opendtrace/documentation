@@ -279,6 +279,7 @@ predicate contains a logical expression in propositional logic:
 <LogicExpression> ::= <Expression> ;
 \end{grammar}
 
+\noindent
 Moreover, we define \texttt{Expression}, which encapsulated scalar and array
 expressions and \texttt{AggExpression} which works with aggregations as:
 \begin{grammar}
@@ -292,6 +293,8 @@ expressions and \texttt{AggExpression} which works with aggregations as:
 <AggExpression> ::=  `@' [ <Identifier> ] [ `[' ( <Integer> | <Identifier> ) [ `,' \{ ( <Integer> | <Identifier> ) \} ] ] `=' <AggFunc> ;
                 \alt <AggSubroutine> `(' <AggSubroutineArgs> `)' ;
 \end{grammar}
+
+\noindent
 In order to provide a full definition, we need to define \texttt{Subroutine},
 \texttt{AggFunc} and \texttt{AggSubroutine}. Because this is variable depending on
 what subroutines, aggregating functions and subroutines taking aggregations as parameters
@@ -299,14 +302,15 @@ are actually available as a part of the D runtime, this depends on currently ava
 DTrace implementation. Similarly, \texttt{SubroutineArgs} and \texttt{AggSubroutineArgs}
 depend on \texttt{Subroutine} and \texttt{AggSubroutine}, so we are unable to specify them
 as a part of this specification without significantly limiting what aggregations and subroutines
-can be implemented.
+can be implemented. \newline
 
+\noindent
 Furthermore, D allows for explicit declarations of variables. We specify this as:
 \begin{grammar}
 <Declaration> ::= [ (`this' | `self') ] <Type> <Identifier> ;
 \end{grammar}
 
-
+\noindent
 Finally, we are able to define what a definition of a probe looks like:
 \begin{grammar}
 <ProbeDefinition> ::= <ProbeSpecifier> [ <Predicate> ] `{'  \{ <Statement> \} `}' ;
@@ -314,6 +318,7 @@ Finally, we are able to define what a definition of a probe looks like:
 <Statement> ::= ( <Expression> | <AggExpression> | <Declaration> ) `;' ;
 \end{grammar}
 
+\noindent
 Note that this only defines a single probe clause, not the full syntax of the D script.
 D scripts can have additional preprocessor statements in them and definitions of variables
 user-defined types outside of probe clauses. In the specification, we will avoid talking about
