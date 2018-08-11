@@ -113,6 +113,8 @@ Additionally, we define number constants that are supported in D:
 \begin{grammar}
 <Identifier> ::= <Word> \{ ( <DecDigitWithZero> | <Word> ) \} ;
 
+<IdentifierOrString> ::= [ `"' ] <Identifier> [ `"' ] ;
+
 <VarList> ::= <Identifier> \{ `,' <Identifier> \} ;
 \end{grammar}
 
@@ -172,9 +174,14 @@ as follows:
 
 <EnumDeclList> ::= <Identifier> [ `=' <Identifier> ] [ `,' ] ;
 
+<IdentPtrFollow> ::= <Identifier> \{ `->' <Identifier> \} ;
+
+<TranslatorIdent> ::= <IdentPtrFollow> [ `?' [ `"' ] <IdentPtrFollow> [ `"' ] `:' [ `"' ] <IdentPtrFollow> [ `"' ] ] `;'
+                  \alt <IdentifierOrString> `;' ;
+
 <TranslatorSpec> ::= `translator' <Identifier> `<' <Type> `>' `{' \newline
-	<Identifier> `=' <Identifier> \{ `->' <Identifier> \} `;' \newline
-        \{ <Identifier> `=' <Identifier> \{ `->' <Identifier> \} `;' \} `}' `;' ;
+	<Identifier> `=' <TranslatorIdent> `;' \newline
+        \{ <Identifier> `=' <TranslatorIdent> `;' \} `}' `;' ;
 
 <TypeSpecifier> ::=  <StructOrUnionSpec>
                 \alt <EnumSpecifier>
@@ -290,14 +297,22 @@ predicate contains a logical expression in propositional logic:
 Moreover, we define \texttt{Expression}, which encapsulated scalar and array
 expressions and \texttt{AggExpression} which works with aggregations as:
 \begin{grammar}
+<ArrayIndices> ::= ( <Identifier> | <Integer> ) \{ ( <Identifier> | <Integer> ) \}
+               \alt <IdentifierOrString>
+               \alt <ArrayIndices> `,' <ArrayIndices> ;
+
+<ThisOrSelf> ::= `this->'
+             \alt `self->' ;
+
 <Expression> ::=  <Expression> <bin\_operator> <Expression>
              \alt <pre\_un\_operator> <Expression>
              \alt <Expression> <post\_un\_operator>
              \alt <Expression> `?' <Expression> `:' <Expression>
              \alt <Subroutine> `(' <SubroutineArgs> `)'
-             \alt [ ( `this->' | `self->' ) ] <Identifier> [ `[' ( <Integer> | <Identifier> ) \{ ( <Integer> | <Identifier> ) \} `]' ] ;
+             \alt <ThisOrSelf> <Identifier> [ `[' <ArrayIndices> `]' ]
+             \alt <IdentifierOrString> ;
 
-<AggExpression> ::=  `@' [ <Identifier> ] [ `[' ( <Integer> | <Identifier> ) [ `,' \{ ( <Integer> | <Identifier> ) \} ] ] `=' <AggFunc> ;
+<AggExpression> ::=  `@' [ <Identifier> ] [ `[' <ArrayIndices> `]' ] `=' <AggFunc> ;
                 \alt <AggSubroutine> `(' <AggSubroutineArgs> `)' ;
 \end{grammar}
 
