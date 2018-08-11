@@ -30,6 +30,10 @@ remainder into \registerop{rd}.
 %rd = %r1 % %r2
 \end{verbatim}
 
+\subsubsection*{Load-time constraints}
+The registers \registerop{r1}, \registerop{r2} and \registerop{rd} must be
+valid registers and \registerop{rd} must not be \registerop{r0}.
+
 \subsubsection*{Failure modes}
 
 This instruction has no run-time failure modes beyond its constraints.

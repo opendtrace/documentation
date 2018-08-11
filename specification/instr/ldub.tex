@@ -30,6 +30,14 @@ instruction and will not perform sign extension in any case.
 %rd = %r1
 \end{verbatim}
 
+\subsubsection*{Load-time constraints}
+The registers \registerop{r1} and \registerop{rd} must be valid registers,
+\registerop{r2} must be \registerop{r0} and \registerop{rd} must not be
+\registerop{r0}.
+
+This instruction is \textbf{privileged} and thus performs no access control
+checks. It is up to the OpenDTrace implementation to implement that constraint.
+
 \subsubsection*{Failure modes}
 
 This instruction has no run-time failure modes beyond its constraints.

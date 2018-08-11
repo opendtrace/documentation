@@ -30,6 +30,11 @@ memory it is about to read from before loading a 64 bit quantity into
 %rd = mem[%r1]
 \end{verbatim}
 
+\subsubsection*{Load-time constraints}
+The registers \registerop{r1} and \registerop{rd} must be valid registers,
+\registerop{r2} must be \registerop{r0} and \registerop{rd} must not be
+\registerop{r0}.
+
 \subsubsection*{Failure modes}
 
-This instruction has no run-time failure modes beyond its constraints.
+\textbf{XXXDS: This depends on dtrace\_canload(). We have to enumerate these.}
