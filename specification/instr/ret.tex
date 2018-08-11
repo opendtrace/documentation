@@ -27,6 +27,10 @@ section.
 %pc = textlen
 \end{verbatim}
 
+\subsubsection*{Load-time constraints}
+The registers \registerop{r1} and \registerop{r2} must be \registerop{r0} and
+\registerop{rd} must be a valid register.
+
 \subsubsection*{Failure modes}
 
 This instruction has no run-time failure modes beyond its constraints.
