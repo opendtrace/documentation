@@ -403,10 +403,11 @@ Global variables exhibit two failure modes:
 \item The use of a global variable has caused a fault.
 \end{itemize}
 The former eventually manifests through the latter failure mode at every program
-point where the variable is used, but we have included it as a separate failure
+point where the variable is dereferences, but we have included it as a separate failure
 mode because DTrace currently increments an according counter to indicate that a
-variable could not be allocated and because it has different implications on the
-rest of the D script.
+variable could not be allocated and because whenever a D variable that was not mapped
+is used, but not dereferenced as a pointer, it behaves as if the value of that variable
+is zero (0).
 
 \subsection{Built-in variables}
 \label{subsec:builtin-variables}
