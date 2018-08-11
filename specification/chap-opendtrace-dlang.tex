@@ -315,7 +315,9 @@ Finally, we are able to define what a definition of a probe looks like:
 \begin{grammar}
 <ProbeDefinition> ::= <ProbeSpecifier> [ <Predicate> ] `{'  \{ <Statement> \} `}' ;
 
-<Statement> ::= ( <Expression> | <AggExpression> | <Declaration> ) `;' ;
+<Statement> ::=  <Expression> `;'
+            \alt <AggExpression> `;'
+            \alt <Declaration> `;' ;
 \end{grammar}
 
 \noindent
