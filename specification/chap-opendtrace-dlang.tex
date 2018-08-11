@@ -551,12 +551,22 @@ the runtime or statically at compile-time.
 
 \section{Multithreading}
 
+% XXXDS: While it is true that *currently* DTrace memory is SC, this will not
+% be the case if we have a JIT compiler and implement a stack. We will essentially
+% start seeing the semantics of the underlying CPU.
+%
+% In effect, this is why we do not say that we have to *guarantee* that in any
+% implementation.
+
 When tracing, OpenDTrace guarantees that it can not be preempted
-inside of the \function{dtrace_probe()} function, but it does not
-guarantee that everything in the executing DIF will be thread-safe.
-OpenDTrace does not allow access to locking primitives, because a
-programming error might violate the safety guarantees that OpenDTrace
-was designed to provide.
+inside of a probe firing, but it does not guarantee that everything
+in the executing DIF will be thread-safe. OpenDTrace does not allow
+access to locking primitives, because a programming error might violate
+the safety guarantees that OpenDTrace was designed to provide.
+The memory that OpenDTrace works with is currently guaranteed to be
+sequentially consistent, however, this is not a good assumption to make
+across implementations and one should instead rely on the underlying
+multicore semantics of the CPU.
 
 \subsection{Global variables}
 

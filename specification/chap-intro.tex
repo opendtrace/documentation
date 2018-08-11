@@ -32,7 +32,7 @@ and its usage is well documented
 
 The OpenDTrace system is meant to capture information about systems at
 run time, without the need to stop the program or kernel being
-investigated.  
+investigated.
 A tracing system captures the program state of a running program and
 can show changes in that state over time.  The person who is
 initiating the trace must decide before starting what information they
@@ -180,4 +180,25 @@ This report specifies a number of aspects of OpenDTrace's operation:
 %\item[Providers] for OpenDTrace are listed in
 %  Appendix~\ref{chap:opendtrace-providers}
 
+\end{description}
+
+\section{Definitions}
+
+In this section, we provide a number of definitions that will be used throughout
+the document. We will assume that the reader is familiar with these definitions,
+as no definition will be repeated.
+
+\begin{description}
+\item[Memory locations] The set of all strictly positive integers.
+\item[Memory] An unbounded partial map of memory locations to values at those memory
+  locations.
+\item[Unpagable memory] An unbounded total map of memory locations to values at those memory
+  locations.
+\item[D variable memory] A bounded map of strings to values.
+\item[Page fault] Attempt to access a memory location in memory which does not map to
+  any value, causing a failure.
+\item[Allocation] An attempt to create a new relation in a map between memory locations and
+  values.
+\item[Deallocation] Removing a relation from a map between memory locations and values.
+\item[Thread] An execution pattern of a sequence of instructions with a unique identifier.
 \end{description}
