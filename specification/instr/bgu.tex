@@ -30,9 +30,8 @@ if ((cc_c | cc_z) == 0)
 \end{verbatim}
 
 \subsubsection*{Load-time constraints}
-DIF does not allow backwards branches, therefore \verb+label+ must be
-greater than \verb+pc+. Moreover, \verb+label+ must not go past the last
-address of the current DIF object.
+\verb+label+ must be greater than \verb+pc+. Moreover, \verb+label+ must
+not go past the last address of the current DIF object.
 
 \subsubsection*{Failure modes}
 
