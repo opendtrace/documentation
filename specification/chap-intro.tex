@@ -125,11 +125,11 @@ This report specifies a number of aspects of OpenDTrace's operation:
 
 \begin{description}
 
-\item[The Operational Model] described in
-  Chapter~\ref{chap:opendtrace-operation} gives a general overview of
-  the internals of the OpenDTrace system, including the privilege
-  model, trace-point format and a description of how user space
-  programs are traced.
+\item[The Achitecture of OpenDTrace] described in
+  Chapter~\ref{chap:opendtrace-arch} gives a general overview of the
+  internals of the OpenDTrace system, including the relationship of
+  the major components, privilege model, and other, overarching,
+  concerns.
 
 \item[The D Langauge] described in
   Chaper~\ref{chap:opendtrace-dlang} provides a full description of
@@ -160,10 +160,6 @@ This report specifies a number of aspects of OpenDTrace's operation:
   subroutines available to scripts in execution.
   Chapter~\ref{chap:opendtrace-instruction-reference} enumerates the
   instructions, their arguments, and their semantics.
-
-\item[Variable Records] describe the set of variables (local, global,
-  or thread-local) operated on by a OpenDTrace script.
-  Chapter~\ref{chap:opendtrace-variable-records} specifies this record format.
 
 \item[Built-in Global Variables] are a set of implementation-defined
   variables always available to scripts.
