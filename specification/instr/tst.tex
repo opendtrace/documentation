@@ -32,6 +32,10 @@ cc_n = cc_v = cc_c = 0;
 cc_z = %r1 == 0;
 \end{verbatim}
 
+\subsubsection*{Load-time constraints}
+The register \registerop{r1} be a valid register, \registerop{rd} and
+\registerop{r2} must be \registerop{r0}.
+
 \subsubsection*{Failure modes}
 
 This instruction has no run-time failure modes beyond its constraints.
