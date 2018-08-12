@@ -421,9 +421,9 @@ are represented in source code as prefixed with \texttt{self->}.  A thread-local
 variable is identified with its name and a thread ID.
 
 Clause-local variables are prefixed with \texttt{this->} and are visible only
-within a single \texttt{dtrace\_probe()} call. This means that a clause-local
-variable will be visible across multiple clauses of the same probe, allowing the
-programmer to carry state associated with a clause-local variable across them.
+within a single probe firing. This means that a clause-local variable will be
+visible across multiple clauses of the same probe, allowing the programmer to
+carry state associated with a clause-local variable across them.
 
 \subsection{Global variables}
 \label{subsec:global-variables}
