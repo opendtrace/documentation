@@ -1,14 +1,29 @@
-This document provides an overview of how \texttt{libdtrace} processes the
-DTrace trace buffer in order to produce textual output (specifically when
-processing a ``printlike'' action such as
-\texttt{printf("$\backslash$"event$\backslash$": \%s", probefunc);} or
-printing an aggregation such as \texttt{printa(@a)}). 
+OpenDTrace specifies a ABI between kernel and userspace in the form of trace
+and aggregations buffers and the associate metadata used to interpret these
+buffers for further processing or formatting in order to generate results pased
+back to the user. This chapter specifies the format of the OpenDTrace trace
+and aggregation buffer formats.
 
-\section{Probes}
+\section{Enabling}
 \label{sec:probes}
+
+Each enabling (that is, an enabled probe) is associated with a set of
+\textit{actions} through its \textit{Enabling Control Block} (ECB). When a
+probe fires (and, if present, its predicate evaluates to true) these
+actions are performed.  The execution of these actions potential results in
+data being written into the trace buffers.
 
 \subsection{DTrace trace buffer}
 \label{subsec:trace_buffer}
+
+Each DTrace consumer is associated with a set of in-kernel, per-CPU buffers
+\cite{DTrace2004}.  The format of the DTrace trace buffer is shown in
+Figure~\ref{fig:trace_buffer}.  Note that the length of the data for the trace
+record is not specified by the DTrace trace buffer (trace records are specified
+as TV (\textit{Type-Value}) rather than TLV (\textit{Type-Length-Value}).
+Instead, a separate stream of metadata is used to interpret the trace buffer.
+The data structures describing the metadata stream are described in
+Section~\ref{subsec:probe_data_structures}.
 
 \begin{figure}[!ht]
 	\centering
@@ -34,39 +49,36 @@ printing an aggregation such as \texttt{printa(@a)}).
 	\draw [db] (barr1.south west) -- (barr1.three split south) node[midway,below=10pt]{$Record_0$};
 	\draw [db] (barr1.four split south) -- node[below=10pt]{$Record_n$} (barr1.south east);
     \end{tikzpicture}
-	\caption{DTrace trace buffer.}
+	\caption{OpenDTrace trace buffer format.}
 	\label{fig:trace_buffer}
 \end{figure}
 
 \begin{itemize}
-	\item{\texttt{EPID}}: identifies the enabled probe that produced the
-trace record; the identifier type is \texttt{dtrace\_epid\_t} which corresponds
-to a unsigned 32 bit integer.
+	\item{\texttt{EPID}}: identifies the enabling (that is, the enabled
+		probe) that produced the trace record; the identifier type is
+		\texttt{dtrace\_epid\_t} which corresponds to a unsigned 32 bit
+		integer.  These identifiers are unqiue for each DTrace
+		consumer.
 
 	\item{\texttt{timestamp}:} the timestamp (ns) of the trace record; the
-timestamp type is an unsigned 64 bit integer.
+		timestamp type is an unsigned 64 bit integer.
 
-	\item{\texttt{data}:} the data for trace record.
+	\item{\texttt{data}:} the data for trace record; a sequence of octets
+		the format of which is specified by the trace metadata see
+		Section~\ref{subsec:probe_data_structures}.
 \end{itemize}
 
-Note that the length of the data for the trace record is not specified by the
-DTrace trace buffer (trace records are specified as TV (\textit{Type-Value})
-rather than TLV (\textit{Type-Length-Value}). Instead, a separate stream of
-metadata is used to interpret the trace buffer. The data structures describing
-the metadata stream are described in Section~\ref{subsec:probe_data_structures}.
-
-\subsubsection{Userspace copy}
-\label{subsubsec:bufsnap}
-
-The DTrace trace buffer is copied from the kernel to the userspace consumer by
-invoking the \texttt{BUFSNAP} ioctl. Within \texttt{libdtrace} the
-\texttt{BUFSNAP} ioctl is invoked by the function \texttt{dt\_get\_buf()} found
-in the file \texttt{dt\_consume.c}; this function flattens the buffer (if
-\texttt{dtrace} is configured to use a ring buffer) before passing it on the
-function \texttt{dt\_consume\_cpu()} for processing.
-
-\subsection{Data structures}
+\subsection{Trace metadata}
 \label{subsec:probe_data_structures}
+
+The metadata required to interpret an enabled probe is constant over
+the lifetime of the enabling \cite{DTrace2004}. This allows trace metadata
+to be cached queried from the kernel once (on first processing a given
+enabling) and then locally cached.  The separation of trace records and
+the metadata required to interpret records is a central design decision.
+This seperation simplifies the run-time analysis of the trace data, but comes
+at the expense of some felxibility (for example, the ability change an
+enabling).
 
 \tikzset{
     %every node/.style={draw, text height=1.5ex},
@@ -598,14 +610,6 @@ record is specified by the DTrace trace aggregation buffer.
 Instead, a separate stream of metadata is used to interpret the trace buffer.
 The data structures describing the metadata stream are described in
 Section~\ref{subsec:agg_data_structures}.
-
-\subsubsection{Userspace copy}
-\label{subsubsec:bufsnap}
-
-The DTrace aggregation trace buffer is copied from the kernel to the userspace
-consumer by invoking the \texttt{AGGSNAP} ioctl.  Within \texttt{libdtrace} the
-\texttt{AGGSNAP} ioctl is invoked by the function
-\texttt{dt\_aggregate\_snap\_cpu()} found in the file \texttt{dt\_aggregate.c}.
 
 \subsection{Data structures}
 \label{subsec:agg_data_structures}
