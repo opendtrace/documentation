@@ -17,14 +17,6 @@ This subroutine returns 64 bits of random(ish) data, placing the result in
 On supporting systems, stronger randomness can be obtained uing the
 \hyperref[subr:random]{\subroutine{random}} subroutine.
 
-\subsubsection*{Pseudocode}
-
-\begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
-\end{verbatim}
-
-\subsubsection*{Constraints}
-
 \subsubsection*{Failure modes}
 
 This subroutine has no run-time failure modes beyond its constraints.

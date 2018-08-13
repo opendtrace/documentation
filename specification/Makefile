@@ -7,7 +7,7 @@ SOURCE=								\
 	abstract.tex						\
 	acknowledgments.tex					\
 	chap-intro.tex						\
-	chap-opendtrace-operation.tex				\
+	chap-opendtrace-arch.tex				\
 	chap-opendtrace-ctf.tex					\
 	chap-opendtrace-trace-buffer.tex					\
 	chap-opendtrace-instruction-reference.tex		\
@@ -15,7 +15,6 @@ SOURCE=								\
 	chap-opendtrace-object-format.tex			\
 	chap-opendtrace-subroutines.tex				\
 	chap-opendtrace-global-vars.tex				\
-	chap-opendtrace-variable-records.tex			\
 	chap-opendtrace-code.tex				\
 	chap-opendtrace-dlang.tex				\
 	chap-opendtrace-providers.tex				\
@@ -155,7 +154,35 @@ SOURCE=								\
 	subr/sx_shared_held.tex					\
 	subr/tolower.tex					\
 	subr/toupper.tex					\
-	subr/uuidstr.tex
+	subr/uuidstr.tex					\
+	vars/arg09.tex						\
+	vars/args.tex						\
+	vars/caller.tex						\
+	vars/cpu.tex						\
+	vars/cpucycles.tex					\
+	vars/cpuinstrs.tex					\
+	vars/curthread.tex					\
+	vars/dispatchaddr.tex					\
+	vars/epid.tex						\
+	vars/errno.tex						\
+	vars/execname.tex					\
+	vars/gid.tex						\
+	vars/id.tex						\
+	vars/ipl.tex						\
+	vars/machtimestamp.tex					\
+	vars/pid.tex						\
+	vars/ppid.tex						\
+	vars/probe.tex						\
+	vars/stackdepth.tex					\
+	vars/tid.tex						\
+	vars/ucaller.tex					\
+	vars/uid.tex						\
+	vars/uregs.tex						\
+	vars/ustackdepth.tex					\
+	vars/vcycles.tex					\
+	vars/vinstrs.tex					\
+	vars/vtimestamp.tex					\
+	vars/walltimestamp.tex
 
 ${TARGET}: ${SOURCE}
 	latexmk -pdf -bibtex ${MAIN_TEX}

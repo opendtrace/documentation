@@ -5,12 +5,252 @@ formal definition of the D programming language that is a part of
 OpenDTrace, as well as elaborate on its properties in multithreaded
 environments.
 
-\section{Grammar definition}
+\section{Example Script}
+\label{sec:example-script}
+
+Before describing the full grammar in detail we present a brief,
+example, D script, called a \emph{one liner}.  D one liners are the
+most frequently used D scripts because they are an easy way to start
+tracing a system without writing a file full of D code.  
+
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.8\linewidth]{oneliner.pdf}
+  \caption{D One Liner}
+  \label{fig:d-one-liner}
+\end{figure}
+
+D scripts are a collection of one or more probe points with optional
+actions and filtering predicates.  Figure~\ref{fig:d-one-liner} shows
+a simple, but descriptive, D script.  The script prints out the size
+of the data that a program attempts to write using the
+\texttt{write(2)} system call as well as name of the program that made
+the write call.  Starting from the left hand side of
+Figure~\ref{fig:d-one-liner} we see the probe point in red.  The probe
+point includes the provider name, \texttt{syscall} as well as the
+function, \texttt{write}, and the fact that we want to look at the
+\texttt{entry} into the system call.  Moving to the far right of
+Figure~\ref{fig:d-one-liner} we see the action that will be taken
+whenever the probe point fires.  Actions are written in the D language
+which is an interpreted subset of the C language and so this script
+should be familiar to most C or C++ programmers.  D has a large set of
+built-in subroutines, described in Chapter~\ref{chap:opendtrace-subroutines},
+which includes familiar functions such as \texttt{printf()}.  Each
+probe point can have up to six (6) arguments, numbered from arg0 to
+arg5, and in this example we are interested in arg2, which is the
+\texttt{nbytes} argument to the write system call.  We want to know
+which program made the call to \texttt{write} and so we also print the
+\texttt{execname} which a D built in variable that contains the name
+of the program that caused the probe to fire.
+
+Coming back to the middle of Figure~\ref{fig:d-one-liner} we see text
+marked in green, which is a predicate.  Predicates are used to filter
+when probes fire allowing the script writer to reduce the amount of
+data collected during tracing.  A system call such as \texttt{write}
+is called frequently on a busy system and without a predicate the
+script will collect quite a bit of data, much of which may not be
+relevant to the issue that we are trying to investigate.  The
+predicate in Figure~\ref{fig:d-one-liner} allows the probe to fire if,
+and only if, the call to \texttt{write} is not equal to zero (0).
+More complex boolean expressions are possible within predicates but we
+want to have a simple example.
+
+With this example in mind we now turn to the formal grammar for the D
+language.
+
+\section{Language grammar}
 \label{sec:grammar}
 
-\input{dt_grammar.tex}
+\setlength{\grammarparsep}{5pt plus 1pt minus 1pt} % increase separation between rules
+\setlength{\grammarindent}{12em} % increase separation between LHS/RHS
 
-\ebnftable
+%\input{dt_grammar.tex}
+
+%\ebnftable
+
+%TODO: Define all the auxiliary things we may need, such as integers, ...
+
+In this section, we will define the grammar of the D language and explain how
+each part fits together when interacting with DTrace. Terminals are represented
+using lower\_case, while non-terminals are written as CamelCase. Furthermore, we
+define the tab character, `\textbackslash t' and space, ` ' as separators. We first
+define a number of auxiliary constructs to define the rest of the grammar.
+
+\begin{grammar}
+<letter> ::= `A' ... `Z'
+	\alt `a' ... `z'
+	\alt `\_' ;
+
+<Word> ::= <letter> \{ <letter> \} ;
+\end{grammar}
+
+\noindent
+In D, `\_' is considered a letter, which can be used at either the start of a
+name. As in C, separators can either be tabs or whitespace characters.
+Additionally, we define number constants that are supported in D:
+
+\begin{grammar}
+<dec\_digit> ::= `1' | `2' | `3' | `4' | `5' | `6' | `7' | `8' | `9' ;
+
+<DecDigitWithZero> ::= `0' | <dec\_digit> ;
+
+<bin\_digit> ::= `0' | `1' ;
+
+<oct\_digit> ::= `0' | `1' | `2' | `3' | `4' | `5' | `6' | `7' ;
+
+<HexDigit> ::= <DecDigitWithZero>
+	\alt `A' ... `F'
+	\alt `a' ... `f' ;
+
+<Integer> ::= <dec\_digit> <DecDigitWithZero>
+	\alt `0b' <bin\_digit>
+	\alt `0' <oct\_digit>
+	\alt `0x' <HexDigit>
+\end{grammar}
+
+% XXX: Is this sufficient for a <Identifier>
+\begin{grammar}
+<Identifier> ::= <Word> \{ ( <DecDigitWithZero> | <Word> ) \} ;
+
+<VarList> ::= <Identifier> \{ `,' <Identifier> \} ;
+\end{grammar}
+
+\noindent
+In D, there are many ways to access types. However, there are a number of
+builtin types, as well as mechanisms to define these types. Similarly to C, D
+supports a number of primitive integer types and floating point types, as well
+as a specialized \texttt{string} and \texttt{userland} type.
+
+\begin{grammar}
+<Type> ::= `char'
+	\alt `short'
+	\alt `int'
+	\alt `signed'
+	\alt `unsigned'
+	\alt `long'
+	\alt `long long'
+	\alt `userland'
+	\alt `string'
+	\alt `void'
+	\alt `float'
+	\alt `double'
+	\alt <TypedefName>
+	\alt <StructOrUnionSpec>
+	\alt <EnumSpecifier> ;
+\end{grammar}
+
+\noindent
+In the above type specification, we introduce three new non-terminals that we
+further have to specify: \texttt{TypedefName}, \texttt{StructOrUnionSpec} and
+\texttt{EnumSpecifier}.  \texttt{TypedefName} represents a type that is defined
+to be an alias to another type, much like in C:
+
+\begin{grammar}
+<TypedefName> ::= <Identifier> ;
+\end{grammar}
+
+\noindent
+Similarly, \texttt{StructOrUnionSpec} represents a way to specify a D
+\texttt{struct} or \texttt{union} type. These language primitives are compatible
+with their C counterparts and ensure ABI compatibility. This is important when
+tracing the kernel, but also allows trivial translation to other ABIs.  We
+specify \texttt{StructOrUnionSpec} as follows:
+
+\begin{grammar}
+<StructOrUnionSpec> ::= <Modifier> ( `struct' | `union' ) [ <Identifier> ] \newline
+	`{' <StructDeclList> `}' [ <VarList> ] `;'
+	\alt ( `struct' | `union' ) <Identifier> [ <VarList> ] `;' ;
+
+<StructDeclList> ::= <Type> <VarList> `;' \{ <Type> <VarList> `;' \} ;
+
+<EnumSpecifier> ::= <Modifier> `enum' [ <Identifier> ] \newline
+	`{' <EnumDeclList> `}' [ <VarList> ] `;'
+	\alt `enum' <Identifier> [ <VarList> ] `;' ;
+
+<EnumDeclList> ::= <Identifier> [ `=' <Identifier> ] [ `,' ] ;
+\end{grammar}
+
+\noindent
+Here we introduce a new non-terminal, \texttt{Modifier} which encapsulates the
+modifiers that may occur before a \texttt{struct} or \texttt{enum} definition.
+It is defined as follows:
+
+% XXX: Verify that this is correct
+\begin{grammar}
+<Modifier> ::= `const'
+	\alt `volatile'
+	\alt `typedef'
+	\alt `register'
+	\alt `restrict'
+	\alt `static'
+	\alt `extern' ;
+\end{grammar}
+
+\noindent
+Even though \texttt{Modifier} is permissive in terms of what keywords are
+allowed, the definitions of these keywords are equivalent to those in C and may
+only be used when appropriate. The compiler may choose to emit a warning and
+ignore modifiers that are not applicable or it may choose to be more strict and
+treat misuse of a modifier as an error. Using these modifiers when not
+applicable is considered undefined behaviour. \newline
+
+\noindent
+Since D is a domain-specific language for tracing and provides probes in the
+kenrel, we define the following way of specifying probes:
+
+% TODO: Make this render a bit nicer.
+% XXX: Is this correct?
+\begin{grammar}
+<ProbeSymbol> ::= <letter>
+	\alt <DecDigitWithZero>
+	\alt `*'
+	\alt `+'
+	\alt `\\'
+	\alt `?'
+	\alt `!'
+	\alt `['
+	\alt `]' ;
+
+<ProbeIdent> ::= <ProbeSymbol> \{ <ProbeSymbol> \} ;
+
+<ProbeSpecifier> ::= <ProbeIdent>
+	\alt [ <ProbeIdent> ] `:' [ <ProbeIdent> ]
+	\alt [ <ProbeIdent> ] `:' [ <ProbeIdent> ] `:' [ <ProbeIdent> ]
+	\alt [ <ProbeIdent> ] `:' [ <ProbeIdent> ] `:' \newline
+	[ <ProbeIdent> ] `:' [ <ProbeIdent> ] ;
+\end{grammar}
+
+\noindent
+This provides us with a way to specify the \texttt{provider}, \texttt{module},
+\texttt{function} and \texttt{name} of a DTrace probe in D. The reason symbols
+such as `*' are allowed is because D allows the user to write glob expressions
+much like a Unix shell does. \newline
+
+\noindent
+Furthermore, a probe clause in a D script consists of an optional predicate. A
+predicate contains a logical expression in propositional logic:
+
+\begin{grammar}
+<Predicate> ::= `/' <LogicExpression> `/'
+\end{grammar}
+
+% TODO: This needs to be expanded. We need to define:
+%  * <LogicExpression>
+%  * <Statement>
+%
+% <LogicExpression> needs to capture anything that can be written inside a probe
+% predicate. This seems to be propositional logic...?
+%
+% <Statement> needs to capture all of the possible D expressions that can appear
+% inside probe clauses.
+
+\begin{grammar}
+<ProbeDefinition> ::= <ProbeSpecifier> [ <Predicate> ] `{'  { <Statement> } `}'
+\end{grammar}
+
+% TODO: Define all different types of expressions that we can have, assignment
+% operators, conditionals, ...
 
 \section{Safety}
 \label{sec:safety}
@@ -48,35 +288,140 @@ commitment to safety.
 % for and although generous for a scripting language clearly exist to
 % prevent D scripts from asking for too much.
 
+% XXXDS: I don't think this belongs in a language description, this is
+% an implementation detail. We mostly care about the semantics.
+
 \section{Variables}
 \label{sec:d-variables}
-DTrace implements three different scopes of variables: global,
-thread-local and clause-local. Global variables are visible to every
-probe and across all threads, allowing the user to write scripts that
-carry state across multiple threads should it be
-necessary. Thread-local variables are only visible within a single
-software thread, they are represented in source code as prefixed with
-\texttt{self->}. Clause-local variables are implemented on a
-per-thread basis and are identified by the prefix
-\texttt{this->}. Clause-local variables should be initialised in each
-probe before their use, as the value is otherwise considered
-undefined.
+DTrace implements three different scopes of variables: global, thread-local and
+clause-local. Global variables are visible to every probe and across all
+threads, allowing the user to write scripts that carry state across multiple
+threads should it be necessary and are identified with the variable name. 
+
+Similar to global variables are D built-in variables such as \verb|execname|,
+\verb|curthread|, etc. We make a distinction between the two due to the
+difference between failures that they expose. A list of built-in variables can
+be found in Section~\ref{sec:builtin-variables-ref}.
+
+Thread-local variables are only visible within a single software thread, they
+are represented in source code as prefixed with \texttt{self->}.  A thread-local
+variable is identified with its name and a thread ID.
+
+Clause-local variables are prefixed with \texttt{this->} and are visible only
+within a single \texttt{dtrace\_probe()} call. This means that a clause-local
+variable will be visible across multiple clauses of the same probe, allowing the
+programmer to carry state associated with a clause-local variable across them.
 
 \subsection{Global variables}
 \label{subsec:global-variables}
 
-Any variable introduced in a D script that is not declared as part of
-a \verb|this->| or \verb|self->| is considered to be global in scope,
-meaning that it can be accessed from any action associated with a
-probe when a set of probes are simultaneously activated.  Global
-variables are allocated and instantiated when they are first
-referenced.
+Any variable introduced in a D script that is not declared as part of a
+\verb|this->| or \verb|self->| is considered to be global in scope, meaning that
+it can be accessed from any action associated with a probe when a set of probes
+are simultaneously activated.  Global variables are allocated and instantiated
+when they are first assigned to.  Global variables, however, are subject to the
+semantics of the underlying architecture's cache coherence mechanism.
+
+Global variables exhibit two failure modes:
+\begin{itemize}
+\item The variable could not be allocated.
+\item The use of a global variable has caused a fault.
+\end{itemize}
+The former eventually manifests through the latter failure mode at every program
+point where the variable is used, but we have included it as a separate failure
+mode because DTrace currently increments an according counter to indicate that a
+variable could not be allocated and because it has different implications on the
+rest of the D script.
+
+\subsection{Built-in variables}
+\label{subsec:builtin-variables}
+
+Similarly to global variables, built-in variables are accessible to the
+programmer at any point in the script. The main difference between built-in
+variables and global variables are their semantics. D built-in variables are not
+mutable and are thus not subject to the concurrency semantics of the underlying
+architecture. Furthermore, unlike global variables, built-in variables are
+guaranteed to never cause a page fault and thus can be accessed safely. It is up
+to the DTrace implementation has to ensure that access to these variables is
+race-free and reliable.
 
 \subsection{Thread-local variables}
 \label{subsec:thread-local-variables}
 
+As previously mentioned, thread-local variables are identified with their name
+and a thread ID. The motivation behind them is to have a pragmatic way to carry
+state around probes in a race-free way, as a thread can only be scheduled on a
+single CPU. The failure modes exposed by thread-local variables are the those of
+global variables -- however, thread-local variables do not suffer the problem of
+relying on the underlying architecture's cache coherence semantics under the
+assumption that each software thread can only be scheduled on one CPU and runs
+with interrupts off in the DTrace probe context.
+
 \subsection{Clause-local variables}
 \label{subsec:clause-local-variables}
+
+Clause-local variables in DTrace are defined across a single probe. Note that
+this does not mean that they are only usable within a single probe clause, but
+instead for all of the clauses of a given probe. If a clause-local variable is
+used before it is defined in a given probe firing, its value is undefined and
+depends on the implementation. A good compiler will warn the programmer about
+such misuse of a clause-local variable.
+
+\section{Aggregations}
+\label{sec:aggregations}
+
+The ability to aggregate data during data collection, and to then
+process the data via several types of statistical analysis, is one of
+the key features of OpenDTrace.  The data for an aggregation is
+collected, like all other trace data, by the kernel, while the data
+processing is carried out in user space by the \emph{libdtrace}
+library functions.
+
+Aggregating functions are a set of functions that can operate on
+partial data and achieve the same result as if they had operated
+on all of the data at once.
+
+\begin{table}
+  \centering
+  \begin{tabular}{l|l|l}
+    Function & Pseudo-code & Description \\
+    \hline
+    count & x = x + 1 & Counts the number of occurrences of some argument \\
+    min & x = x > arg ? arg : x & Computes the minimum of all values seen \\
+    max & x = x > arg ? x : arg & Computes the maximum of all values seen \\
+    avg & x = sum/len & Averages out the values seen \\
+    sum & x = x + arg & Sums up all of the values that are seen \\
+    stddev & N/A & The standard deviation over a set of values\\
+    quantize & N/A & Power-of-two frequency distribution over a set of values\\
+    lquantize & N/A & Linear frequency distribution over a specified range.\\
+    llquantize & N/A & Linear frequency distribution within a logarithmic distribution
+  \end{tabular}
+  \caption{Aggregation Functions}
+  \label{tab:agg-func}
+\end{table}
+
+There are nine (9) aggregating functions, which are listed in
+Table~\ref{tab:agg-func}.  The first five aggreggating functions:
+count(), min(), max(), avg(), and sum(), are simple enought that
+pseudo-code can be supplied within Table~\ref{tab:agg-func} while the
+next three functions: stddev(), quantize() and lquantize(), should be
+understood in their mathematical expression.
+
+The llquantize() function is specific to OpenDTrace, and was written
+by Bryan Cantrill while at Joyent.  The purpose of llquantize() is to
+aggregate data logarithmically over a specified range of magnitudes,
+but use a frequency distribution within each of the magnitude.
+
+\section{Subroutines}
+\label{sec:subroutines}
+
+OpenDTrace subroutines are built into the D language and run inside the
+operating system kernel. The programmer cannot create their own subroutines
+inside the D language itself, but new ones can be added as a part of the D
+language runtime. All of the parameters are type-checked during every call,
+however the safety of using these subroutines depends on the safety of DTrace
+action and the DIF emulator. The subroutines currently supported are given
+in Table~\ref{tab:subroutines}.
 
 \section{Multithreading}
 
@@ -86,11 +431,12 @@ referenced.
 % little over the top, as this has not been verified at all. We should
 % think about this a bit more.
 
-When tracing, DTrace guarantees that it can not be preempted inside of
-the \function{dtrace_probe()} function, but it does not guarantee that
-everything in the executing DIF will be thread-safe. DTrace does not
-allow access to locking primitives, because a programming error might
-violate the safety guarantees that OpenDTrace was designed to provide.
+When tracing, OpenDTrace guarantees that it can not be preempted
+inside of the \function{dtrace_probe()} function, but it does not
+guarantee that everything in the executing DIF will be thread-safe.
+OpenDTrace does not allow access to locking primitives, because a
+programming error might violate the safety guarantees that OpenDTrace
+was designed to provide.
 
 \subsection{Global variables}
 
@@ -191,46 +537,10 @@ dtrace:::END
   \label{fig:avoiding-the-race}
 \end{figure}
 
-\subsection{Thread-local variables}
+% \subsection{Thread-local variables}
 
-As mentioned in Subsection~\ref{subsec:thread-local-variables}, thread-local
-variables are only visible within a single thread.
+% As mentioned in Subsection~\ref{subsec:thread-local-variables}, thread-local
+% variables are only visible within a single thread.
 
-\subsection{Clause-local variables}
+% \subsection{Clause-local variables}
 
-\section{Aggregations}
-\label{sec:aggregations}
-
-The ability to aggregate data during data collection, and to then
-process the data via several types of statistical analysis, is one of
-the key features of OpenDTrace.  The data for an aggregation is
-collected, like all other trace data, by the kernel, while the data
-processing is carried out in user space by the \emph{libdtrace}
-library functions.
-
-\begin{table}
-  \centering
-  \begin{tabular}{l|l}
-    Function & Explanation\\
-    \hline
-    count(arg) & x = x + arg (arg == 1 by default)\\
-    min() & x = minimum of all values seen\\
-    max() & x = maximum o all values seen\\
-    avg() & x = sum(all values seen)/len(value list)\\
-    sum() & x = x + val\\
-    stddev() & \\
-    quantize() & \\
-    lquantize() & \\
-    llquantize() &
-  \end{tabular}
-  \caption{Aggregation Functions}
-  \label{tab:agg-func}
-\end{table}
-
-There are nine (9) aggregation functions, which are listed in
-Table~\ref{tab:agg-func}.
-
-\section{Subroutines}
-\label{sec:subroutines}
-
-% XXX explain how subroutines are different from actions.

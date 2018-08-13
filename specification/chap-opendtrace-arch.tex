@@ -1,6 +1,13 @@
+\begin{figure}[htpb]
+	\centering
+	\includegraphics[width=0.8\linewidth]{toplevelarch.pdf}
+	\caption{OpenDTrace Components}
+	\label{fig:components}
+\end{figure}
+
 The components that make up OpenDTrace interact with each other to
 implement an operational model for dynamic tracing.  At the highest
-level there are three components to OpenDTrace: tools, such as
+level there are several components to OpenDTrace: tools, such as
 \texttt{ctfconvert} which take compiled object code and generate new
 ELF/DWARF sections that capture type information, the kernel module,
 which is responsible for adding and removing trace points at run time,
@@ -27,14 +34,21 @@ libraries can manipulate or display the data to end users.
 Providers in OpenDTrace encapsulate the probe points that are used to
 instrument code and provide data to the end user. A provider defines
 both a set of probe points as well as the standard by which the system
-interacts with that set of probe points.  For example the Function
-Boundary Tracepoint (\texttt{fbt}) provider defines \texttt{return} trace
-points in which only arguments zero ($0$) and one ($1$) are valid and
-which always contain the return value and return address
-respectively, whereas no other provider has such a definition.
+interacts with that set of probe points.  For example, the Function
+Boundary Tracepoint (\texttt{fbt}) provider, not only gives D scripts
+access to function entry points and their arguments, but also access
+to the return from a function.  The \texttt{fbt} provider, following
+the C ABI standard, defines a \texttt{return} trace point to have only
+two arguments: zero ($0$) and one ($1$).  The zero'th argument to any
+\texttt{return} probe always contains the return value and the first
+argument contains return address.  The \texttt{return} probe is
+specific to the \texttt{fbt} provider, and no other provider has such
+a definition.
 
 OpenDTrace has a base set of providers that are shipped as part of the
-system, see Appendix~\ref{chap:opendtrace-providers}, but developers are free to
+system,
+% see Appendix~\ref{chap:opendtrace-providers},
+but developers are free to
 create their own, to expose more or different information from their
 code. Providers can be developed either for the kernel, in which case
 they are defined as kernel modules, or for user space, as part of the
@@ -49,19 +63,20 @@ provider is responsible for tracking when probes are enabled and
 implementing a mechanism for the kernel module to update their state.
 
 The user space interface to OpenDTrace is the \texttt{drace(1)}
-command line utility, . The \texttt{dtrace} command line utility
-handles all run time interaction with the OpenDTrace system, such as
+command line utility. The \texttt{dtrace} command line utility handles
+all run time interaction with the OpenDTrace system, such as
 submitting scripts for execution as well as configuring options as
 memory usage, and how often the system should flush data from the
 kernel.  The complete syntax and set of options for the
-\texttt{dtrace} command is given in the manual page.
+\texttt{dtrace} command is given in the \texttt{dtrace(1)} manual
+page.
 
 The majority of the DTrace CLI functionality is provided through calls
 to the DTrace user-space library, \texttt{libdtrace}, which is
 responsible for setting DTrace options, compiling D scripts, and
-passing compiled D code to the kernel for
-execution. \texttt{libdtrace} provides the mechanism for all
-interactions with DTrace in the kernel.
+passing compiled D code to the kernel for execution. The
+\texttt{libdtrace} library provides the mechanism for all interactions
+with DTrace in the kernel.
 
 \section{Probe Life Cycle}
 \label{sec:lifecycle}
@@ -112,6 +127,26 @@ with others, in a tree like structure. Once an ECB is safely stored in
 the kernel, the kernel module tells the provider to enable the probes
 that are to be instrumented.
 
+Enabling a probe means telling the provider that at the right point
+the \verb|dtrace_probe| kernel function must be called.  All tracing
+ultimately goes through the \verb|dtrace_probe| function in the
+kernel, which is responsible for all of the work related to any part
+of tracing.  How \verb|dtrace_probe| is ultimately called depends on
+both the program and the provider.
+
+The function boundary tracepoint (\verb|fbt|) and \verb|fasttrap|
+providers which allow tracing of kernel code and user space code,
+respectively, both operate under the same model.  They both find the
+instruction in the program at which the tracepoint is to be placed and
+swap the regular instruction with a an architecture dependent
+break-point instruction when tracing is enabled.
+
+The profile provider is completely different from the FBT or fasttrap
+providers as it is meant to call \verb|dtrace_probe| on a periodic
+basis using in-kernel timers.  Enabling a profile provider does not
+change any instruction stream in any program, but instead adds calls
+to \verb|dtrace_probe| to the kernel's timing machinery.
+
 When code execution reaches a point that has an enabled probe, the
 probe fires and a call is made into the kernel module (5). The kernel
 module then walks through the tree of ECBs, executing any that match
@@ -120,19 +155,33 @@ buffer created when \texttt{libdtrace} was initialized. At a later
 point the data is copied out of the kernel by the library (7), and
 then the final results are made available to the end user (8).
 
+\section{Trace Records}
+\label{sec:trace-records}
+
+When tracing is enabled the OpenDTrace modules in the kernel produce a
+stream of records which are consumed by user level processes, such as
+the \verb|dtrace(1)| command, and turned into various types of output.
+
+Records are communicated in a buffer structure, \verb|dtrace_bufdata|
+which is shared between the kernel and user space.  Buffers contain
+one of two types of data.  Either the data is a plain record, or it is
+an aggregation.  All data is arranged as a stream of bytes where the
+current header gives the extent of the data, indicating where the next
+record can be found.
+
+Plain records contain the data requested by the D script along with
+optional formatting information and arguments.  Aggregations are
+treated specially because they are not simply raw data buffers, but
+instead, contain information that descibes deltas, normalized data,
+and information on data binning.
+
 \section{Privilege Model}
 \label{sec:privilege}
 
 The OpenDTrace privilege model is relatively simple, any program that
-wishes to trace another program must be running with \emph{root}
-privileges.  Some operating systems, such as Illumos, provide a more
-nuanced privilege model.
-
-\section{Tracepoint Format}
-\label{sec:tracepoint-format}
-
-\section{User Space Tracing}
-\label{sec:user-space}
+wishes to trace another program, or the operating system kernel, must
+be running with \emph{root} privileges.  Some operating systems, such
+as Illumos, provide a more nuanced privilege model.
 
 %%% Local Variables:
 %%% mode: latex

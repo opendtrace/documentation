@@ -1,16 +1,16 @@
 %%%% University of Cambridge tech-report formatting; enable when producing
 %%%% tech-report versions of these documents; otherwise, disable.
-%\documentclass[12pt,twoside,openright,a4paper]{report}
-%\setlength{\oddsidemargin}{-0.4mm} % 25 mm left margin
-%\setlength{\evensidemargin}{\oddsidemargin}
-%\setlength{\textwidth}{160mm}      % 25 mm right margin
-%\setlength{\topmargin}{-5.4mm}     % 20 mm top margin
-%\setlength{\headheight}{5mm}
-%\setlength{\headsep}{5mm}
-%\setlength{\footskip}{10mm}
-%\setlength{\textheight}{237mm}     % 20 mm bottom margin
+\documentclass[12pt,twoside,openright,a4paper]{report}
+\setlength{\oddsidemargin}{-0.4mm} % 25 mm left margin
+\setlength{\evensidemargin}{\oddsidemargin}
+\setlength{\textwidth}{160mm}      % 25 mm right margin
+\setlength{\topmargin}{-5.4mm}     % 20 mm top margin
+\setlength{\headheight}{5mm}
+\setlength{\headsep}{5mm}
+\setlength{\footskip}{10mm}
+\setlength{\textheight}{237mm}     % 20 mm bottom margin
 %%%% .. or regular document
-\documentclass[12pt,letterpaper,twoside,openright,fleqn]{report}
+%\documentclass[12pt,letterpaper,twoside,openright,fleqn]{report}
 %%%% End of tech-report vs. regular
 %%%%
 
@@ -30,6 +30,7 @@
 \usepackage{setspace}
 \usepackage{amsmath}
 \usepackage{longtable}
+\usepackage[nounderscore]{syntax}
 % Must be included later than setspace, otherwise all footnote hyperlinks
 % point to the title page.
 \usepackage{hyperref}

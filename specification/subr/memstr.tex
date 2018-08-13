@@ -2,27 +2,28 @@
 \phantomsection
 \addcontentsline{toc}{subsection}{memstr}
 \label{subr:memstr}
-\subsection*{memstr: FILL ME IN}
+\subsection*{memstr: convert NULL separated strings to one string}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{arg0}] pointer to memory
+\item[\registerop{arg1}] separation character
+\item[\registerop{arg2}] length of memory to convert
+\item[\registerop{rd}] converted string
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
-\subsubsection*{Pseudocode}
+The \subroutine{memstr} subroutine converts a set of NULL separated
+strings into a single string.  The string is bounded by the caller.
 
-\begin{verbatim}
-regs[rd] = (getthrtime() * 2416 + 374441) % 1771875
-\end{verbatim}
 
 \subsubsection*{Constraints}
 
-The \subroutine{memstr} subroutine is only available on the FreeBSD operating
-system.
+The maximum length of string to be converted is limited to 4096 bytes
+by default.  The \subroutine{memstr} subroutine is only available on
+the FreeBSD operating system.
 
 \subsubsection*{Failure modes}
 

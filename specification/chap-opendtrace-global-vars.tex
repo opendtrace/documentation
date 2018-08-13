@@ -1,8 +1,18 @@
-\section{Global Variables}
 
-All global variables in D are read only, including in destructive mode.
+The D language provides a set of built-in global variables that are
+available to D scripts from within probe context.  The built-in global
+variables are meant to help script writers and expose information that
+is commonly uses within C and C++ programs, such as \verb|errno| for
+the error number set by the most recent system call, and the
+\verb|pid| for the Process Identifier of the currently running
+process.  All global variables in D are read only, including in
+destructive mode.
 
-\section{Global Variables reference}
+\section{Built-in Variables reference}
+\label{sec:builtin-variables-ref}
+
+The following is a list of all of the global variables available to D
+programs.
 
 \input{vars/arg09}
 \input{vars/args}

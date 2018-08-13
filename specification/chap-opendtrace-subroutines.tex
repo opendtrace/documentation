@@ -1,8 +1,47 @@
+The D language provides a set of built-in global sub-routines that are
+available to D scripts from within probe context.  The built-in global
+sub-routines provide commonly used functions present in the C and C++
+language, such as \verb|printf| and \verb|inet_ntoa| but which can be
+called from probe context without risking system safety.
+
 \section{Subroutine calling mechanism}
+
+Every D subroutine exists simultaneously as a part of the D scripting
+language as well as code in the operating system kernel.  D subroutines
+must be coded in such a way that they do not depend on kernel
+services, such as memory allocation, or mutual exclusion primitives,
+which might be inspected as part of a tracing session.
+
+When a subroutine appears in a D script it is the responsibility of
+the D code generator to turn the subroutine and its arguments into DIF
+to be passed into the kernel for execution.  All subroutines and their
+arguments are described in a single structure, \verb|_dtrace_globals|
+in the \verb|libdtrace| library.  Each subroutine has a string name,
+an identifier type, a set of flags, a numeric ID, a small set of
+functions, and an argument list.  The argument list defined in the
+\verb|_dtrace_globals| structure is a string which is processed via
+the \verb|dt_open| function into a relevant set of argument types.
+
+The \verb|DT_INSTR_CALL| instruction is used by the D code generator
+to generate a subroutine call.  Each call instruction has an
+identifier, which is the name of the subroutine, and a set of
+registers which contain the arguments to the call.  The arguments in
+the registers are placed into D's tuple stack for use in kernel
+context.
+
+Once in the kernel all subroutines are executed from a central
+function, \verb|dtrace_dif_subr| which dispatches calls to various,
+OpenDTrace private versions of the functions required.  All of the
+subroutines are implemented using the register state passed into the
+kernel and represented on the tuple stack, or local variables, in
+order to avoid using any of the kernel's memory allocation subsystem.
+All subroutines are executed from probe context (\verb|dtrace_probe|)
+via the \verb|dt_dif_emulate| routine.
 
 \section{Subroutine list}
 
 \begin{table}
+\label{tab:subroutines}
 \begin{center}
 \begin{tabular}{llp{9cm}}
 \toprule
@@ -95,60 +134,60 @@
 
 \section{Subroutine reference}
 
-\input{subr/rand}
+\input{subr/alloca}
+\input{subr/basename}
+\input{subr/bcopy}
+\input{subr/cleanpath}
+\input{subr/copyin}
+\input{subr/copyinto}
+\input{subr/copyinstr}
+\input{subr/copyout}
+\input{subr/copyoutstr}
+\input{subr/copyoutmbuf}
+\input{subr/ddi_pathname}
+\input{subr/dirname}
+\input{subr/getmajor}
+\input{subr/getminor}
+\input{subr/getf}
+\input{subr/htonl}
+\input{subr/htonll}
+\input{subr/htons}
+\input{subr/index}
+\input{subr/inet_ntop}
+\input{subr/inet_ntoa}
+\input{subr/inet_ntoa6}
+\input{subr/json}
+\input{subr/lltostr}
+\input{subr/memref}
+\input{subr/memstr}
+\input{subr/msgdsize}
+\input{subr/msgsize}
 \input{subr/mutex_owned}
 \input{subr/mutex_owner}
 \input{subr/mutex_type_adaptive}
 \input{subr/mutex_type_spin}
+\input{subr/ntohl}
+\input{subr/ntohll}
+\input{subr/ntohs}
+\input{subr/progenyof}
+\input{subr/rand}
+\input{subr/random}
+\input{subr/rindex}
 \input{subr/rw_read_held}
 \input{subr/rw_write_held}
 \input{subr/rw_iswriter}
-\input{subr/copyin}
-\input{subr/copyinstr}
 \input{subr/speculation}
-\input{subr/progenyof}
 \input{subr/strlen}
-\input{subr/copyout}
-\input{subr/copyoutstr}
-\input{subr/copyoutmbuf}
-\input{subr/alloca}
-\input{subr/bcopy}
-\input{subr/copyinto}
-\input{subr/msgdsize}
-\input{subr/msgsize}
-\input{subr/getmajor}
-\input{subr/getminor}
-\input{subr/ddi_pathname}
 \input{subr/strjoin}
-\input{subr/lltostr}
-\input{subr/basename}
-\input{subr/dirname}
-\input{subr/cleanpath}
 \input{subr/strchr}
 \input{subr/strrchr}
 \input{subr/strstr}
+\input{subr/strtoll}
 \input{subr/strtok}
 \input{subr/substr}
-\input{subr/index}
-\input{subr/rindex}
-\input{subr/htons}
-\input{subr/htonl}
-\input{subr/htonll}
-\input{subr/ntohs}
-\input{subr/ntohl}
-\input{subr/ntohll}
-\input{subr/inet_ntop}
-\input{subr/inet_ntoa}
-\input{subr/inet_ntoa6}
-\input{subr/toupper}
-\input{subr/tolower}
-\input{subr/memref}
 \input{subr/sx_shared_held}
 \input{subr/sx_exclusive_held}
 \input{subr/sx_isexclusive}
-\input{subr/memstr}
-\input{subr/getf}
-\input{subr/json}
-\input{subr/strtoll}
-\input{subr/random}
+\input{subr/tolower}
+\input{subr/toupper}
 \input{subr/uuidstr}

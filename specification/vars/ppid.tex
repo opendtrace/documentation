@@ -2,12 +2,12 @@
 \phantomsection
 \addcontentsline{toc}{subsection}{ppid}
 \label{vars:ppid}
-\subsection*{pid: parent process ID}
+\subsection*{ppid: parent process ID}
 
 \subsubsection*{Description}
 
-The \verb|pid| variable contains the process ID of the parent process
-to the one which is being traced by the currently executing probe.
-
-\subsubsection*{Failure modes}
+The \verb|ppid| variable contains the process ID of the parent process
+to the one which is being traced by the currently executing probe.  A
+parent process ID of zero (0) indicates that the parent of the
+currently running process is the operating system kernel.
 

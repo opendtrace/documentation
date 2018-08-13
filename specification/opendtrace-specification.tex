@@ -1,18 +1,18 @@
 \include{preamble}
 
 \begin{document}
-\title{OpenDTrace Specification (Public Draft 1)\\
-  {\large Version 0.1 - DRAFT}
+\title{OpenDTrace Specification\\
+  {\large Version 1.0}
 }
 
-\date{January 22, 2018}
+\date{July 31, 2018}
 
 \author{
-  Robert N. M. Watson, George Neville-Neil, and Domagoj Stolfa \\
+  George Neville-Neil, Graeme Jenkinson, Brian Kidney, \\
+  Domagoj Stolfa,  Arun Thomas, Robert N. M. Watson \\
   \\
   BAE Systems, The University of Cambridge, \\
-    and Memorial University Newfoundland
-}
+  and Memorial University Newfoundland }
 
 %% CL tech-report format provides its own cover page
 \begin{minipage}[h]{\textwidth}
@@ -59,9 +59,9 @@
 \label{chap:introduction}
 \input{chap-intro}
 
-\chapter{Operational Model}
-\label{chap:opendtrace-operation}
-\input{chap-opendtrace-operation}
+\chapter{OpenDTrace Architecture}
+\label{chap:opendtrace-arch}
+\input{chap-opendtrace-arch}
 
 \chapter{The D Language}
 \label{chap:opendtrace-dlang}
@@ -87,10 +87,6 @@
 \label{chap:opendtrace-instruction-reference}
 \input{chap-opendtrace-instruction-reference}
 
-\chapter{Variable Records}
-\label{chap:opendtrace-variable-records}
-\input{chap-opendtrace-variable-records}
-
 \chapter{Built-in Global Variables}
 \label{chap:opendtrace-global-vars}
 \input{chap-opendtrace-global-vars}
@@ -104,9 +100,9 @@
 \label{chap:opendtrace-code}
 \input{chap-opendtrace-code}
 
-\chapter{Providers}
-\label{chap:opendtrace-providers}
-\input{chap-opendtrace-providers}
+%\chapter{Providers}
+%\label{chap:opendtrace-providers}
+%\input{chap-opendtrace-providers}
 
 \end{appendices}
 

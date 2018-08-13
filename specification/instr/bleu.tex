@@ -18,7 +18,7 @@
 
 \subsubsection*{Description}
 
-The \instruction{ble} instruction jumps to the specified label if and
+The \instruction{bleu} instruction jumps to the specified label if and
 only if the result of the previous comparison instruction indicated
 that the value in \registerop{r1} was less than, or equal to, the
 value in \registerop{r2}.
@@ -29,8 +29,6 @@ value in \registerop{r2}.
 if (cc_c | cc_z)
 	pc = label
 \end{verbatim}
-
-\subsubsection*{Constraints}
 
 \subsubsection*{Failure modes}
 
