@@ -200,7 +200,10 @@ as no definition will be repeated.
 \item[Paged in memory] In a given memory map, a memory location $\mathcal{l}$ is
   paged in if it exists in the domain of the map.
 \item[Paged out memory] Memory that is not paged in.
-\item[Allocation] An attempt to create a new relation in a map.
+\item[Allocation] An attempt to create a new relation in a map which may fail.
 \item[Deallocation] Removing a relation from a map.
-\item[Thread] A sequence of instructions with a unique identifier.
+\item[Thread] A sequence of instructions with a unique identifier.\footnote{While this is often
+  implemented through an operating system thread, it should be thought of as an abstract thread
+  with some abstract notion of an identifier. It may contain far more in its identifier than just
+  what the operating system provides.}
 \end{description}
