@@ -32,7 +32,7 @@ documented \cite{mckusick2014design}\cite{Microsystems2008a}\cite{Gregg:2011:DDT
 
 The OpenDTrace system is meant to capture information about systems at
 run time, without the need to stop the program or kernel being
-investigated, and as such can be thought of as a run time debugger.
+investigated, and as such can be thought of as a run-time debugger.
 While traditional debuggers might be attached to a running process,
 they most often stop the target process immediately so that the
 programmer can beging to investigate a problem in the code.  The
@@ -120,7 +120,7 @@ This report specifies a number of aspects of OpenDTrace's operation:
 
 \begin{description}
 
-\item[The OpenDTrace Operational Model] described in
+\item[The Operational Model] described in
   Chapter~\ref{chap:opendtrace-operation} gives a general overview of
   the internals of the OpenDTrace system, including the privilege
   model, trace-point format and a description of how user space
@@ -132,17 +132,17 @@ This report specifies a number of aspects of OpenDTrace's operation:
   to create more complex data queries and to perform data reduction
   after tracepoint data has been captured.
 
-\item[The Compact Trace Format] described in
+\item[The Compact Trace Format (CTF)] described in
   Chapter~\ref{chap:opendtrace-ctf} explains the data extracted from
   compiled object code that is used by OpenDTrace to create trace
   points and extract function arguments and types.
 
-\item[The DTrace Object Format (DOF)] described in
+\item[The OpenDTrace Object Format (DOF)] described in
   Chapter~\ref{chap:opendtrace-object-format} is a file-like format linking
   together a set of sections describing OpenDTrace code, string constants, and
   other aspects of a complete compiled OpenDTrace script.
 
-\item[The DTrace Intermediate Format (DIF)] is the byte code that the
+\item[The OpenDTrace Intermediate Format (DIF)] is the bytecode that the
   executable elements of OpenDTrace scripts are compiled to.
   This is a simple RISC-like instruction set with constrained execution
   properties (e.g., only forward branches).
@@ -156,17 +156,27 @@ This report specifies a number of aspects of OpenDTrace's operation:
   Chapter~\ref{chap:opendtrace-instruction-reference} enumerates the
   instructions, their arguments, and their semantics.
 
-\item[DTrace Variable Records] describe the set of variables (local, global,
+\item[Variable Records] describe the set of variables (local, global,
   or thread-local) operated on by a OpenDTrace script.
   Chapter~\ref{chap:opendtrace-variable-records} specifies this record format.
 
-\item[DTrace Global Variables] describe the set of read-only global variables 
-  accessable by a OpenDTrace script.
-  Chapter~\ref{chap:opendtrace-global-vars} specifies these  variables.
+\item[Built-in Global Variables] are a set of implementation-defined
+  variables always available to scripts.
+  This includes DTrace state (such as the current probe ID) and state from the
+  instrumented probe context (e.g., the current process ID).
+  Chapter~\ref{chap:opendtrace-global-vars} specifies these variables.
 
-\item[DTrace Subroutines] are available to scripts, providing access to
+\item[Built-in Subroutines] are available to scripts, providing access to
   higher-level behavior, such as memory copying, string comparison, and so on.
   Chapter~\ref{chap:opendtrace-subroutines} describes the available built-in
   subroutines.
+
+\item[Code Organization] for the DTrace implementation varies by operating
+  system.
+  Appendix~\ref{chap:opendtrace-code} describes the high-level layout of the
+  DTrace code in several operating systems incorporating DTrace support.
+
+\item[XXX] There is also an appendix on Providers that needs a description
+  and reference here.
 
 \end{description}
