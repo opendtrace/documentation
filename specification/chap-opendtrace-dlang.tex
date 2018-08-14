@@ -71,11 +71,12 @@ language.
 
 %TODO: Define all the auxiliary things we may need, such as integers, ...
 
-In this section, we will define the grammar of the D language and explain how
-each part fits together when interacting with DTrace. Terminals are represented
-using lower\_case, while non-terminals are written as CamelCase. Furthermore, we
-define the tab character, `\textbackslash t' and space, ` ' as separators. We first
-define a number of auxiliary constructs to define the rest of the grammar.
+In this section, we will define the grammar of the D language and
+explain how each part fits together when interacting with
+DTrace. Terminals are represented using lower\_case, while
+non-terminals are written as CamelCase. We define the tab character,
+`\textbackslash t' and space, ` ' as separators. We first define a
+number of auxiliary constructs to define the rest of the grammar.
 
 \begin{grammar}
 <letter> ::= `A' ... `Z'
@@ -119,10 +120,11 @@ Additionally, we define number constants that are supported in D:
 \end{grammar}
 
 \noindent
-In D, there are many ways to access types. However, there are a number of
-builtin types, as well as mechanisms to define these types. Similarly to C, D
-supports a number of primitive integer types and floating point types, as well
-as a specialized \texttt{string} and \texttt{userland} type.
+In D, there are many ways to access types. There are a number of
+builtin types, as well as mechanisms to define these types. Similar to
+the C language, D supports a number of primitive integer and floating
+point types, as well as a specialized \texttt{string} and
+\texttt{userland} type.
 
 \begin{grammar}
 <Type> ::=  `char'
@@ -153,13 +155,14 @@ to be an alias to another type, much like in C:
 \end{grammar}
 
 \noindent
-Similarly, \texttt{StructOrUnionSpec} represents a way to specify a D
-\texttt{struct} or \texttt{union} type. These language primitives are compatible
-with their C counterparts and ensure ABI compatibility. This is important when
-tracing the kernel, but also allows trivial translation to other ABIs. Moreover,
-\texttt{enum} definitions exist in D with the same syntax as they have in C. Finally,
-D has a notion of translators -- we specify all of these as a part of a type specifier
-as follows:
+The \texttt{StructOrUnionSpec} represents a way to specify a D
+\texttt{struct} or \texttt{union} type. These language primitives are
+compatible with their C counterparts and ensure ABI
+compatibility. This is important when tracing the kernel, but also
+allows trivial translation to other ABIs. Moreover, \texttt{enum}
+definitions exist in D with the same syntax as they have in
+C. Finally, D has a notion of translators -- we specify all of these
+as a part of a type specifier as follows:
 
 \begin{grammar}
 <StructOrUnionSpec> ::=  <Modifier> ( `struct' | `union' ) [ <Identifier> ] \newline
@@ -216,8 +219,9 @@ treat misuse of a modifier as an error. Using these modifiers when not
 applicable is considered undefined behaviour. \newline
 
 \noindent
-Since D is a domain-specific language for tracing and provides probes in the
-kenrel, we define the following way of specifying probes:
+D is a domain-specific language used for tracing and provides probes
+in the operating system kernel.  The D language allows the programmer
+to specifying probes in the following way:
 
 % TODO: Make this render a bit nicer.
 % XXX: Is this correct?
@@ -248,11 +252,12 @@ such as `*' are allowed is because D allows the user to write glob expressions
 much like a Unix shell does. \newline
 
 \noindent
-Next, we define all of the operators that the D language provides to the
-programmer to use. We split the operators in three different parts -- binary
-operators, prefix unary operators and postfix unary operators. We intentionally
-avoid the use of a ternary `?' operator here, as it will be specified as a part
-of allowed expressions.
+D defines a complete set of opeartors for the language.  For clarity
+We split the operators into three different parts -- binary operators,
+prefix unary operators and postfix unary operators. We intentionally
+avoid the use of a ternary `?' operator here, as it is specified as a
+part of allowed expressions.
+
 \begin{grammar}
 <pre\_un\_operator> ::=  `++'
                     \alt `--'
@@ -287,7 +292,7 @@ of allowed expressions.
 \end{grammar}
 
 \noindent
-Furthermore, a probe clause in a D script consists of an optional predicate. A
+A probe clause in a D script consists of an optional predicate. A
 predicate contains a logical expression in propositional logic:
 
 \begin{grammar}
@@ -297,8 +302,9 @@ predicate contains a logical expression in propositional logic:
 \end{grammar}
 
 \noindent
-Moreover, we define \texttt{Expression}, which encapsulated scalar and array
-expressions and \texttt{AggExpression} which works with aggregations as:
+We define \texttt{Expression}, which encapsulated scalar and array
+expressions and \texttt{AggExpression} which works with aggregations
+as:
 \begin{grammar}
 <ArrayIndices> ::= ( <Identifier> | <Integer> ) \{ ( <Identifier> | <Integer> ) \}
                \alt <IdentifierOrString>
@@ -320,23 +326,25 @@ expressions and \texttt{AggExpression} which works with aggregations as:
 \end{grammar}
 
 \noindent
-In order to provide a full definition, we need to define \texttt{Subroutine},
-\texttt{AggFunc} and \texttt{AggSubroutine}. Because this is variable depending on
-what subroutines, aggregating functions and subroutines taking aggregations as parameters
-are actually available as a part of the D runtime, this depends on currently available
-DTrace implementation. Similarly, \texttt{SubroutineArgs} and \texttt{AggSubroutineArgs}
-depend on \texttt{Subroutine} and \texttt{AggSubroutine}, so we are unable to specify them
-as a part of this specification without significantly limiting what aggregations and subroutines
-can be implemented. \newline
+In order to provide a full definition, we need to define
+\texttt{Subroutine}, \texttt{AggFunc} and \texttt{AggSubroutine}. The
+definitions of these elements varies depending on what subroutines,
+aggregating functions and aggregating subroutines are actually
+available as a part of the D runtime, which in turn, depends on the
+currentl DTrace implementation. The same problem presents itself with
+\texttt{SubroutineArgs} and \texttt{AggSubroutineArgs} which depend on
+\texttt{Subroutine} and \texttt{AggSubroutine}, so we are unable to
+specify completely without significantly limiting what aggregations
+and subroutines can be implemented. \newline
 
 \noindent
-Furthermore, D allows for explicit declarations of variables. We specify this as:
+D allows for explicit declarations of variables. We specify this as:
 \begin{grammar}
 <Declaration> ::= [ (`this' | `self') ] <Type> <Identifier> ;
 \end{grammar}
 
 \noindent
-Finally, we are able to define what a definition of a probe looks like:
+We are able to define what a definition of a probe looks like:
 \begin{grammar}
 <ProbeDefinition> ::= <ProbeSpecifier> [ <Predicate> ] `{'  \{ <Statement> \} `}' ;
 
@@ -346,12 +354,14 @@ Finally, we are able to define what a definition of a probe looks like:
 \end{grammar}
 
 \noindent
-Note that this only defines a single probe clause, not the full syntax of the D script.
-D scripts can have additional preprocessor statements in them and definitions of variables
-user-defined types outside of probe clauses. In the specification, we will avoid talking about
-compiler-specific preprocessor statements and the C preprocessor that can be run on the D
-script, as how this will be implemented and what parts of it will be supported is entirely
-up to the compiler writer. We define the D script as follows:
+Note that this only defines a single probe clause, not the full syntax
+of the D script.  D scripts can have additional preprocessor
+statements in them and definitions of variables user-defined types
+outside of probe clauses. In the specification, we will avoid talking
+about compiler-specific preprocessor statements and the C preprocessor
+that can be run on the D script, as how this will be implemented and
+what parts of it will be supported is entirely up to the compiler
+writer. We define the D script as follows:
 \begin{grammar}
 <DScript> ::=  <DScript> <PreprocessorStatement> <DScript>
           \alt <DScript> <TypeSpecifier> <DScript>
@@ -450,13 +460,14 @@ is zero (0).
 \subsection{Built-in variables}
 \label{subsec:builtin-variables}
 
-Similarly to global variables, built-in variables are accessible to the
-programmer at any point in the script. The main difference between built-in
-variables and global variables are their semantics. D built-in variables are not
-mutable and are thus not subject to the concurrency semantics of the underlying
-architecture. Furthermore, unlike global variables, built-in variables are
-guaranteed to never cause a page fault and thus can be accessed safely. It is up
-to the DTrace implementation has to ensure that access to these variables is
+Similarly to global variables, built-in variables are accessible to
+the programmer at any point in the script. The main difference between
+built-in variables and global variables are their semantics. D
+built-in variables are not mutable and are thus not subject to the
+concurrency semantics of the underlying architecture. Unlike global
+variables, built-in variables are guaranteed to never cause a page
+fault and thus can be accessed safely. It is up to the DTrace
+implementation has to ensure that access to these variables is
 race-free and reliable.
 
 \subsection{Thread-local variables}
