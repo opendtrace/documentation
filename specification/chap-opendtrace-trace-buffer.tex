@@ -1,30 +1,32 @@
-OpenDTrace specifies a Application Binary Interface (ABI) between kernel and
-userspace in the form of trace and aggregations buffers and the associated
-metadata used to interpret these buffers (for example, for further processing
-or formatting in order to generate results pased back to the user). This
-chapter specifies the format of the OpenDTrace trace and aggregation buffers,
-and metadata data structures used to interpret them.
+OpenDTrace specifies an Application Binary Interface (ABI) between
+kernel and userspace in the form of trace and aggregations buffers
+along with the associated metadata used to interpret these buffers
+e.g. for further processing or formatting in order to generate results
+passed back to the user.  This chapter specifies the format of the
+OpenDTrace trace and aggregation buffers, and metadata data structures
+used to interpret them.
 
 \section{Enabling}
 \label{sec:probes}
 
-Each enabling (that is, an enabled probe) is associated with a set of
-\textit{actions} through its \textit{Enabling Control Block} (ECB). When a
-probe fires (and, if present, its predicate evaluates to true) these
-actions are performed. The execution of these actions potential results in
-data being written into the trace buffers.
+Each enabled probe is associated with a set of \textit{actions}
+through its \textit{Enabling Control Block} (ECB). When a probe fires
+these actions are performed. The execution of these actions
+potentially results in data being written into one or more trace
+buffers.
 
 \subsection{OpenDTrace trace buffer}
 \label{subsec:trace_buffer}
 
-Each OpenDTrace consumer is associated with a set of in-kernel, per-CPU buffers
-\cite{DTrace2004}.  The format of the OpenDTrace trace buffer is shown in
-Figure~\ref{fig:trace_buffer}.  Note that the length of the data for the trace
-record is not specified by the OpenDTrace trace buffer (trace records are specified
-as TV (\textit{Type-Value}) rather than TLV (\textit{Type-Length-Value}).
-Instead, a separate stream of metadata is used to interpret the trace buffer.
-The data structures describing the metadata stream are described in
-Section~\ref{subsec:probe_data_structures}.
+Each OpenDTrace consumer is associated with a set of in-kernel,
+per-CPU buffers \cite{DTrace2004}.  The format of the OpenDTrace trace
+buffer is shown in Figure~\ref{fig:trace_buffer}.  The length of the
+data for each trace record is not specified by the OpenDTrace trace
+buffer itself because trace records are specified as
+\textit{Type-Value} (TV) rather than \textit{Type-Length-Value} (TLV).
+Instead, a separate stream of metadata is used to interpret the trace
+buffer.  The data structures describing the metadata stream are
+described in Section~\ref{subsec:probe_data_structures}.
 
 \begin{figure}[!ht]
 	\centering
@@ -55,31 +57,30 @@ Section~\ref{subsec:probe_data_structures}.
 \end{figure}
 
 \begin{itemize}
-	\item{\texttt{EPID}}: identifies the enabling (that is, the enabled
-		probe) that produced the trace record; the identifier type is
-		\texttt{dtrace\_epid\_t} which corresponds to a unsigned 32 bit
-		integer.  These identifiers are unqiue for each OpenDTrace
-		consumer.
+\item{\texttt{EPID}}: identifies the enabling (that is, the enabled
+  probe) that produced the trace record; the identifier type is
+  \texttt{dtrace\_epid\_t} which corresponds to a unsigned 32 bit
+  integer.  These identifiers are unique for each OpenDTrace consumer.
 
-	\item{\texttt{timestamp}:} the timestamp (ns) of the trace record; the
-		timestamp type is an unsigned 64 bit integer.
+\item{\texttt{timestamp}:} the timestamp, in nanoseconds, of the trace
+  record; the timestamp type is an unsigned 64 bit integer.
 
-	\item{\texttt{data}:} the data for trace record; a sequence of octets
-		the format of which is specified by the trace metadata see
-		Section~\ref{subsec:probe_data_structures}.
+\item{\texttt{data}:} the data for the trace record; a sequence of
+  octets the format of which is specified by the trace metadata see
+  Section~\ref{subsec:probe_data_structures}.
 \end{itemize}
 
 \subsection{Trace metadata}
 \label{subsec:probe_data_structures}
 
 The metadata required to interpret an enabled probe is constant over
-the lifetime of the enabling \cite{DTrace2004}. This allows trace metadata
-to be queried from the kernel once (on first processing a given
-enabling) and then locally cached.  The separation of trace records and
-the metadata required to interpret records is a central design decision.
-This seperation simplifies the run-time analysis of the trace data but comes
-at the expense of some flexibility (for example, the ability change an
-enabling at runtime).
+the lifetime of the enabling \cite{DTrace2004}, which allows trace
+metadata to be queried from the kernel once, on first processing a
+given enabling, and is then cached locally.  The separation of trace
+records and the metadata required to interpret them is an important
+design decision.  The separation simplifies the run-time analysis of
+the trace data but comes at the expense of some flexibility, for
+example, the ability change an enabling at runtime.
 
 \tikzset{
     %every node/.style={draw, text height=1.5ex},
@@ -87,9 +88,9 @@ enabling at runtime).
         rectangle split horizontal=false,rectangle split part align=base},
 }
 
-Figure~\ref{fig:overview} provides an overview of the data structures (and
-their relationships) used by \texttt{libdtrace} when interpreting the contents
-of a OpenDTrace trace buffer.
+Figure~\ref{fig:overview} provides an overview of the data structures,
+and their relationships, used by \texttt{libdtrace} when interpreting
+the contents of a OpenDTrace trace buffer.
 
 \begin{figure}[!htp]
 	\centering
@@ -178,12 +179,13 @@ of a OpenDTrace trace buffer.
 \subsubsection{\texttt{struct \textit{dtrace\_probedata}}}
 \label{subsubsec:dtpda}
 
-The \texttt{struct~\textit{dtrace\_probedata}} (Figure~\ref{fig:dtpda}) is used
-solely by \texttt{libdtrace}. This data structure aggregates the information
-required to process the OpenDTrace trace buffer including metadata describing the
-enabling, a pointer to the copy of the trace buffer and formatting information
-(such as the flow prefix and indent---used when the OpenDTrace is invoked with the
-\texttt{flowindent} option enabled).
+The \texttt{struct~\textit{dtrace\_probedata}}, shown in
+Figure~\ref{fig:dtpda}, is used solely by \texttt{libdtrace} and
+collects the information required to process the OpenDTrace trace
+buffer, including the metadata describing the enabling, a pointer to
+the copy of the trace buffer and formatting information, such as the
+flow prefix and indent---used when the OpenDTrace is invoked with the
+\texttt{flowindent} option enabled.
 
 \begin{figure}[!ht]
 	\centering
@@ -240,16 +242,16 @@ Section~\ref{subsec:trace_buffer}).
 \subsubsection{\texttt{struct \textit{dtrace\_eprobedesc}}}
 \label{subsubsec:dtepd}
 
-The \texttt{struct~\textit{dtrace\_eprobedesc}} (Figure~\ref{fig:dtepd})
-specifies an enabled probe. Specifically, \texttt{struct~\textit{eprobedesc}}
-contains metadata required to process the OpenDTrace trace buffer. The
-\texttt{struct~\textit{dtrace\_eprobedesc}} is returned from the kernel to
-userspace through invoking the \texttt{EPROBE} ioctl.
+The \texttt{struct~\textit{dtrace\_eprobedesc}}
+(Figure~\ref{fig:dtepd}) specifies an enabled probe. Specifically,
+\texttt{struct~\textit{eprobedesc}} contains metadata required to
+process the OpenDTrace trace buffer. The
+\texttt{struct~\textit{dtrace\_eprobedesc}} is returned from the
+kernel to userspace by invoking the \texttt{EPROBE} ioctl.
 
 \begin{figure}[!ht]
 	\centering
 	\begin{tikzpicture}[->, -{Latex}]
-
 		\node[split=6,label=north:\texttt{struct~\textit{dtrace\_eprobedesc}}] (a2) at (6,-7) {
 		\nodepart{one}\textit{dtepd\_epid: dtrace\_epid\_t}
 		\nodepart{two}\textit{dtepd\_probeid: dtrace\_id\_t}
@@ -276,8 +278,8 @@ integer.
 uncertain when this is used, and whether it is relevant when in printing
 trace records}. 
 
-	\item The \texttt{dtepd\_size} field specifies the size of the OpenDTrace
-trace buffer (a pointer to the trace buffer is held in the
+	\item The \texttt{dtepd\_size} field specifies the size of the
+          OpenDTrace trace buffer (a pointer to the trace buffer is held in the
 \texttt{struct~\textit{dtrace\_probedata}} structure.
 
 	\item The \texttt{dtepd\_nrec} field specifies the number of records in
@@ -376,12 +378,12 @@ record is processed.
 
 	\item The \texttt{dtrd\_size} field contains the size (in bytes) of the
 trace record; this is computed within the kernel based on the CTF (Compact Type
-Formet) type of the value being written to the trace buffer.
+Format) type of the value being written to the trace buffer.
 
 	\item The \texttt{dtrd\_offset} field contains the offset (in bytes)
 into the OpenDTrace trace buffer at which the trace record is located; the offset
 is computed within the kernel and is based on the size and alignment of the
-preceeeding records.
+preceding records.
 
 	\item The \texttt{dtrd\_alignment} field contains the specified
 alignment (in bytes) of the trace record; the alignment is based on the trace
@@ -420,7 +422,7 @@ structures that define a set of format codes (such as \texttt{\%s} or
 		\nodepart{five}\textit{pfv\_flags: uint\_t}};
 
 	\end{tikzpicture}
-	\caption{Data structure used to describe the formating of a \texttt{printf} action.}
+	\caption{Data structure used to describe the formatting of a \texttt{printf} action.}
 	\label{fig:pfv}
 \end{figure}
 
@@ -481,14 +483,14 @@ the format string passed to \texttt{printf{}}.
 	\item The \texttt{pfd\_preflen} field contains the length in bytes of the
 prefix (\texttt{pfd\_prefix}). For example, for the prefix
 "$\backslash$"event$\backslash$": \%s" the \texttt{pfd\_preflen} will be 9 (the
-number of characters preceeding the format code \texttt{\%s}). 
+number of characters preceding the format code \texttt{\%s}). 
 
 	\item The \texttt{pfd\_fmt} field contains the format code (for
 \texttt{\%s} this field will contain the value \texttt{s}).
 
 	\item The \texttt{pfd\_flags} field contains a set of flags. As with
 \texttt{printf} in the C language, formatting flags can be used to control
-whether, for example, the printed values are left aligned or preceeded by
+whether, for example, the printed values are left aligned or preceded by
 zeroes.
 
 	\item The \texttt{pfd\_width} field contains the width, for example
@@ -502,7 +504,7 @@ is the value of \texttt{width}.
 	\item The \texttt{pfrdv\_prec} field contains the precision.
 
 	\item The \texttt{pfd\_conv} field points to a data structure used to
-handle a specifc format code (such as \texttt{\%s}). The \texttt{printf} format
+handle a specific format code (such as \texttt{\%s}). The \texttt{printf} format
 conversion dictionary (\texttt{\_dtrace\_conversions}) can be found in the
 file \texttt{dt\_prinf.c}.
 
@@ -521,8 +523,8 @@ further entries.
 \subsection{OpenDTrace aggregation trace buffer}
 \label{subsec:agg_trace_buffer}
 
-Figure~\ref{fig:agg_trace_buffer} presents an overview of a OpenDTrace aggregation
-trace buffer:
+Figure~\ref{fig:agg_trace_buffer} presents an overview of an
+OpenDTrace aggregation trace buffer:
 
 \begin{figure}[!h]
 	\centering
@@ -619,10 +621,11 @@ Section~\ref{subsec:agg_data_structures}.
 \subsubsection{\texttt{struct~\textit{dtrace\_aggdesc}}}
 \label{subsubsec:dtagd-aggdesc}
 
-The \texttt{struct~\textit{dtrace\_aggdesc}} (Figure~\ref{fig:dtagd})
-contains metadata required to interpret trace records from a given
-aggregation.  The \texttt{struct~\textit{dtrace\_aggdesc}} is returned
-from the kernel to userspace by invoking the \texttt{AGGDESC} ioctl.
+The \texttt{struct~\textit{dtrace\_aggdesc}}, shown in
+Figure~\ref{fig:dtagd}, contains the metadata required to interpret trace
+records from a given aggregation.  The
+\texttt{struct~\textit{dtrace\_aggdesc}} is returned from the kernel
+to userspace by invoking the \texttt{AGGDESC} ioctl.
 
 \begin{figure}[!h]
 	\centering
@@ -640,7 +643,7 @@ from the kernel to userspace by invoking the \texttt{AGGDESC} ioctl.
 		\nodepart{nine}\textit{dtagd\_rec[1]: dtrace\_recdesc\_t}};
 
 	\end{tikzpicture}
-	\caption{Data structure used to describe an aggregationn.}
+	\caption{Data structure used to describe an aggregation.}
 	\label{fig:dtagd}
 \end{figure}
 
@@ -671,18 +674,18 @@ are assigned by a kernel unit allocator (\texttt{vmem\_alloc()} on Illumos and
 clearly dependent on previous allocated/freed values, which in turn depends on
 the current OpenDTrace enablings.
 
-	\item The \texttt{dtagd\_epid} field contains the identifer of the enabling
+	\item The \texttt{dtagd\_epid} field contains the identifier of the enabling
 (that is, the enabled probe identifier).
 
 	\item The \texttt{dtagd\_size} field contains the size of the aggregation;
-thta is, the total size of the aggregation trace record (see
+that is, the total size of the aggregation trace record (see
 Figure~\ref{fig:agg_trace_buffer}).
 
 	\item The \texttt{dtagd\_nrecs} field contains the number of records in
 the \texttt{dtagd\_rec} field.
 
 	\item The \texttt{dtagd\_pad} field points to a data structure used to
-handle a specifc format code (such as \texttt{\%s}).\footnote{The printf format
+handle a specific format code (such as \texttt{\%s}).\footnote{The printf format
 conversion dictionary (\texttt{\_dtrace\_conversions}) can be found in the
 		file \texttt{dt\_printf.c}}.
 
@@ -697,29 +700,31 @@ that the value is always defined by the last record description.
 
 \end{itemize}
 
-Both the kernel and userspace independently name aggregations. In kernel,
-aggregations are named with a kernel unit allocator (such as
-\texttt{alloc\_unr} in FreeBSD). In contrast, userspace assigns an identifer to
-the aggregation at compilation time. The \texttt{dtagd\_varid} field is used to
-contain the compile time identifier for the aggregation. This is determined by
-inspecting the \texttt{dtag\_rec[0].dtrd\_uarg} field; that is, the first
-record description's \texttt{dtrd\_uarg} field. The value of
-\texttt{dtrd\_uarg} is cast as a \texttt{dtrace\_stmdesc\_t} allowing the
-compiler assigned identifier and the user assigned name of the aggregation to be
-determined.
+Both the kernel and userspace independently name aggregations. In the
+kernel, aggregations are named with a kernel specific unit allocator,
+such as \texttt{alloc\_unr} in FreeBSD. In contrast, userspace assigns
+an identifier to the aggregation at compilation time. The
+\texttt{dtagd\_varid} field is used to contain the compile time
+identifier for the aggregation. This is determined by inspecting the
+\texttt{dtag\_rec[0].dtrd\_uarg} field; that is, the first record
+description's \texttt{dtrd\_uarg} field. The value of
+\texttt{dtrd\_uarg} is cast as a \texttt{dtrace\_stmdesc\_t} allowing
+the compiler assigned identifier and the user assigned name of the
+aggregation to be determined.
 
-Whith anonymous enablings the connection between the aggregation identifiers
-created at compilation and execution time is broken. And instead all
-aggregations are assigned \newline
-\texttt{DTRACE\_AGGVARIDNONE}\footnote{Note as the aggregation name can't be
-determined it cannot be included in the printed output.}
+With anonymous enablings the connection between the aggregation
+identifiers created at compilation and execution time is
+broken. Instead, all aggregations are assigned \newline
+\texttt{DTRACE\_AGGVARIDNONE}\footnote{Note as the aggregation name
+  can't be determined it cannot be included in the printed output.}
 
 \subsubsection{\texttt{struct~\textit{dtrace\_aggkey}}}
 \label{subsubsec:dtagd-aggkey}
 
-The \texttt{struct~\textit{dtrace\_aggkey}} (Figure~\ref{fig:dtagd}) is used to
-represent a key within a given aggregation. This data structure is used solely
-within the kernel and thus should be considered as part of the implementation.
+The \texttt{struct~\textit{dtrace\_aggkey}} (Figure~\ref{fig:dtagd})
+is used to represent a key within a given aggregation. This data
+structure is used solely within the kernel and thus should be
+considered as part of the implementation and not part of a public ABI.
 
 \begin{figure}[!h]
 	\centering
@@ -733,7 +738,7 @@ within the kernel and thus should be considered as part of the implementation.
 		\nodepart{five}\textit{dtak\_next: struct~dtrace\_aggkey~*}};
 
 	\end{tikzpicture}
-	\caption{Data structure respresenting a key within the aggregation hash table.}
+	\caption{Data structure representing a key within the aggregation hash table.}
 	\label{fig:dtagd-key}
 \end{figure}
 
@@ -743,7 +748,7 @@ within the kernel and thus should be considered as part of the implementation.
 the hash value is computed using the Jenkins's ``one-at-a-time'' hash function.
 
 	\item The \texttt{dtak\_action} field identifies the aggregating function
-that applies to this aggregation. The \texttt{dtak\_action} fiels is 4-bits in
+that applies to this aggregation. The \texttt{dtak\_action} field is 4-bits in
 length allowing 16 aggregation functions, of which 9 are currently defined:
 
 	\begin{enumerate}
@@ -766,7 +771,7 @@ aggregation and the key (or set of keys).
 
 	\item The \texttt{dtak\_data} field contains a pointer to the data
 corresponding to this key; that is, the key's corresponding record in trace
-buffer (see FIgure~\ref{fig:agg_trace_buffer}).
+buffer (see Figure~\ref{fig:agg_trace_buffer}).
 
 	\item The \texttt{dtak\_next} field contains a pointer to the next
 aggregation key in this list (the hash table is implemented with separate
@@ -784,7 +789,7 @@ within the kernel and thus should be considered as part of the implementation.
 userspace copy of the aggregation buffer doesn't contain the hash map and
 associated metadata. However, as the \texttt{AGGSNAP} ioctl is practical
 identical to the \texttt{BUFSNAP} ioctl, it appears that the data is in the
-buffer but unsused by \texttt{libdtrace}}.
+buffer but unused by \texttt{libdtrace}}.
 
 \begin{figure}[!h]
 	\centering
@@ -796,7 +801,7 @@ buffer but unsused by \texttt{libdtrace}}.
 		\nodepart{three}\textit{dtagb\_hash: dtrace\_aggkey\_t~**}};
 
 	\end{tikzpicture}
-	\caption{Data structure used to describe an aggregationn.}
+	\caption{Data structure used to describe an aggregation.}
 	\label{fig:dtagd-desc}
 \end{figure}
 
