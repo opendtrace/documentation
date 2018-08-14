@@ -9,6 +9,7 @@ SOURCE=								\
 	chap-intro.tex						\
 	chap-opendtrace-arch.tex				\
 	chap-opendtrace-ctf.tex					\
+	chap-opendtrace-trace-buffer.tex					\
 	chap-opendtrace-instruction-reference.tex		\
 	chap-opendtrace-intermediate-format.tex			\
 	chap-opendtrace-object-format.tex			\
