@@ -2,6 +2,6 @@
  "execname"
  (lambda ()
    (LaTeX-add-labels
-    "vars:arg09"))
+    "vars:execname"))
  :latex)
 

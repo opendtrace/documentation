@@ -516,7 +516,7 @@ further entries.
 \end{itemize}
 
 \section{Aggregations}
-\label{sec:aggregations}
+\label{sec:trace-aggregations}
 
 \subsection{OpenDTrace aggregation trace buffer}
 \label{subsec:agg_trace_buffer}
@@ -617,12 +617,12 @@ Section~\ref{subsec:agg_data_structures}.
 \label{subsec:agg_data_structures}
 
 \subsubsection{\texttt{struct~\textit{dtrace\_aggdesc}}}
-\label{subsubsec:dtagd}
+\label{subsubsec:dtagd-aggdesc}
 
-The \texttt{struct~\textit{dtrace\_aggdesc}} (Figure~\ref{fig:dtagd}) contains
-metadata required to interpret trace records from a given aggregation.  The
-\texttt{struct~\textit{dtrace\_aggdesc}} is returned from the kernel to userspace
-by invoking the \texttt{AGGDESC} ioctl.
+The \texttt{struct~\textit{dtrace\_aggdesc}} (Figure~\ref{fig:dtagd})
+contains metadata required to interpret trace records from a given
+aggregation.  The \texttt{struct~\textit{dtrace\_aggdesc}} is returned
+from the kernel to userspace by invoking the \texttt{AGGDESC} ioctl.
 
 \begin{figure}[!h]
 	\centering
@@ -715,7 +715,7 @@ aggregations are assigned \newline
 determined it cannot be included in the printed output.}
 
 \subsubsection{\texttt{struct~\textit{dtrace\_aggkey}}}
-\label{subsubsec:dtagd}
+\label{subsubsec:dtagd-aggkey}
 
 The \texttt{struct~\textit{dtrace\_aggkey}} (Figure~\ref{fig:dtagd}) is used to
 represent a key within a given aggregation. This data structure is used solely
@@ -734,7 +734,7 @@ within the kernel and thus should be considered as part of the implementation.
 
 	\end{tikzpicture}
 	\caption{Data structure respresenting a key within the aggregation hash table.}
-	\label{fig:dtagd}
+	\label{fig:dtagd-key}
 \end{figure}
 
 \begin{itemize}
@@ -777,7 +777,7 @@ chaining using a linked list).
 \subsubsection{\texttt{struct~\textit{dtrace\_aggbuffer}}}
 \label{subsubsec:dtagb}
 
-The \texttt{struct \textit{dtrace\_aggbuffer}} (Figure~\ref{fig:dtagd})
+The \texttt{struct \textit{dtrace\_aggbuffer}} (Figure~\ref{fig:dtagd-key})
 specifies the metadata for an aggregation. The data structure is used solely
 within the kernel and thus should be considered as part of the implementation.
 \footnote{The comments within the code suggest that the
@@ -797,7 +797,7 @@ buffer but unsused by \texttt{libdtrace}}.
 
 	\end{tikzpicture}
 	\caption{Data structure used to describe an aggregationn.}
-	\label{fig:dtagd}
+	\label{fig:dtagd-desc}
 \end{figure}
 
 \begin{itemize}
