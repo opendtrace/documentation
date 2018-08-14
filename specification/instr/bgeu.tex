@@ -30,6 +30,10 @@ if (cc_c == 0)
 	pc = label;
 \end{verbatim}
 
+\subsubsection*{Load-time constraints}
+\verb+label+ must be greater than \verb+pc+. Moreover, \verb+label+ must
+not go past the last address of the current DIF object.
+
 \subsubsection*{Failure modes}
 
 This instruction has no run-time failure modes beyond its constraints.

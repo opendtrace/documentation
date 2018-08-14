@@ -11,7 +11,7 @@ environments.
 Before describing the full grammar in detail we present a brief,
 example, D script, called a \emph{one liner}.  D one liners are the
 most frequently used D scripts because they are an easy way to start
-tracing a system without writing a file full of D code.  
+tracing a system without writing a file full of D code.
 
 
 \begin{figure}
@@ -99,19 +99,21 @@ Additionally, we define number constants that are supported in D:
 
 <oct\_digit> ::= `0' | `1' | `2' | `3' | `4' | `5' | `6' | `7' ;
 
-<HexDigit> ::= <DecDigitWithZero>
-	\alt `A' ... `F'
-	\alt `a' ... `f' ;
+<HexDigit> ::=  <DecDigitWithZero>
+           \alt `A' ... `F'
+           \alt `a' ... `f' ;
 
-<Integer> ::= <dec\_digit> <DecDigitWithZero>
-	\alt `0b' <bin\_digit>
-	\alt `0' <oct\_digit>
-	\alt `0x' <HexDigit>
+<Integer> ::=  <dec\_digit> <DecDigitWithZero>
+          \alt `0b' <bin\_digit>
+          \alt `0' <oct\_digit>
+          \alt `0x' <HexDigit>
 \end{grammar}
 
 % XXX: Is this sufficient for a <Identifier>
 \begin{grammar}
 <Identifier> ::= <Word> \{ ( <DecDigitWithZero> | <Word> ) \} ;
+
+<IdentifierOrString> ::= [ `"' ] <Identifier> [ `"' ] ;
 
 <VarList> ::= <Identifier> \{ `,' <Identifier> \} ;
 \end{grammar}
@@ -123,21 +125,21 @@ supports a number of primitive integer types and floating point types, as well
 as a specialized \texttt{string} and \texttt{userland} type.
 
 \begin{grammar}
-<Type> ::= `char'
-	\alt `short'
-	\alt `int'
-	\alt `signed'
-	\alt `unsigned'
-	\alt `long'
-	\alt `long long'
-	\alt `userland'
-	\alt `string'
-	\alt `void'
-	\alt `float'
-	\alt `double'
-	\alt <TypedefName>
-	\alt <StructOrUnionSpec>
-	\alt <EnumSpecifier> ;
+<Type> ::=  `char'
+       \alt `short'
+       \alt `int'
+       \alt `signed'
+       \alt `unsigned'
+       \alt `long'
+       \alt `long long'
+       \alt `userland'
+       \alt `string'
+       \alt `void'
+       \alt `float'
+       \alt `double'
+       \alt <TypedefName>
+       \alt <StructOrUnionSpec>
+       \alt <EnumSpecifier> ;
 \end{grammar}
 
 \noindent
@@ -154,37 +156,55 @@ to be an alias to another type, much like in C:
 Similarly, \texttt{StructOrUnionSpec} represents a way to specify a D
 \texttt{struct} or \texttt{union} type. These language primitives are compatible
 with their C counterparts and ensure ABI compatibility. This is important when
-tracing the kernel, but also allows trivial translation to other ABIs.  We
-specify \texttt{StructOrUnionSpec} as follows:
+tracing the kernel, but also allows trivial translation to other ABIs. Moreover,
+\texttt{enum} definitions exist in D with the same syntax as they have in C. Finally,
+D has a notion of translators -- we specify all of these as a part of a type specifier
+as follows:
 
 \begin{grammar}
-<StructOrUnionSpec> ::= <Modifier> ( `struct' | `union' ) [ <Identifier> ] \newline
-	`{' <StructDeclList> `}' [ <VarList> ] `;'
-	\alt ( `struct' | `union' ) <Identifier> [ <VarList> ] `;' ;
+<StructOrUnionSpec> ::=  <Modifier> ( `struct' | `union' ) [ <Identifier> ] \newline
+                         `{' <StructDeclList> `}' [ <VarList> ] `;'
+                    \alt ( `struct' | `union' ) <Identifier> [ <VarList> ] `;' ;
 
 <StructDeclList> ::= <Type> <VarList> `;' \{ <Type> <VarList> `;' \} ;
 
-<EnumSpecifier> ::= <Modifier> `enum' [ <Identifier> ] \newline
-	`{' <EnumDeclList> `}' [ <VarList> ] `;'
-	\alt `enum' <Identifier> [ <VarList> ] `;' ;
+<EnumSpecifier> ::=  <Modifier> `enum' [ <Identifier> ] \newline
+                     `{' <EnumDeclList> `}' [ <VarList> ] `;'
+                \alt `enum' <Identifier> [ <VarList> ] `;' ;
 
 <EnumDeclList> ::= <Identifier> [ `=' <Identifier> ] [ `,' ] ;
+
+<IdentPtrFollow> ::= <Identifier> \{ `->' <Identifier> \} ;
+
+<TranslatorIdent> ::=  <IdentifierOrString>
+                  \alt <IdentifierPtrFollow>
+                  \alt <Subroutine> `(' <SubroutineArgs> `)'
+                  \alt <TranslatorIdent> [ `?' <TranslatorIdent> `:' <TranslatorIdent> ] ;
+
+<TranslatorSpec> ::= `translator' <Identifier> `<' <Type> `>' `{' \newline
+	<Identifier> `=' <TranslatorIdent> `;' \newline
+        \{ <Identifier> `=' <TranslatorIdent> `;' \} `}' `;' ;
+
+<TypeSpecifier> ::=  <StructOrUnionSpec>
+                \alt <EnumSpecifier>
+                \alt <TranslatorSpec> ;
 \end{grammar}
 
 \noindent
 Here we introduce a new non-terminal, \texttt{Modifier} which encapsulates the
 modifiers that may occur before a \texttt{struct} or \texttt{enum} definition.
-It is defined as follows:
+Moreover, we introduce \texttt{Subroutine} and \texttt{SubroutineArgs} which
+will be defined later on. \texttt{Modifier} is defined as follows:
 
 % XXX: Verify that this is correct
 \begin{grammar}
-<Modifier> ::= `const'
-	\alt `volatile'
-	\alt `typedef'
-	\alt `register'
-	\alt `restrict'
-	\alt `static'
-	\alt `extern' ;
+<Modifier> ::=  `const'
+           \alt `volatile'
+           \alt `typedef'
+           \alt `register'
+           \alt `restrict'
+           \alt `static'
+           \alt `extern' ;
 \end{grammar}
 
 \noindent
@@ -202,23 +222,23 @@ kenrel, we define the following way of specifying probes:
 % TODO: Make this render a bit nicer.
 % XXX: Is this correct?
 \begin{grammar}
-<ProbeSymbol> ::= <letter>
-	\alt <DecDigitWithZero>
-	\alt `*'
-	\alt `+'
-	\alt `\\'
-	\alt `?'
-	\alt `!'
-	\alt `['
-	\alt `]' ;
+<ProbeSymbol> ::=  <letter>
+              \alt <DecDigitWithZero>
+              \alt `*'
+              \alt `+'
+              \alt `\\'
+              \alt `?'
+              \alt `!'
+              \alt `['
+              \alt `]' ;
 
 <ProbeIdent> ::= <ProbeSymbol> \{ <ProbeSymbol> \} ;
 
-<ProbeSpecifier> ::= <ProbeIdent>
-	\alt [ <ProbeIdent> ] `:' [ <ProbeIdent> ]
-	\alt [ <ProbeIdent> ] `:' [ <ProbeIdent> ] `:' [ <ProbeIdent> ]
-	\alt [ <ProbeIdent> ] `:' [ <ProbeIdent> ] `:' \newline
-	[ <ProbeIdent> ] `:' [ <ProbeIdent> ] ;
+<ProbeSpecifier> ::=  <ProbeIdent>
+                 \alt [ <ProbeIdent> ] `:' [ <ProbeIdent> ]
+                 \alt [ <ProbeIdent> ] `:' [ <ProbeIdent> ] `:' [ <ProbeIdent> ]
+                 \alt [ <ProbeIdent> ] `:' [ <ProbeIdent> ] `:' \newline
+                      [ <ProbeIdent> ] `:' [ <ProbeIdent> ] ;
 \end{grammar}
 
 \noindent
@@ -228,29 +248,122 @@ such as `*' are allowed is because D allows the user to write glob expressions
 much like a Unix shell does. \newline
 
 \noindent
+Next, we define all of the operators that the D language provides to the
+programmer to use. We split the operators in three different parts -- binary
+operators, prefix unary operators and postfix unary operators. We intentionally
+avoid the use of a ternary `?' operator here, as it will be specified as a part
+of allowed expressions.
+\begin{grammar}
+<pre\_un\_operator> ::=  `++'
+                    \alt `--'
+                    \alt `!'
+                    \alt `~' ;
+
+<post\_un\_operator> ::=  `++'
+                     \alt `--' ;
+
+<bin\_operator> ::=  `+'
+                \alt `-'
+                \alt `*'
+                \alt `='
+                \alt `/'
+                \alt `\%'
+                \alt `=='
+                \alt `&&'
+                \alt `||'
+                \alt `|'
+                \alt `&'
+                \alt `^'
+                \alt `='
+                \alt `&='
+                \alt `|='
+                \alt `^='
+                \alt `~='
+                \alt `+='
+                \alt `-='
+                \alt `*='
+                \alt `/='
+                \alt `\%=' ;
+\end{grammar}
+
+\noindent
 Furthermore, a probe clause in a D script consists of an optional predicate. A
 predicate contains a logical expression in propositional logic:
 
 \begin{grammar}
-<Predicate> ::= `/' <LogicExpression> `/'
+<Predicate> ::= `/' <LogicExpression> `/' ;
+
+<LogicExpression> ::= <Expression> ;
 \end{grammar}
 
-% TODO: This needs to be expanded. We need to define:
-%  * <LogicExpression>
-%  * <Statement>
-%
-% <LogicExpression> needs to capture anything that can be written inside a probe
-% predicate. This seems to be propositional logic...?
-%
-% <Statement> needs to capture all of the possible D expressions that can appear
-% inside probe clauses.
-
+\noindent
+Moreover, we define \texttt{Expression}, which encapsulated scalar and array
+expressions and \texttt{AggExpression} which works with aggregations as:
 \begin{grammar}
-<ProbeDefinition> ::= <ProbeSpecifier> [ <Predicate> ] `{'  { <Statement> } `}'
+<ArrayIndices> ::= ( <Identifier> | <Integer> ) \{ ( <Identifier> | <Integer> ) \}
+               \alt <IdentifierOrString>
+               \alt <ArrayIndices> `,' <ArrayIndices> ;
+
+<ThisOrSelf> ::= `this->'
+             \alt `self->' ;
+
+<Expression> ::=  <Expression> <bin\_operator> <Expression>
+             \alt <pre\_un\_operator> <Expression>
+             \alt <Expression> <post\_un\_operator>
+             \alt <Expression> `?' <Expression> `:' <Expression>
+             \alt <Subroutine> `(' <SubroutineArgs> `)'
+             \alt <ThisOrSelf> <Identifier> [ `[' <ArrayIndices> `]' ]
+             \alt <IdentifierOrString> ;
+
+<AggExpression> ::=  `@' [ <Identifier> ] [ `[' <ArrayIndices> `]' ] `=' <AggFunc> ;
+                \alt <AggSubroutine> `(' <AggSubroutineArgs> `)' ;
 \end{grammar}
 
-% TODO: Define all different types of expressions that we can have, assignment
-% operators, conditionals, ...
+\noindent
+In order to provide a full definition, we need to define \texttt{Subroutine},
+\texttt{AggFunc} and \texttt{AggSubroutine}. Because this is variable depending on
+what subroutines, aggregating functions and subroutines taking aggregations as parameters
+are actually available as a part of the D runtime, this depends on currently available
+DTrace implementation. Similarly, \texttt{SubroutineArgs} and \texttt{AggSubroutineArgs}
+depend on \texttt{Subroutine} and \texttt{AggSubroutine}, so we are unable to specify them
+as a part of this specification without significantly limiting what aggregations and subroutines
+can be implemented. \newline
+
+\noindent
+Furthermore, D allows for explicit declarations of variables. We specify this as:
+\begin{grammar}
+<Declaration> ::= [ (`this' | `self') ] <Type> <Identifier> ;
+\end{grammar}
+
+\noindent
+Finally, we are able to define what a definition of a probe looks like:
+\begin{grammar}
+<ProbeDefinition> ::= <ProbeSpecifier> [ <Predicate> ] `{'  \{ <Statement> \} `}' ;
+
+<Statement> ::=  <Expression> `;'
+            \alt <AggExpression> `;'
+            \alt <Declaration> `;' ;
+\end{grammar}
+
+\noindent
+Note that this only defines a single probe clause, not the full syntax of the D script.
+D scripts can have additional preprocessor statements in them and definitions of variables
+user-defined types outside of probe clauses. In the specification, we will avoid talking about
+compiler-specific preprocessor statements and the C preprocessor that can be run on the D
+script, as how this will be implemented and what parts of it will be supported is entirely
+up to the compiler writer. We define the D script as follows:
+\begin{grammar}
+<DScript> ::=  <DScript> <PreprocessorStatement> <DScript>
+          \alt <DScript> <TypeSpecifier> <DScript>
+          \alt <DScript> <ProbeDefinition> <DScript>
+          \alt <DScript> <XLate>  <DScript>
+          \alt `' ;
+
+<XLateMethod> ::=  <Subroutine> `(' <SubroutineArgs> `)'
+              \alt <IdentifierOrString> ;
+
+<XLate> ::= <Modifier> <Type> <Identifier> [ `[' <Type> <Identifier> `]' ] = `xlate <' <Type> `>' `(' <XLateMethod> `)' `;' ;
+\end{grammar}
 
 \section{Safety}
 \label{sec:safety}
@@ -263,7 +376,7 @@ sort of looping mechanism.  Once they are compiled into byte code D
 scripts are loaded into the kernel where they run to completion.  A
 script that was allowed to loop might, due to error or intent, loop
 forever, causing the operating system kernel to lock up and require a
-system reset.  D lacks any form of loops to prevent such errors from
+system reset. D lacks any form of loops to prevent such errors from
 occurring.
 
 By default, OpenDTrace runs in a mode where memory can be read but not
@@ -296,7 +409,7 @@ commitment to safety.
 DTrace implements three different scopes of variables: global, thread-local and
 clause-local. Global variables are visible to every probe and across all
 threads, allowing the user to write scripts that carry state across multiple
-threads should it be necessary and are identified with the variable name. 
+threads should it be necessary and are identified with the variable name.
 
 Similar to global variables are D built-in variables such as \verb|execname|,
 \verb|curthread|, etc. We make a distinction between the two due to the
@@ -308,9 +421,9 @@ are represented in source code as prefixed with \texttt{self->}.  A thread-local
 variable is identified with its name and a thread ID.
 
 Clause-local variables are prefixed with \texttt{this->} and are visible only
-within a single \texttt{dtrace\_probe()} call. This means that a clause-local
-variable will be visible across multiple clauses of the same probe, allowing the
-programmer to carry state associated with a clause-local variable across them.
+within a single probe firing. This means that a clause-local variable will be
+visible across multiple clauses of the same probe, allowing the programmer to
+carry state associated with a clause-local variable across them.
 
 \subsection{Global variables}
 \label{subsec:global-variables}
@@ -328,10 +441,11 @@ Global variables exhibit two failure modes:
 \item The use of a global variable has caused a fault.
 \end{itemize}
 The former eventually manifests through the latter failure mode at every program
-point where the variable is used, but we have included it as a separate failure
+point where the variable is dereferences, but we have included it as a separate failure
 mode because DTrace currently increments an according counter to indicate that a
-variable could not be allocated and because it has different implications on the
-rest of the D script.
+variable could not be allocated and because whenever a D variable that was not mapped
+is used, but not dereferenced as a pointer, it behaves as if the value of that variable
+is zero (0).
 
 \subsection{Built-in variables}
 \label{subsec:builtin-variables}
@@ -386,11 +500,11 @@ on all of the data at once.
   \begin{tabular}{l|l|l}
     Function & Pseudo-code & Description \\
     \hline
-    count & x = x + 1 & Counts the number of occurrences of some argument \\
-    min & x = x > arg ? arg : x & Computes the minimum of all values seen \\
-    max & x = x > arg ? x : arg & Computes the maximum of all values seen \\
-    avg & x = sum/len & Averages out the values seen \\
-    sum & x = x + arg & Sums up all of the values that are seen \\
+    count & $x = x + 1$ & Counts the number of occurrences of some argument \\
+    min & $x = x > arg\,\, ?\,\, arg\,\, :\,\, x$ & Computes the minimum of all values seen \\
+    max & $x = x > arg\,\, ?\,\, x\,\, :\,\, arg$ & Computes the maximum of all values seen \\
+    avg & $x = sum\,\,/\,\,len$ & Averages out the values seen \\
+    sum & $x = x + arg$ & Sums up all of the values that are seen \\
     stddev & N/A & The standard deviation over a set of values\\
     quantize & N/A & Power-of-two frequency distribution over a set of values\\
     lquantize & N/A & Linear frequency distribution over a specified range.\\
@@ -423,20 +537,36 @@ however the safety of using these subroutines depends on the safety of DTrace
 action and the DIF emulator. The subroutines currently supported are given
 in Table~\ref{tab:subroutines}.
 
+\section{Translators}
+\label{sec:translators}
+
+OpenDTrace translators serve the purpose of providing a way to translate between
+different data types for D scripts. The main motivation behind translators is to
+translate C types that are a part of the operating system to a stable user-defined
+data type to avoid having to change the script when the operating system implementation
+changes, however, they do work for any D type. In a sense, translators define a two way
+map\footnote{A translator creates an isomorphism between types.} between two types.
+This enables the compiler to translate between these two data types either as a part of
+the runtime or statically at compile-time.
+
 \section{Multithreading}
 
-% XXX: This is very vague because saying that DTrace guarantees
-% something is a very bold statement. For example, saying that it
-% guarantees thread safety when creating dynamic variables would be a
-% little over the top, as this has not been verified at all. We should
-% think about this a bit more.
+% XXXDS: While it is true that *currently* DTrace memory is SC, this will not
+% be the case if we have a JIT compiler and implement a stack. We will essentially
+% start seeing the semantics of the underlying CPU.
+%
+% In effect, this is why we do not say that we have to *guarantee* that in any
+% implementation.
 
 When tracing, OpenDTrace guarantees that it can not be preempted
-inside of the \function{dtrace_probe()} function, but it does not
-guarantee that everything in the executing DIF will be thread-safe.
-OpenDTrace does not allow access to locking primitives, because a
-programming error might violate the safety guarantees that OpenDTrace
-was designed to provide.
+inside of a probe firing, but it does not guarantee that everything
+in the executing DIF will be thread-safe. OpenDTrace does not allow
+access to locking primitives, because a programming error might violate
+the safety guarantees that OpenDTrace was designed to provide.
+The memory that OpenDTrace works with is currently guaranteed to be
+sequentially consistent, however, this is not a good assumption to make
+across implementations and one should instead rely on the underlying
+multicore semantics of the CPU.
 
 \subsection{Global variables}
 
@@ -458,7 +588,7 @@ syscall:::entry
 {
     num_syscalls++;
 }
-    
+
 dtrace:::END
 {
     printf("Number of syscalls: %d\n", num_syscalls);
@@ -536,11 +666,3 @@ dtrace:::END
   \caption{Avoiding the race condition}
   \label{fig:avoiding-the-race}
 \end{figure}
-
-% \subsection{Thread-local variables}
-
-% As mentioned in Subsection~\ref{subsec:thread-local-variables}, thread-local
-% variables are only visible within a single thread.
-
-% \subsection{Clause-local variables}
-

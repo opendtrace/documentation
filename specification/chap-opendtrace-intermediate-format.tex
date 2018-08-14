@@ -5,18 +5,19 @@ that executes instructions on behalf of D scripts that are associated
 with predicates and actions.  DIF is a simple, RISC-like, instruction
 set where each instruction consists of a 32-bit, native-endian integer
 whose most significant 8 bits contain an opcode allowing the remainder
-of the instruction to be decoded.  Interpretation is executed in a
-loop within the \function{dtrace_dif_emulate} function, which has, as
-its first argument, a pointer to a DIF Object or
-\struct{dtrace_difo_t}. Each of the DIF objects gets executed in its
-own separate environment and must return a value using the
-\instruction{ret} instruction. Instructions are executed one at a
-time, until they are exhausted or an error causes interpretation to
-end. The DIF objects are verified in the
-\function{dtrace_difo_validate} function and the DIF interpreter
-ignores any bounds checking within the \function{dtrace_dif_emulate}
-function precisely because \function{dtrace_difo_validate} performs
-the necessary checks.
+of the instruction to be decoded. While DIF is an interpreter on its own,
+it is just one of many actions that DTrace can execute. Its purpose is to
+gather arguments and set up state for all other actions.
+
+Each DIF object is executed separately with its own register file, as
+DIF does not have a notion of a stack. Each DIF object must end with
+a return instruction which will cause the value in the returned register
+to be written into the trace buffer.
+
+Before DIF is executed, DTrace will perfom a sanity check for each of the
+DIF objects and ensure that they contain valid DIF. The constraints for
+each DIF instruction will be enumerated in the instruction description in
+Chapter~\ref{chap:opendtrace-instruction-reference}.
 
 The following chapter describes the overall implementation of the DIF
 interpreter as well as how the various instructions are implemented,
@@ -141,30 +142,23 @@ performed in the \function{dtrace_difo_validate} function at load time.
 
 % \textbf{XXXRW: Something about user memory access}
 
-\subsection{Local Variables}
-\label{sec:local-vars}
+% XXXDS: I've removed all the variable bits here, as their semantics and syntax is
+% described in the DLang chapter. The only thing important for DIF is how they're
+% represented.
+\subsection{Variables}
+\label{sec:dif-vars}
 
-Local variables are local to the D program clause.  In a D program
-these variables are referenced using the \verb|this->| syntax.  
+Variables in DIF are just numeric references to simple names within the D script.
+The space for variables is statically allocated on each invocation of a script.
+Additionally, variables are identified using the modified register format as described
+in Subsection~\ref{subsec:r-format} when working with arrays and the W-Format described
+in Subsection~\ref{subsec:w-format} when working with scalar variables.
 
-\subsection{Thread Local Variables}
-\label{sec:thread-local-vars}
-
-Thread local variables are usable in multiple D program clauses.  In a
-D program the thread local variables are referenced using the
-\verb|self->| syntax.
-
-\subsection{Global Variables}
-\label{sec:globals-vars}
-
-Global variables are global to all the clauses in a D script and are references
-to simple names within the D script.  Space for global variables is statically
-allocated on each invocation of a script. Additionally, global variables are
-identified using the modified register format as described in
-Subsection~\ref{subsec:r-format} the case of arrays and the W-Format
-which is described in Subsection~\ref{subsec:w-format} in the case
-of scalar variables inside of the \function{dtrace_dif_variable} function.
-
+% XXXDS: These are all just implementation details. This isn't really about DIF, it's
+% about the current runtime implementation. We've talked about scalars and arrays just
+% above. For aggregations, it would be useful to talk about the more general idea of
+% DTrace actions instead of just DIF -- but we can say that their arguments are gathered
+% through DIF.
 \subsection{Scalars}
 \label{sec:scalars}
 
@@ -174,9 +168,12 @@ of scalar variables inside of the \function{dtrace_dif_variable} function.
 \subsection{Aggregations}
 \label{sec:dif-aggregations}
 
+% XXXDS: What are exceptions?
 \subsection{Exceptions}
 \label{sec:exceptions}
 
+% The semantics of them have been described in the DLang chapter. The rest are just
+% implementation details that don't really belong here IMO.
 \subsection{Dynamic Variables}
 \label{sec:sec:dynamic-vars}
 

@@ -32,6 +32,12 @@ sign extension in any case.
 %rd = umem[r1]
 \end{verbatim}
 
+\subsubsection*{Load-time constraints}
+The registers \registerop{r1} and \registerop{rd} must be valid registers,
+\registerop{r2} must be \registerop{r0} and \registerop{rd} must not be
+\registerop{r0}.
+
 \subsubsection*{Failure modes}
 
-This instruction has no run-time failure modes beyond its constraints.
+This instruction can cause a page fault if the memory it is trying to access
+is not paged in.

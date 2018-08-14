@@ -19,8 +19,8 @@
 \subsubsection*{Description}
 
 The \instruction{bg} instruction sets the PC to a new label if, and
-only if the result of the last \instruction{cmp} instrucion indicated
-that 
+only if the result of the last \instruction{cmp} resulted in the zero bit
+(cc\_z) being set to a value other than 0.
 
 \subsubsection*{Pseudocode}
 
@@ -28,6 +28,10 @@ that
 if (cc_z)
 	%pc = label
 \end{verbatim}
+
+\subsubsection*{Load-time constraints}
+\verb+label+ must be greater than \verb+pc+. Moreover, \verb+label+ must
+not go past the last address of the current DIF object.
 
 \subsubsection*{Failure modes}
 
