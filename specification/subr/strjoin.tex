@@ -4,18 +4,12 @@
 \label{subr:strjoin}
 \subsection*{strjoin: join two strings and return the result}
 
-\subsubsection*{Subroutine prototype}
-
-\begin{verbatim}
-char * strjoin(const char *first, const char *second);
-\end{verbatim}
-
 \subsubsection*{Calling convention}
 
 \begin{description}
+\item[\registerop{rd}] Pointer to the combined string
 \item[\registerop{arg0}] Pointer to the first string
 \item[\registerop{arg1}] Pointer to the second string
-\item[\registerop{rd}] Pointer to the combined string
 \end{description}
 
 \subsubsection*{Description}

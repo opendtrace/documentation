@@ -2,17 +2,21 @@
 \phantomsection
 \addcontentsline{toc}{subsection}{copyout}
 \label{subr:copyout}
-\subsection*{copyout: FILL ME IN}
+\subsection*{copyout: copy data from a buffer into process address space}
 
 \subsubsection*{Calling convention}
 
 \begin{description}
-\item[\registerop{rd}] What goes into the destination regiester
+\item[\registerop{rd}] void
+\item[\registerop{arg0}] Pointer to buffer
+\item[\registerop{arg1}] Pointer to memory
+\item[\registerop{arg2}] Length
 \end{description}
 
 \subsubsection*{Description}
 
-This subroutine 
+The \subroutine{copyout} subroutine copies data from a buffer supplied
+by the caller into a process's address space.
 
 \subsubsection*{Failure modes}
 

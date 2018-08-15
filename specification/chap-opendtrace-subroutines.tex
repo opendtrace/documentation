@@ -39,8 +39,13 @@ All subroutines are executed from probe context (\verb|dtrace_probe|)
 via the \verb|dt_dif_emulate| routine.
 
 \section{Subroutine list}
+\label{sec:subroutine-list}
 
-\begin{table}
+The tables (\ref{tbl:subroutines-1}, \ref{tbl:subroutines-2} in this
+section summarize all of the subroutines available in the D language.
+The subroutines listed in in order by their index.
+
+\begin{table}[htp]
 \label{tab:subroutines}
 \begin{center}
 \begin{tabular}{llp{9cm}}
@@ -68,19 +73,22 @@ via the \verb|dt_dif_emulate| routine.
     Copy in string from userspace \\
   \hyperref[subr:copyoutmbuf]{\subroutine{copyoutmbuf}} & 9 &
     Copy data from an mbuf chain\\
-  \hyperref[subr:speculation]{\subroutine{speculation}} & 10 & \\
+  \hyperref[subr:speculation]{\subroutine{speculation}} & 10 &
+  Reserves space for a speculation buffer\\
   \hyperref[subr:progenyof]{\subroutine{progenyof}} & 11 &
     Query whether this process the child of a particular PID\\
   \hyperref[subr:strlen]{\subroutine{strlen}} & 12 &
     Return the length of a string\\
   \hyperref[subr:copyout]{\subroutine{copyout}} & 13 &
-  \\
-  \hyperref[subr:copyoutstr]{\subroutine{copyoutstr}} & 14 & \\
+  Copy data from user process\\
+  \hyperref[subr:copyoutstr]{\subroutine{copyoutstr}} & 14 &
+  Copy data from user process as a string\\
   \hyperref[subr:alloca]{\subroutine{alloca}} & 15 &
   allocate temporary space \\
   \hyperref[subr:bcopy]{\subroutine{bcopy}} & 16 &
   copy bytes from source to destination bounded by a size\\
-  \hyperref[subr:copyinto]{\subroutine{copyinto}} & 17 & \\
+  \hyperref[subr:copyinto]{\subroutine{copyinto}} & 17 &
+  copy data from a source to a destination\\
   \hyperref[subr:msgdsize]{\subroutine{msgdsize}} & 18 &
   return the size data in a STREAMS message block \\
   \hyperref[subr:msgsize]{\subroutine{msgsize}} & 19 &
@@ -97,24 +105,25 @@ via the \verb|dt_dif_emulate| routine.
   convert a long long (64 bit) value to a string\\
   \hyperref[subr:basename]{\subroutine{basename}} & 25 &
   return the file name portion of a pathname\\
+\bottomrule
+\end{tabular}
+\end{center}
+\caption{DTrace Subroutines (Part 1)}
+\label{tbl:subroutines-1}
+\end{table}
+
+\begin{table}[htp]
+\begin{center}
+\begin{tabular}{llp{9cm}}
+\toprule
+  Name & Number & Description \\
+\midrule
   \hyperref[subr:dirname]{\subroutine{dirname}} & 26 &
   return the directory component of a pathname\\
   \hyperref[subr:cleanpath]{\subroutine{cleanpath}} & 27 &
   return the cleaned up pathname\\
   \hyperref[subr:strchr]{\subroutine{strchr}} & 28 &
   locate a character in a string\\
-\bottomrule
-\end{tabular}
-\end{center}
-\caption{DTrace Subroutines (Part 1)}
-\end{table}
-
-\begin{table}
-\begin{center}
-\begin{tabular}{llp{9cm}}
-\toprule
-  Name & Number & Description \\
-\midrule
   \hyperref[subr:strrchr]{\subroutine{strrchr}} & 29 &
   reverse search a string\\
   \hyperref[subr:strstr]{\subroutine{strstr}} & 30 &
@@ -173,9 +182,17 @@ via the \verb|dt_dif_emulate| routine.
 \end{tabular}
 \end{center}
 \caption{DTrace Subroutines (Part 2)}
+\label{tbl:subroutines-2}
 \end{table}
 
+\newpage
+
 \section{Subroutine reference}
+\label{sec:subroutine-reference}
+
+The remainder of this chapter describes each of the subroutines
+available in the D language in detail.  The subroutines are arranged
+in alphabetical order.  
 
 \input{subr/alloca}
 \input{subr/basename}

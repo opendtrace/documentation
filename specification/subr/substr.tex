@@ -8,6 +8,9 @@
 
 \begin{description}
 \item[\registerop{rd}] a string representing the substring
+\item[\registerop{arg0}] string from which to derive a sub-string
+\item[\registerop{arg2}] index of substring
+\item[\registerop{arg2}] length of substring
 \end{description}
 
 \subsubsection*{Description}
@@ -24,7 +27,7 @@ terminating NUL character.
 \begin{verbatim}
 string = stack[0].value
 index = stack[1].value
-length = stack[1].value
+length = stack[2].value
 %rd = substr(string, index, length)
 \end{verbatim}
 
