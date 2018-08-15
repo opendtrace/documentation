@@ -125,27 +125,18 @@ as for each action statement in a D language clause.
 The ECBs are provided to the kernel module (3c) which stores them,
 with others, in a tree like structure. Once an ECB is safely stored in
 the kernel, the kernel module tells the provider to enable the probes
-that are to be instrumented.
-
-Enabling a probe means telling the provider that at the right point
-the \verb|dtrace_probe| kernel function must be called.  All tracing
-ultimately goes through the \verb|dtrace_probe| function in the
-kernel, which is responsible for all of the work related to any part
-of tracing.  How \verb|dtrace_probe| is ultimately called depends on
-both the program and the provider.
+that are to be instrumented. Enabling a probe means telling the provider
+that at the right point, decided by the provider, the control will be
+transferred to DTrace.
 
 The function boundary tracepoint (\verb|fbt|) and \verb|fasttrap|
 providers which allow tracing of kernel code and user space code,
 respectively, both operate under the same model.  They both find the
 instruction in the program at which the tracepoint is to be placed and
 swap the regular instruction with a an architecture dependent
-break-point instruction when tracing is enabled.
-
-The profile provider is completely different from the FBT or fasttrap
-providers as it is meant to call \verb|dtrace_probe| on a periodic
-basis using in-kernel timers.  Enabling a profile provider does not
-change any instruction stream in any program, but instead adds calls
-to \verb|dtrace_probe| to the kernel's timing machinery.
+break-point instruction when tracing is enabled. The profile provider is
+completely different from the \verb|fbt| or \verb|fasttrap| providers as
+it fires its probes on a periodic basis.
 
 When code execution reaches a point that has an enabled probe, the
 probe fires and a call is made into the kernel module (5). The kernel
@@ -162,12 +153,13 @@ When tracing is enabled the OpenDTrace modules in the kernel produce a
 stream of records which are consumed by user level processes, such as
 the \verb|dtrace(1)| command, and turned into various types of output.
 
-Records are communicated in a buffer structure, \verb|dtrace_bufdata|
+Records are communicated in a buffer structure
 which is shared between the kernel and user space.  Buffers contain
 one of two types of data.  Either the data is a plain record, or it is
 an aggregation.  All data is arranged as a stream of bytes where the
 current header gives the extent of the data, indicating where the next
-record can be found.
+record can be found. The details of the buffer structure are described in
+Chapter~\ref{chap:opendtrace-trace-buffer}.
 
 Plain records contain the data requested by the D script along with
 optional formatting information and arguments.  Aggregations are
@@ -178,10 +170,13 @@ and information on data binning.
 \section{Privilege Model}
 \label{sec:privilege}
 
+% XXXDS: Avoid any mention of ``root'' or any other privilege models,
+% we just care that the user is privileged w.r.t. the provider. Nothing
+% else.
+
 The OpenDTrace privilege model is relatively simple, any program that
 wishes to trace another program, or the operating system kernel, must
-be running with \emph{root} privileges.  Some operating systems, such
-as Illumos, provide a more nuanced privilege model.
+be a privileged user from the perspective of each provider.
 
 %%% Local Variables:
 %%% mode: latex
