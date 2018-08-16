@@ -319,7 +319,14 @@ as:
              \alt <Expression> `?' <Expression> `:' <Expression>
              \alt <Subroutine> `(' <SubroutineArgs> `)'
              \alt <ThisOrSelf> <Identifier> [ `[' <ArrayIndices> `]' ]
-             \alt <IdentifierOrString> ;
+             \alt <IdentifierOrString>
+             \alt <XLate> ;
+
+<XLate> ::= `xlate <' <Type> `>' `(' <XLateMethod> `)' ;
+
+<XLateMethod> ::=  <Subroutine> `(' <SubroutineArgs> `)'
+              \alt <IdentifierOrString> ;
+
 
 <AggExpression> ::=  `@' [ <Identifier> ] [ `[' <ArrayIndices> `]' ] `=' <AggFunc> ;
                 \alt <AggSubroutine> `(' <AggSubroutineArgs> `)' ;
@@ -363,16 +370,14 @@ that can be run on the D script, as how this will be implemented and
 what parts of it will be supported is entirely up to the compiler
 writer. We define the D script as follows:
 \begin{grammar}
+<VarDecl> ::= <Modifier> <Type> <Identifier> [ `[' <Type> <Identifier> `]' ] ;
+
 <DScript> ::=  <DScript> <PreprocessorStatement> <DScript>
           \alt <DScript> <TypeSpecifier> <DScript>
           \alt <DScript> <ProbeDefinition> <DScript>
-          \alt <DScript> <XLate>  <DScript>
+          \alt <DScript> <VarDecl> [ `=' <Expression> ] <DScript>
+          \alt `;'
           \alt `' ;
-
-<XLateMethod> ::=  <Subroutine> `(' <SubroutineArgs> `)'
-              \alt <IdentifierOrString> ;
-
-<XLate> ::= <Modifier> <Type> <Identifier> [ `[' <Type> <Identifier> `]' ] = `xlate <' <Type> `>' `(' <XLateMethod> `)' `;' ;
 \end{grammar}
 
 \section{Safety}

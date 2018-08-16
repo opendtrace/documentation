@@ -103,31 +103,17 @@ Format described in Subsection~\ref{subsec:b-format}.
 \subsection{Subroutine Calls}
 \label{sec:subroutines}
 
-OpenDTrace provides an extensive set of subroutines for use by D programs.
-The subroutines are implemented within the kernel code via a set of
-functions which are centrally dispatched from the
-\function{dtrace_dif_subr} function.  Within DIF subroutines are
-triggered via the \instruction{CALL} instruction. The arguments to
-these subroutines are passed through the \verb|tupregs| variable
-through use of the \instruction{PUSHTR} and \instruction{PUSHTV}
-instructions. The return values of the subroutines are provided
+Within DIF subroutines are triggered via the \instruction{CALL} instruction.
+The arguments to these subroutines are passed through the tuple stack.
+The tuple stack itself is populated using \verb|pushtr| and \verb|pushtv|
+instructions and the return values of the subroutines are provided
 through the \registerop{rd} register. The subroutine identifier is
 placed in the \registerop{idx} field of the wide-immediate format (W-Format)
 described in Subsection~\ref{subsec:w-format}. Any subroutine that is provided
-to DTrace \emph{must} go via these mechanisms.
-
-\begin{quote}
-  Notice that we don't bother validating the proper number of
-  arguments or their types in the tuple stack.  This isn't needed
-  because all argument interpretation is safe because of our load
-  safety -- the worst that can happen is that a bogus program can
-  obtain bogus results.
-\label{fig:argcheck}
-\end{quote}
-
-According to a comment in the code, see Figure~\ref{fig:argcheck}, argument
-checks are not carried out when a subroutine is called. These checks are
-performed in the \function{dtrace_difo_validate} function at load time.
+to DTrace \emph{must} go via these mechanisms. None of the arguments to subroutines
+need to be validated before calling the subroutine, as they originate from the
+previously validated data using other DIF instructions which themselves have
+validated this data beforehand.
 
 % \textbf{XXXDS: Are these comments related to the Subroutine Calls section, or
 % overall?}
@@ -154,33 +140,23 @@ Additionally, variables are identified using the modified register format as des
 in Subsection~\ref{subsec:r-format} when working with arrays and the W-Format described
 in Subsection~\ref{subsec:w-format} when working with scalar variables.
 
-% XXXDS: These are all just implementation details. This isn't really about DIF, it's
-% about the current runtime implementation. We've talked about scalars and arrays just
-% above. For aggregations, it would be useful to talk about the more general idea of
-% DTrace actions instead of just DIF -- but we can say that their arguments are gathered
-% through DIF.
 \subsection{Scalars}
 \label{sec:scalars}
+
+Scalar variables are loaded into registers using \verb|LDGS|,
+\verb|LDTS| and \verb|LDLS| and stored to memory from registers using
+\verb|STGS|, \verb|STTS| and \verb|STLS| for global, thread-local and
+clause-local scalar variables respectively.
 
 \subsection{Arrays}
 \label{sec:arrays}
 
-\subsection{Aggregations}
-\label{sec:dif-aggregations}
-
-% XXXDS: What are exceptions?
-\subsection{Exceptions}
-\label{sec:exceptions}
-
-% The semantics of them have been described in the DLang chapter. The rest are just
-% implementation details that don't really belong here IMO.
-\subsection{Dynamic Variables}
-\label{sec:sec:dynamic-vars}
-
-% From Samuel Lepetit
-% It would be super useful to have a section on how dynamic variables
-% work and how the hashing magic in dtrace_dynvar work for those.
-
+%% FIXME: There are also LDGA and LDTA, which seem to be for built-in variables (args, uregs)
+%% but I'm unable to determine that for sure. I'm not able to generate LDTA yet.
+Similarly to scalar variables, array variables are loaded into registers using
+\verb|LDGAA| and \verb|LDTAA| and stored to using \verb|STGAA| and \verb|STTAA|
+for global and thread-local array variables respectively. Note that there are no
+instructions for clause-local array variables.
 
 \section{Instruction Format}
 
