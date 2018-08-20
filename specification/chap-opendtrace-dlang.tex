@@ -87,7 +87,7 @@ number of auxiliary constructs to define the rest of the grammar.
 \end{grammar}
 
 \noindent
-In D, `\_' is considered a letter, which can be used at either the start of a
+In D, `\_' is considered a letter, which can be used at the start of a
 name. As in C, separators can either be tabs or whitespace characters.
 Additionally, we define number constants that are supported in D:
 
@@ -123,7 +123,7 @@ Additionally, we define number constants that are supported in D:
 In D, there are many ways to access types. There are a number of
 builtin types, as well as mechanisms to define these types. Similar to
 the C language, D supports a number of primitive integer and floating
-point types, as well as a specialized \texttt{string} and
+point types, as well as a \texttt{string} and
 \texttt{userland} type.
 
 \begin{grammar}
@@ -302,7 +302,7 @@ predicate contains a logical expression in propositional logic:
 \end{grammar}
 
 \noindent
-We define \texttt{Expression}, which encapsulated scalar and array
+We define \texttt{Expression}, which encapsulates scalar and array
 expressions and \texttt{AggExpression} which works with aggregations
 as:
 \begin{grammar}
@@ -455,12 +455,13 @@ Global variables exhibit two failure modes:
 \item The variable could not be allocated.
 \item The use of a global variable has caused a fault.
 \end{itemize}
-The former eventually manifests through the latter failure mode at every program
-point where the variable is dereferences, but we have included it as a separate failure
-mode because DTrace currently increments an according counter to indicate that a
-variable could not be allocated and because whenever a D variable that was not mapped
-is used, but not dereferenced as a pointer, it behaves as if the value of that variable
-is zero (0).
+The former eventually manifests through the latter failure mode at
+every program point where the variable is dereferenced, but we have
+included it as a separate failure mode because DTrace currently
+increments a counter to indicate that a variable could not
+be allocated and because whenever a D variable that was not mapped is
+used, but not dereferenced as a pointer, it behaves as if the value of
+that variable is zero (0).
 
 \subsection{Built-in variables}
 \label{subsec:builtin-variables}
@@ -472,7 +473,7 @@ built-in variables are not mutable and are thus not subject to the
 concurrency semantics of the underlying architecture. Unlike global
 variables, built-in variables are guaranteed to never cause a page
 fault and thus can be accessed safely. It is up to the DTrace
-implementation has to ensure that access to these variables is
+implementation to ensure that access to these variables is
 race-free and reliable.
 
 \subsection{Thread-local variables}
