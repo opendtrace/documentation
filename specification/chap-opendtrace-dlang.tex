@@ -52,7 +52,8 @@ is called frequently on a busy system and without a predicate the
 script will collect quite a bit of data, much of which may not be
 relevant to the issue that we are trying to investigate.  The
 predicate in Figure~\ref{fig:d-one-liner} allows the probe to fire if,
-and only if, the call to \texttt{write} is not equal to zero (0).
+and only if, the length of the buffer passed to the \texttt{write}
+system call is not equal to zero (0).
 More complex Boolean expressions are possible within predicates but we
 want to have a simple example.
 
