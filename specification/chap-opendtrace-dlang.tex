@@ -2,7 +2,7 @@ The D language is a language inspired by the AWK programming language
 \cite{Aho:1987:APL:29361} and the C programming language
 \cite{DTrace2004}\cite{Kernighan:1988}. In this chapter, we give a
 formal definition of the D programming language that is a part of
-OpenDTrace, as well as elaborate on its properties in multithreaded
+OpenDTrace, as well as elaborate on its properties in multi-threaded
 environments.
 
 \section{Example Script}
@@ -53,7 +53,7 @@ script will collect quite a bit of data, much of which may not be
 relevant to the issue that we are trying to investigate.  The
 predicate in Figure~\ref{fig:d-one-liner} allows the probe to fire if,
 and only if, the call to \texttt{write} is not equal to zero (0).
-More complex boolean expressions are possible within predicates but we
+More complex Boolean expressions are possible within predicates but we
 want to have a simple example.
 
 With this example in mind we now turn to the formal grammar for the D
@@ -88,7 +88,7 @@ number of auxiliary constructs to define the rest of the grammar.
 
 \noindent
 In D, `\_' is considered a letter, which can be used at the start of a
-name. As in C, separators can either be tabs or whitespace characters.
+name. As in C, separators can either be tabs or white space characters.
 Additionally, we define number constants that are supported in D:
 
 \begin{grammar}
@@ -216,7 +216,7 @@ allowed, the definitions of these keywords are equivalent to those in C and may
 only be used when appropriate. The compiler may choose to emit a warning and
 ignore modifiers that are not applicable or it may choose to be more strict and
 treat misuse of a modifier as an error. Using these modifiers when not
-applicable is considered undefined behaviour. \newline
+applicable is considered undefined behavior. \newline
 
 \noindent
 D is a domain-specific language used for tracing and provides probes
@@ -252,7 +252,7 @@ such as `*' are allowed is because D allows the user to write glob expressions
 much like a Unix shell does. \newline
 
 \noindent
-D defines a complete set of opeartors for the language.  For clarity
+D defines a complete set of operators for the language.  For clarity
 We split the operators into three different parts -- binary operators,
 prefix unary operators and postfix unary operators. We intentionally
 avoid the use of a ternary `?' operator here, as it is specified as a
@@ -397,7 +397,7 @@ occurring.
 By default, OpenDTrace runs in a mode where memory can be read but not
 written by D language scripts.  A command line option to the \texttt{dtrace} (1)
 program, \texttt{-w}, puts OpenDTrace into destructive mode, where both reads
-and writes are possible.  Although destructive mode is not a feaure of
+and writes are possible.  Although destructive mode is not a feature of
 the D language itself, it is an important part of the system's overall
 commitment to safety.
 
@@ -532,8 +532,8 @@ on all of the data at once.
 \end{table}
 
 There are nine (9) aggregating functions, which are listed in
-Table~\ref{tab:agg-func}.  The first five aggreggating functions:
-count(), min(), max(), avg(), and sum(), are simple enought that
+Table~\ref{tab:agg-func}.  The first five aggregating functions:
+count(), min(), max(), avg(), and sum(), are simple enough that
 pseudo-code can be supplied within Table~\ref{tab:agg-func} while the
 next three functions: stddev(), quantize() and lquantize(), should be
 understood in their mathematical expression.
@@ -656,14 +656,14 @@ stgs %r2, num_syscalls /* Store the result back into num_syscalls */
 \noindent
 It is clear that the value in the \registerop{r2} register will be lost because
 the register \registerop{r4} is stored to the same location afterwards. It is
-worth noting that this behaviour is not observed because the thread was
+worth noting that this behavior is not observed because the thread was
 preempted, but simply by the fact that DTrace does not guarantee any ordering
-outside of each CPU core. This behaviour applies to all of the operations
+outside of each CPU core. This behavior applies to all of the operations
 performed on global variables and as a result, they should only be used in
 probes that are guaranteed to fire on a single thread. \newline
 
 \noindent
-Often the desired behaviour with global variables can be achieved through
+Often the desired behavior with global variables can be achieved through
 aggregations. The script shown in Figure~\ref{fig:global-var-usage} ought to be
 written using an equivalent aggregation function, as shown in
 Figure~\ref{fig:avoiding-the-race}.

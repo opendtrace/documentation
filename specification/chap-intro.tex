@@ -42,16 +42,16 @@ impact on overall system performance as possible.
 
 From the perspective of the user the OpenDTrace model is one of
 \emph{Plan}, \emph{Capture} and \emph{Analyze}.  The \emph{Plan} phase
-is where the user writes brief scripts, in the D langauge, that
+is where the user writes brief scripts, in the D language, that
 describe the probe points from which they wish to capture data.
 Conditions can be placed upon when these probe points are active, so
 that the amount of data captured in the next phase, can be narrowed
-down to only what is absolutely neessary to feed the analysis and
+down to only what is absolutely necessary to feed the analysis and
 answer the question we are asking of the system.  The \emph{Capture}
 phase is triggered by the \texttt{dtrace} program pushing the plan,
 in the form of compiled code, into the operating system's kernel which
 activates the required probe points.  The OS kernel captures the data
-into bufers which are eventually fed out to user space, where they can
+into buffers which are eventually fed out to user space, where they can
 be analyzed.  The \emph{Analysis} is undertaken in user space where
 the previously written plan, in the form of D scripts, directs the
 OpenDTrace library to extract, display and or aggregate the captured
@@ -78,7 +78,7 @@ nuanced privilege model, the details of which are discussed further in
 Section~\ref{sec:privilege}.
 
 Tracepoints are collected into one of many \emph{providers} which dictate
-the capabilites of the tracepoint and how it interacts with the overall
+the capabilities of the tracepoint and how it interacts with the overall
 tracing system.  Providers exist for system calls (\texttt{syscall}),
 function boundary tracing (\texttt{fbt}), timing services (\texttt{profile}),
 as well as specific subsystems such as the network (\texttt{ip}, \texttt{tcp}),
@@ -125,14 +125,14 @@ This report specifies a number of aspects of OpenDTrace's operation:
 
 \begin{description}
 
-\item[The Achitecture of OpenDTrace] described in
+\item[The Architecture of OpenDTrace] described in
   Chapter~\ref{chap:opendtrace-arch} gives a general overview of the
   internals of the OpenDTrace system, including the relationship of
   the major components, privilege model, and other, overarching,
   concerns.
 
-\item[The D Langauge] described in
-  Chaper~\ref{chap:opendtrace-dlang} provides a full description of
+\item[The D Language] described in
+  Chapter~\ref{chap:opendtrace-dlang} provides a full description of
   the D language, which is the domain specific scripting language used
   to create more complex data queries and to perform data reduction
   after tracepoint data has been captured.

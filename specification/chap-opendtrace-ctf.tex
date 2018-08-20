@@ -7,7 +7,7 @@ information that usually appears in the debugging sections of object
 files and executables. The CTF section gives D scripts programmatic
 access to the names of types making it easier to implement features
 such as pretty printing of data.  CTF only contains data types it does
-not contain other debugging infromation, which allows it to be far
+not contain other debugging information, which allows it to be far
 more compact.  The debugging sections on a debug build of the FreeBSD
 kernel in 2017 take up 78 megabytes of space, while the CTF section in
 the same kernel take up only 800 kilobytes.
@@ -57,10 +57,10 @@ architecture.
 \end{figure}
 
 The CTF section makes heavy use of references between the sub-sections
-to fully describe the datatypes in a program as well as the functions,
+to fully describe the data-types in a program as well as the functions,
 the function's argument list, and the function's return value.  The
 \verb|data objects| and \verb|functions| sections depend upon the
-\verb|type| section, which encodes all of the datatypes that have
+\verb|type| section, which encodes all of the data-types that have
 been during the CTF conversion process.  Each type has a unique number
 and name, as well as a size and encoding.  Types may refer to other,
 more primitive types by use of a reference, e.g. a \verb|uint32_t|
@@ -137,7 +137,7 @@ Types that are larger than 64Kbytes are encoded using a
 \verb|ctf_type| structure, shown in Figure~\ref{fig:ctf-type}.  The
 \verb|name| and \verb|info| fields of this, larger, \verb|ctf_type|
 are the same as the smaller \verb|ctf_stype|, but the \verb|size|
-field is always set to \verb|CTF_LSIZE_SENT|, the sentinal value that
+field is always set to \verb|CTF_LSIZE_SENT|, the sentinel value that
 tells the consumer that this is a larger structure.  A \verb|ctf_type|
 structure can encode an extremely large type, since it provides 64
 bits for the size, and that size is expressed in bytes.
