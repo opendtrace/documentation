@@ -386,7 +386,7 @@ writer. We define the D script as follows:
 
 The D language will look familiar to anyone who has programmed in C or
 its close linguistic relatives, but in order to provide certain
-safety guarantees there are features of C like languages that are
+safety guarantees there are features of C-like languages that are
 missing from D.  The most obviously missing feature is the lack of any
 sort of looping mechanism.  Once they are compiled into byte code D
 scripts are loaded into the kernel where they run to completion.  A
@@ -533,16 +533,18 @@ on all of the data at once.
 \end{table}
 
 There are nine (9) aggregating functions, which are listed in
-Table~\ref{tab:agg-func}.  The first five aggregating functions:
-count(), min(), max(), avg(), and sum(), are simple enough that
-pseudo-code can be supplied within Table~\ref{tab:agg-func} while the
-next three functions: stddev(), quantize() and lquantize(), should be
-understood in their mathematical expression.
+Table~\ref{tab:agg-func}.  The first five aggregating functions
+(\texttt{count()}, \texttt{min()}, \texttt{max()}, \texttt{avg()}, and
+\texttt{sum()}) are simple enough that pseudo-code can be supplied
+within Table~\ref{tab:agg-func} while the next three functions:
+\texttt{stddev()}, \texttt{quantize()} and \texttt{lquantize()},
+should be understood in their mathematical expression.
 
-The llquantize() function is specific to OpenDTrace, and was written
-by Bryan Cantrill while at Joyent.  The purpose of llquantize() is to
-aggregate data logarithmically over a specified range of magnitudes,
-but use a frequency distribution within each of the magnitude.
+The \texttt{llquantize()} function is specific to OpenDTrace, and was
+written by Bryan Cantrill while at Joyent.  The purpose of
+\texttt{llquantize()} is to aggregate data logarithmically over a
+specified range of magnitudes, but use a frequency distribution within
+each of the magnitude.
 
 \section{Subroutines}
 \label{sec:dlang-subroutines}
